@@ -40,6 +40,7 @@ void searchPartsData(const GString *in, GString *out){
 	temp2 = g_string_new("");
 	kDatabase->get(kDatabase, &dbkey, &dbdata, 0);
 	if(dbdata.size != 0){
+	  ((char *)dbdata.data)[dbdata.size] = '\0'; //set null-stop to the result data
 		//first:search selected shotai
 		if(kShotai == kMincho) start = strstr(dbdata.data, ",mincho,");
 		else start = strstr(dbdata.data, ",gothic,");
