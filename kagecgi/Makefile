@@ -9,7 +9,7 @@ SHAREDIR=/usr/local/share/kagecgi
 DBURL=http://fonts.jp/kagedb/kagedb
 
 CFLAGS=
-LIBS= -lpng -ldb
+LIBS= -lpng -ldb -lm
 
 #for MacOSX with fink
 #CFLAGS= -I/sw/include -I/sw/include/db3 -I/sw/include/libpng/

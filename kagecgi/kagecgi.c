@@ -99,7 +99,8 @@ int main(int argc, char *argv[]){
   if(kType == 1){ //svg
     kg_string_append(kResultText, "<?xml version=\"1.0\"?>\n");
     kg_string_append(kResultText, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
-    kg_string_append(kResultText, "<svg viewBox=\"0 0 1024 1024\">");
+    kg_string_append(kResultText, "<svg width=\"1024\" height=\"1024\" viewBox=\"0 0 1024 1024\">");
+    kg_string_append(kResultText, "<g style=\"fill: black; stroke: black\">");
   }
   else if(kType == 2){ //eps
     kg_string_append(kResultText, "%!PS-Adobe-3.0 EPSF-3.0\n");
@@ -162,7 +163,7 @@ int main(int argc, char *argv[]){
       test2 = CalcSizes(test2, 1);
       kMode = 1;
       drawGlyph(test2, 0);
-      kg_string_append(kResultText, "</svg>\n");
+      kg_string_append(kResultText, "</g></svg>\n");
       if(type != 1) fprintf(stdout, "Content-type: image/svg-xml\n\n");
       fprintf(stdout, "%s", kResultText->str);
     }
