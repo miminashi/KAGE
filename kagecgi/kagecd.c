@@ -1249,7 +1249,7 @@ void cdDrawLine(double tx1, double ty1, double tx2, double ty2, int ta1, int ta2
 		}
 		else{ //for others, use x-axis
 			rad = atan((double)(y2 - y1) / (double)(x2 - x1));
-			if((abs(y2 - y1) < abs(x2 - x1)) && (a1 != 6) && (a2 != 6)){ //ASAI KAUDO
+			if((abs(y2 - y1) < abs(x2 - x1)) && (a1 != 6) && (a2 != 6) && !(a1 == 22 && a2 == 0)){ //ASAI KAUDO
 				switch(a1){ //must be 0 or 2
 				case 0:
 					poly[0].X = x1 + sin(rad) * kMinWidthY;
