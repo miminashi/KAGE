@@ -181,12 +181,12 @@ GString * CalcSizes(const GString *in, int mode){
             cuty++;
         }
 		
-        //especially get small the 'mouse'
+        //especially get small the 'mouth'
         if(mode == 2 && flg_boxT % 16 == 15){
             widthT = widthT - kWidth * (max(0, 16 - (int)yokoT * 4));
             heightT = heightT - kWidth * (max(0, 16 - (int)tateT * 4));
 		}
-        //'dot' as same as 'mouse'
+        //'dot' as same as 'mouth'
         if(mode == 2 && tateT == 1 && yokoT == 1){
             widthT = pngWidth * 0.9 * 0.5;
             heightT = pngWidth * 0.9 * 0.5;
