@@ -10,8 +10,8 @@ void DotsWidth(int *dlx, int *drx){
 	
     *dlx = 0;
     *drx = 0;
-    for(i = 0; i <= pngWidth && *dlx == 0; i++){
-		for(j = 0; j <= pngHeight; j++){
+    for(i = 0; i < canvasWidth && *dlx == 0; i++){
+		for(j = 0; j < canvasHeight; j++){
 			if(kageCanvas[j][i] == 0){
 				*dlx = i;
 				break;
@@ -19,8 +19,8 @@ void DotsWidth(int *dlx, int *drx){
 		}
 	}
 	
-	for(i = pngWidth; i >= 0 && *drx == 0; i--){
-		for(j = 0; j <= pngHeight; j++){
+	for(i = canvasWidth - 1; i >= 0 && *drx == 0; i--){
+		for(j = 0; j < canvasHeight; j++){
 			if(kageCanvas[j][i] == 0){
 				*drx = i;
 				break;
@@ -34,8 +34,8 @@ void DotsHeight(int *dly, int *dry){
 	
     *dly = 0;
 	*dry = 0;
-    for(j = 0; j <= pngHeight && *dly == 0; j++){
-        for(i = 0; i <= pngWidth; i++){
+    for(j = 0; j < canvasHeight && *dly == 0; j++){
+        for(i = 0; i < canvasWidth; i++){
             if(kageCanvas[j][i] == 0){
                 *dly = j;
                 break;
@@ -43,8 +43,8 @@ void DotsHeight(int *dly, int *dry){
         }
     }
 	
-    for(j = pngHeight; j >= 0 && *dry == 0; j--){
-        for(i = 0; i <= pngWidth; i++){
+    for(j = canvasHeight - 1; j >= 0 && *dry == 0; j--){
+        for(i = 0; i < canvasWidth; i++){
             if(kageCanvas[j][i] == 0){
                 *dry = j;
                 break;
