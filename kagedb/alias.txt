@@ -6,6 +6,7 @@ cdp-8baf	u72ad
 gt-00458	u4eba-03
 gt-k00059	u516b-04
 gt-k00064	u53c8-01
+u2e85	u4ebb
 u2e86	v5182-01
 u2e98	u624c
 u2ea1	u6c35
