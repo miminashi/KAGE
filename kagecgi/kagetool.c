@@ -54,33 +54,132 @@ void DotsHeight(int *dly, int *dry){
 }
 
 void PartsWidth(const KGString *in, int *lx, int *rx){
+	int tempShotai;
+    DrawBox();
+    tempShotai = kShotai;
+    kShotai = kGothic;
+    drawGlyph(in, 1);
+    kShotai = tempShotai;
+    DotsWidth(lx, rx);
+	/*
     int i;
 	int *buf, strokes;
+	double t, x;
 	
 	*lx = 1000; *rx = 0;
 	buf = convertStroke(in->str, buf, &strokes);
 	
     for(i = 0; i < strokes; i++){
-        if(buf[i * 11 + 0] % 10 == 0) continue;
+		switch(buf[i * 11 + 0] % 10){
 		
-        if(*lx > buf[i * 11 + 3]) *lx = buf[i * 11 + 3];
-		if(*rx < buf[i * 11 + 3]) *rx = buf[i * 11 + 3];
-        if(*lx > buf[i * 11 + 5]) *lx = buf[i * 11 + 5];
-        if(*rx < buf[i * 11 + 5]) *rx = buf[i * 11 + 5];
-		
-        if(buf[i * 11 + 0] % 10 == 2 || buf[i * 11 + 0] % 10 == 3 || buf[i * 11 + 0] % 10 == 8){
+		case 0:
+		case 9:
+			break;
+		case 1:
+	        if(*lx > buf[i * 11 + 3]) *lx = buf[i * 11 + 3];
+			if(*rx < buf[i * 11 + 3]) *rx = buf[i * 11 + 3];
+	        if(*lx > buf[i * 11 + 5]) *lx = buf[i * 11 + 5];
+	        if(*rx < buf[i * 11 + 5]) *rx = buf[i * 11 + 5];
+			break;
+		case 2:
+			for(t = 0; t <= 1; t = t + 0.05){
+				x = (1.0 - t) * (1.0 - t) * buf[i * 11 + 3] + 2.0 * t * (1.0 - t) * buf[i * 11 + 5] + t * t * buf[i * 11 + 7];
+		        if(*lx > x) *lx = x;
+        	    if(*rx < x) *rx = x;
+			}
+			break;
+		case 3:
+	        if(*lx > buf[i * 11 + 3]) *lx = buf[i * 11 + 3];
+			if(*rx < buf[i * 11 + 3]) *rx = buf[i * 11 + 3];
+	        if(*lx > buf[i * 11 + 5]) *lx = buf[i * 11 + 5];
+	        if(*rx < buf[i * 11 + 5]) *rx = buf[i * 11 + 5];
 	        if(*lx > buf[i * 11 + 7]) *lx = buf[i * 11 + 7];
             if(*rx < buf[i * 11 + 7]) *rx = buf[i * 11 + 7];
+			break;
+		case 6:
+			for(t = 0; t < 1; t = t + 0.05){
+				x = (1.0 - t) * (1.0 - t) * (1.0 - t) * buf[i * 11 + 3] + 3.0 * t * (1.0 - t) * (1.0 - t) * buf[i * 11 + 5] + 3 * t * t * (1.0 - t) * buf[i * 11 + 7] + t * t * t * buf[i * 11 + 9];
+		        if(*lx > x) *lx = x;
+        	    if(*rx < x) *rx = x;
+			}
+			break;
+		case 7:
+	        if(*lx > buf[i * 11 + 3]) *lx = buf[i * 11 + 3];
+			if(*rx < buf[i * 11 + 3]) *rx = buf[i * 11 + 3];
+			for(t = 0; t < 1; t = t + 0.05){
+				x = (1.0 - t) * (1.0 - t) * buf[i * 11 + 5] + 2.0 * t * (1.0 - t) * buf[i * 11 + 7] + t * t * buf[i * 11 + 9];
+		        if(*lx > x) *lx = x;
+        	    if(*rx < x) *rx = x;
+			}
 		}
-        if(buf[i * 11 + 0] % 10 == 4 || buf[i * 11 + 0] % 10 == 6 || buf[i * 11 + 0] % 10 == 7){
-	        if(*lx > buf[i * 11 + 9]) *lx = buf[i * 11 + 9];
-	        if(*rx < buf[i * 11 + 9]) *rx = buf[i * 11 + 9];
-        }
 	}
 	free(buf);
+	*/
 }
 
 void PartsHeight(const KGString *in, int *ly, int *ry){
+	int tempShotai;
+    DrawBox();
+    tempShotai = kShotai;
+    kShotai = kGothic;
+    drawGlyph(in, 1);
+    kShotai = tempShotai;
+    DotsHeight(ly, ry);
+	/*
+    int i;
+	int *buf, strokes;
+	double t, y;
+	
+	*ly = 1000; *ry = 0;
+	buf = convertStroke(in->str, buf, &strokes);
+	
+    for(i = 0; i < strokes; i++){
+		switch(buf[i * 11 + 0] % 10){
+		
+		case 0:
+		case 9:
+			break;
+		case 1:
+	        if(*ly > buf[i * 11 + 4]) *ly = buf[i * 11 + 4];
+			if(*ry < buf[i * 11 + 4]) *ry = buf[i * 11 + 4];
+	        if(*ly > buf[i * 11 + 6]) *ly = buf[i * 11 + 6];
+	        if(*ry < buf[i * 11 + 6]) *ry = buf[i * 11 + 6];
+			break;
+		case 2:
+			for(t = 0; t <= 1; t = t + 0.05){
+				y = (1.0 - t) * (1.0 - t) * buf[i * 11 + 4] + 2.0 * t * (1.0 - t) * buf[i * 11 + 6] + t * t * buf[i * 11 + 8];
+		        if(*ly > y) *ly = y;
+        	    if(*ry < y) *ry = y;
+			}
+			break;
+		case 3:
+	        if(*ly > buf[i * 11 + 4]) *ly = buf[i * 11 + 4];
+			if(*ry < buf[i * 11 + 4]) *ry = buf[i * 11 + 4];
+	        if(*ly > buf[i * 11 + 6]) *ly = buf[i * 11 + 6];
+	        if(*ry < buf[i * 11 + 6]) *ry = buf[i * 11 + 6];
+	        if(*ly > buf[i * 11 + 8]) *ly = buf[i * 11 + 8];
+            if(*ry < buf[i * 11 + 8]) *ry = buf[i * 11 + 8];
+			break;
+		case 6:
+			for(t = 0; t < 1; t = t + 0.05){
+				y = (1.0 - t) * (1.0 - t) * (1.0 - t) * buf[i * 11 + 4] + 3.0 * t * (1.0 - t) * (1.0 - t) * buf[i * 11 + 6] + 3 * t * t * (1.0 - t) * buf[i * 11 + 8] + t * t * t * buf[i * 11 + 10];
+		        if(*ly > y) *ly = y;
+        	    if(*ry < y) *ry = y;
+			}
+			break;
+		case 7:
+	        if(*ly > buf[i * 11 + 4]) *ly = buf[i * 11 + 4];
+			if(*ry < buf[i * 11 + 4]) *ry = buf[i * 11 + 4];
+			for(t = 0; t < 1; t = t + 0.05){
+				y = (1.0 - t) * (1.0 - t) * buf[i * 11 + 6] + 2.0 * t * (1.0 - t) * buf[i * 11 + 8] + t * t * buf[i * 11 + 10];
+		        if(*ly > y) *ly = y;
+        	    if(*ry < y) *ry = y;
+			}
+		}
+	}
+	free(buf);
+	*/
+	/*
     int i;
 	int *buf, strokes;
 	
@@ -105,6 +204,7 @@ void PartsHeight(const KGString *in, int *ly, int *ry){
         }
 	}
 	free(buf);
+	*/
 }
 
 KGString * CalcSizes(const KGString *in, int mode){
