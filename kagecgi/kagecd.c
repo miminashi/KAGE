@@ -597,71 +597,71 @@ void cdDrawLine(int tx1, int ty1, int tx2, int ty2, int ta1, int ta2){
 		if(x1 == x2){ //if TATE stroke, use y-axis
 			switch(a1){
 			case 0:
-				poly[0].X = x1 - kMinWidthT;
-				poly[0].Y = y1 - kMinWidthY / 2;
-				poly[3].X = x1 + kMinWidthT;
-				poly[3].Y = y1 + kMinWidthY / 2;
+				poly[3].X = x1 - kMinWidthT;
+				poly[3].Y = y1 - kMinWidthY / 2;
+				poly[0].X = x1 + kMinWidthT;
+				poly[0].Y = y1 + kMinWidthY / 2;
 				break;
 			case 1:
 			case 6:
 			case 22:
-				poly[0].X = x1 - kMinWidthT;
-				poly[0].Y = y1;
-				poly[3].X = x1 + kMinWidthT;
+				poly[3].X = x1 - kMinWidthT;
 				poly[3].Y = y1;
+				poly[0].X = x1 + kMinWidthT;
+				poly[0].Y = y1;
 				break;
 			case 12:
-				poly[0].X = x1 - kMinWidthT;
-				poly[0].Y = y1 - kMinWidthY - kMinWidthT;
-				poly[3].X = x1 + kMinWidthT;
-				poly[3].Y = y1 - kMinWidthY;
+				poly[3].X = x1 - kMinWidthT;
+				poly[3].Y = y1 - kMinWidthY - kMinWidthT;
+				poly[0].X = x1 + kMinWidthT;
+				poly[0].Y = y1 - kMinWidthY;
 				break;
 			case 32:
-				poly[0].X = x1 - kMinWidthT;
-				poly[0].Y = y1 - kMinWidthY;
-				poly[3].X = x1 + kMinWidthT;
+				poly[3].X = x1 - kMinWidthT;
 				poly[3].Y = y1 - kMinWidthY;
+				poly[0].X = x1 + kMinWidthT;
+				poly[0].Y = y1 - kMinWidthY;
 				break;
 			}
 			
 			switch(a2){
 			case 0:
 				if(a1 == 6){ //KAGI's tail
-					poly[1].X = x2 - kMinWidthT;
-					poly[1].Y = y2;
-					poly[2].X = x2 + kMinWidthT;
+					poly[2].X = x2 - kMinWidthT;
 					poly[2].Y = y2;
+					poly[1].X = x2 + kMinWidthT;
+					poly[1].Y = y2;
 				}
 				else{
-					poly[1].X = x2 - kMinWidthT;
-					poly[1].Y = y2 + kMinWidthT / 2;
-					poly[2].X = x2 + kMinWidthT;
-					poly[2].Y = y2 - kMinWidthT / 2;
+					poly[2].X = x2 - kMinWidthT;
+					poly[2].Y = y2 + kMinWidthT / 2;
+					poly[1].X = x2 + kMinWidthT;
+					poly[1].Y = y2 - kMinWidthT / 2;
 				}
 				break;
 			case 1:
-				poly[1].X = x2 - kMinWidthT;
-				poly[1].Y = y2;
-				poly[2].X = x2 + kMinWidthT;
+				poly[2].X = x2 - kMinWidthT;
 				poly[2].Y = y2;
+				poly[1].X = x2 + kMinWidthT;
+				poly[1].Y = y2;
 				break;
 			case 13:
-				poly[1].X = x2 - kMinWidthT;
-				poly[1].Y = y2 + kWidth * kKakato + kMinWidthT;
-				poly[2].X = x2 + kMinWidthT;
-				poly[2].Y = y2 + kWidth * kKakato;
+				poly[2].X = x2 - kMinWidthT;
+				poly[2].Y = y2 + kWidth * kKakato + kMinWidthT;
+				poly[1].X = x2 + kMinWidthT;
+				poly[1].Y = y2 + kWidth * kKakato;
 				break;
 			case 23:
-				poly[1].X = x2 - kMinWidthT;
-				poly[1].Y = y2 + kWidth * kKakato * 0.5 + kMinWidthT;
-				poly[2].X = x2 + kMinWidthT;
-				poly[2].Y = y2 + kWidth * kKakato * 0.5;
+				poly[2].X = x2 - kMinWidthT;
+				poly[2].Y = y2 + kWidth * kKakato * 0.5 + kMinWidthT;
+				poly[1].X = x2 + kMinWidthT;
+				poly[1].Y = y2 + kWidth * kKakato * 0.5;
 				break;
 			case 32:
-				poly[1].X = x2 - kMinWidthT;
-				poly[1].Y = y2 + kMinWidthY;
-				poly[2].X = x2 + kMinWidthT;
+				poly[2].X = x2 - kMinWidthT;
 				poly[2].Y = y2 + kMinWidthY;
+				poly[1].X = x2 + kMinWidthT;
+				poly[1].Y = y2 + kMinWidthY;
 				break;
 			}
 			
@@ -692,16 +692,16 @@ void cdDrawLine(int tx1, int ty1, int tx2, int ty2, int ta1, int ta2){
 			}
 			
 			if((a1 == 6 && a2 == 0) || a2 == 1){ //KAGI NO YOKO BOU NO SAIGO NO MARU
-				poly3[0].X = x2 - kMinWidthT;
-				poly3[0].Y = y2;
-				poly3[1].X = x2 - kMinWidthT * 0.6;
-				poly3[1].Y = y2 + kMinWidthT * 0.6;
+				poly3[4].X = x2 - kMinWidthT;
+				poly3[4].Y = y2;
+				poly3[3].X = x2 - kMinWidthT * 0.6;
+				poly3[3].Y = y2 + kMinWidthT * 0.6;
 				poly3[2].X = x2;
 				poly3[2].Y = y2 + kMinWidthT;
-				poly3[3].X = x2 + kMinWidthT * 0.6;
-				poly3[3].Y = y2 + kMinWidthT * 0.6;
-				poly3[4].X = x2 + kMinWidthT;
-				poly3[4].Y = y2;
+				poly3[1].X = x2 + kMinWidthT * 0.6;
+				poly3[1].Y = y2 + kMinWidthT * 0.6;
+				poly3[0].X = x2 + kMinWidthT;
+				poly3[0].Y = y2;
 				icPolygon(poly3, 5);
 			}
 		}
