@@ -9,11 +9,10 @@
 
 // define for localhost environment
 #define errorFileSize 3992
-//#define errorFileName "/usr/local/share/kagecgi/error.png"
 #define errorFileName "error.png"
-#define pngFilePath "/var/www/fontsjp/v0.4/"
-//#define databaseFileName "/usr/local/share/kagecgi/kagedb"
-#define databaseFileName "kagedb"
+#define pngFilePath "/var/www/v0.4/"
+#define partsdbFileName "/var/www/kagedb/partsdb"
+#define idsdbFileName "/var/www/kagedb/idsdb"
 
 #define kBaseline 188
 #define pngWidth 200
@@ -24,7 +23,8 @@
 #define min(x1,x2) ((x1) > (x2))? (x2):(x1)
 #define max(x1,x2) ((x1) > (x2))? (x1):(x2)
 
-DB *kDatabase;
+DB *kPartsdbDatabase;
+DB *kIdsdbDatabase;
 
 FILE *debug;
 
