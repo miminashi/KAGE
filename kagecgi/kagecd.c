@@ -566,7 +566,6 @@ void cdDrawCurve(double x1, double y1,
 	switch(a2){
 	case 0:
 	case 1:
-	case 8:
 	case 7:
 	case 9:
 	case 15:
@@ -575,6 +574,9 @@ void cdDrawCurve(double x1, double y1,
 	case 5:
 		delta = 0;
 		break;
+        case 8: // get shorten for tail's circle
+          delta = -1 * kMinWidthT * 0.5;
+          break;
 	default:
 		break;
 	}
