@@ -120,6 +120,7 @@ void searchAliasData(const GString *in, GString *out){
 				}
 			}
 		}
+		free(buf);
 	}
 }
 
