@@ -6,9 +6,9 @@ PREREQUISITES
 
 KAGE/cgi needs following librarys:
 
- - Berkely DB 2 (3 is not supported yet)
+ - Berkely DB 1or2 (3 is not supported yet)
  - libpng
- - glib
+ - glib2.0
  - xlib
 
 
@@ -16,6 +16,7 @@ CONFIGURATION
 =============
 
 Please edit `Makefile' fit with your environment.
+
 
 
 RUNNING MAKE

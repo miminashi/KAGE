@@ -3,8 +3,7 @@
 
 #include "kage.h"
 #include "kagecgi.h"
-#include <stdlib.h>
-#include <png.h>
+#include "sysdep.h"
 
 void DotsWidth(int *dlx, int *drx){
 	int i, j;

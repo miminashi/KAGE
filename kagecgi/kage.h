@@ -1,8 +1,7 @@
 //kage.h
 //
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <math.h>
+
+#include "sysdep.h"
 
 #ifndef _KAGE_H_
 #define _KAGE_H_

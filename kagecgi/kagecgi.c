@@ -1,12 +1,9 @@
 //kagecgi.c
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <png.h>
-#include <glib.h>
 #include "kage.h"
 #include "kagecgi.h"
+#include "sysdep.h"
 
 int main(int argc, char *argv[]){
 	GString *tmp1, *tmp2, *test1, *test2, *filename;

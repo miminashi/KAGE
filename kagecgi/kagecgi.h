@@ -1,12 +1,8 @@
 //kagecgi.h
 //
 
-#include <db1/db.h>
-//#include <db2/db_185.h>
-
-#include <png.h>
-#include <glib.h>
 #include "kage.h"
+#include "sysdep.h"
 
 #ifndef _KAGECGI_H_
 #define _KAGECGI_H_

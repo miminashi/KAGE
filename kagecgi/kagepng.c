@@ -1,9 +1,7 @@
 //kagepng.c
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <png.h>
+#include "sysdep.h"
 
 png_bytepp initPng(int width, int height){
 	png_bytepp image;

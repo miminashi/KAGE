@@ -1,10 +1,9 @@
 //kagechar.c
 //
 
-#include <glib.h>
-#include <stdlib.h>
-#include "kagecgi.h"
 #include "kage.h"
+#include "kagecgi.h"
+#include "sysdep.h"
 
 int isIDS(const GString *in){
 	//check IDC "u2ff*"

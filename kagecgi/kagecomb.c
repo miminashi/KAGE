@@ -1,10 +1,9 @@
 //kagecomb.c
 //
-#include <glib.h>
-#include <math.h>
-#include <stdlib.h>
-#include "kagecgi.h"
+
 #include "kage.h"
+#include "kagecgi.h"
+#include "sysdep.h"
 
 void combineYoko2(const GString *parts1, const GString *parts3, int *result){
     int f, g, h, i, j, k, l;

@@ -1,10 +1,9 @@
 // kagepoly.c
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "kagecgi.h"
 #include "kage.h"
+#include "kagecgi.h"
+#include "sysdep.h"
 
 void fillPolygon(struct kPoint *p, int number, int col, unsigned char **image){
 	int i, ix, iy;

@@ -1,13 +1,9 @@
 //kageeg.c
 //
 
-#include <db1/db.h>
-//#include <db2/db_185.h>
-
-#include <glib.h>
-#include <stdlib.h>
-#include "kagecgi.h"
 #include "kage.h"
+#include "kagecgi.h"
+#include "sysdep.h"
 
 void generateGlyphByIDS(const GString *in, GString *out, int flag){
 	GString *tmp1, *tmp2, *tmp3, *tmp4;

@@ -1,13 +1,9 @@
 //kagedb.c
 //
 
-#include <db1/db.h>
-//#include <db2/db_185.h>
-
-#include <sys/fcntl.h>
-#include <glib.h>
-#include "kagecgi.h"
 #include "kage.h"
+#include "kagecgi.h"
+#include "sysdep.h"
 
 int initDB(){
 	kDatabase = dbopen(databaseFileName, O_RDWR|O_CREAT, 0666, DB_HASH, NULL);
