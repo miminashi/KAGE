@@ -109,8 +109,9 @@ void generateGlyph(const GString *in, GString *out){
 	//search from parts(2nd)
 	searchPartsData(in, tmp);
 	if(tmp->len != 0){
-		g_string_assign(out, tmp->str);
-		return;
+	  tmp = CalcSizes(tmp, 1);
+	  g_string_assign(out, tmp->str);
+	  return;
 	}
 	
 	//search from alias(2nd)
