@@ -30,6 +30,11 @@ int kShotai;
 #define FLAG_FLAT_TOP 4
 #define FLAG_FLAT_BOTTOM 8
 
+#define FLAG_SURROUND_LEFT 1
+#define FLAG_SURROUND_RIGHT 2
+#define FLAG_SURROUND_TOP 4
+#define FLAG_SURROUND_BOTTOM 8
+
 typedef struct _kPoint{
 	double X;
 	double Y;
