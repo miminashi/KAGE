@@ -2,16 +2,16 @@
 //
 #include "kage.h"
 
-void cdDrawCurve(int x1, int y1,
-	int x2, int y2,
-	int x3, int y3,
+void cdDrawCurve(double x1, double y1,
+	double x2, double y2,
+	double x3, double y3,
 	int a1, int a2){
 
 	double rad, t;
 	double x, y, v;
 	double ix, iy, ia, ib, ir;
 	int count, tt;
-	int delta;
+	double delta;
 	double deltad;
 	double XX, XY, YX, YY;
 	
@@ -562,9 +562,10 @@ void cdDrawCurve(int x1, int y1,
 	}
 }
 
-void cdDrawLine(int tx1, int ty1, int tx2, int ty2, int ta1, int ta2){
+void cdDrawLine(double tx1, double ty1, double tx2, double ty2, int ta1, int ta2){
 	double rad;
-	int v, x1, y1, x2, y2, a1, a2;
+	double v, x1, y1, x2, y2;
+	int a1, a2;
 	double XX, XY, YX, YY;
 	
 	if(kShotai == kMincho){ //mincho
