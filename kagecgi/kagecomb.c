@@ -475,14 +475,65 @@ void combineTate3(const KGString *parts1, const KGString *parts2, const KGString
   result[11] = tempResult2[1] + (tempResult[7] - miny) * ((double)height2 / height);
 }
 
-void combineHame2(const KGString *parts1, const KGString *parts3, int *result, int surround){
+void adjust(int *x, int *y, int x1, int y1, int x2, int y2, double ratio){
+  if(*x <= x1){
+    *x = 0 + *x * ratio;
+  } else if(x2 <= *x){
+    *x = pngWidth - (pngWidth - *x) * ratio;
+  }
+  if(*y <= y1){
+    *y = 0 + *y * ratio;
+  } else if(y2 <= *y){
+    *y = pngHeight - (pngHeight - *y) * ratio;
+  }
+}
+
+void combineHame2(KGString *parts1, KGString *parts3, int *result, int surround){
   int i, flag;
   int *buf, strokes;
   double yoko, tate;
   int mitsu, flg_box;
+  int x1, x2, y1, y2;
+  double ratio;
+  KGString *temp;
+  
+  CalcOptions(parts3, &mitsu, &flg_box, &yoko, &tate);
+  
+  if(yoko * tate > 12){
+    ratio = sqrt(12 / (yoko * tate));
+    temp = kg_string_new("");
+    buf = convertStroke(parts1->str, buf, &strokes);
+    for(i = 0; i < strokes; i++){
+      if(buf[i * 11] == 9){
+        x1 = buf[i * 11 + 3];
+        y1 = buf[i * 11 + 4];
+        x2 = buf[i * 11 + 5];
+        y2 = buf[i * 11 + 6];
+        i = strokes;
+      }
+    }
+    for(i = 0; i <strokes; i++){
+      switch(buf[i * 11]){
+      case 6:
+      case 7:
+        adjust(&buf[i * 11 + 9], &buf[i * 11 + 10], x1,y1,x2,y2, ratio);
+      case 2:
+      case 12:
+      case 3:
+        adjust(&buf[i * 11 + 7], &buf[i * 11 + 8], x1,y1,x2,y2, ratio);
+      case 1:
+      case 9:
+      case 8:
+      case 99:
+        adjust(&buf[i * 11 + 5], &buf[i * 11 + 6], x1,y1,x2,y2, ratio);
+        adjust(&buf[i * 11 + 3], &buf[i * 11 + 4], x1,y1,x2,y2, ratio);
+      }
+    }
+    convertArray(buf, temp, strokes, 0);
+    kg_string_assign(parts1, temp->str);
+  }
   
   flag = 0;
-  CalcOptions(parts3, &mitsu, &flg_box, &yoko, &tate);
   
   //set results
   result[0] = 0;

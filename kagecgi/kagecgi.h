@@ -70,7 +70,8 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result);
 void combineYoko3(const KGString *parts1, const KGString *parts2, const KGString *parts3, int *result);
 void combineTate2(const KGString *parts1, const KGString *parts3, int *result);
 void combineTate3(const KGString *parts1, const KGString *parts2, const KGString *parts3, int *result);
-void combineHame2(const KGString *parts1, const KGString *parts3, int *result, int surround);
+void combineHame2(KGString *parts1, KGString *parts3, int *result, int surround);
+//void combineHame2(const KGString *parts1, const KGString *parts3, int *result, int surround);
 
 int initDB();
 int closeDB();
