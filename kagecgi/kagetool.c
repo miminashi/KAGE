@@ -53,7 +53,7 @@ void DotsHeight(int *dly, int *dry){
     }
 }
 
-void PartsWidth(const GString *in, int *lx, int *rx){
+void PartsWidth(const KGString *in, int *lx, int *rx){
     int i;
 	int *buf, strokes;
 	
@@ -80,7 +80,7 @@ void PartsWidth(const GString *in, int *lx, int *rx){
 	free(buf);
 }
 
-void PartsHeight(const GString *in, int *ly, int *ry){
+void PartsHeight(const KGString *in, int *ly, int *ry){
     int i;
 	int *buf, strokes;
 	
@@ -107,7 +107,7 @@ void PartsHeight(const GString *in, int *ly, int *ry){
 	free(buf);
 }
 
-GString * CalcSizes(const GString *in, int mode){
+KGString * CalcSizes(const KGString *in, int mode){
     int i, j, k, basewidth, one_lineX, one_lineY;
     int dlx1, drx1, dly1, dry1;
 	int px1, py1;
@@ -119,9 +119,9 @@ GString * CalcSizes(const GString *in, int mode){
 	
 	int *buf, strokes;
 	int tf[12];
-	GString *out;
+	KGString *out;
 	
-	out = g_string_new("");
+	out = kg_string_new("");
     basewidth = pngWidth * 0.9;
 	
     if(mode == 0){
@@ -232,7 +232,7 @@ GString * CalcSizes(const GString *in, int mode){
 	tf[2] = px1 + pr1 * 200;
 	tf[3] = py1 + pry1 * 200;
 	addStrokeWithTransform(in, 1, tf, out, 0);
-	return g_string_new(out->str);
+	return kg_string_new(out->str);
 }
 
 void DrawBox(){
@@ -245,7 +245,7 @@ void DrawBox(){
 	}
 }
 
-void CalcOptions(const GString *in, int *mitsudo, int *flag, double *yoko, double *tate){
+void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, double *tate){
     int i, j, k, l, flg;
     int dlx1, drx1, dly1, dry1;
     int kari, mode;
@@ -394,7 +394,7 @@ void CalcOptions(const GString *in, int *mitsudo, int *flag, double *yoko, doubl
     free(buf);
 }
 
-void DoDrawParts(const GString *in, const int lx1, const double rf1, const int ly1, const double rfy1){
+void DoDrawParts(const KGString *in, const int lx1, const double rf1, const int ly1, const double rfy1){
     int i;
 	int *buf, strokes;
 	
@@ -416,10 +416,10 @@ void DoDrawParts(const GString *in, const int lx1, const double rf1, const int l
 	free(buf);
 }
 
-void DoDrawMixFont(const GString *in1,
+void DoDrawMixFont(const KGString *in1,
  const int lx1,
  const double rf1,
- const GString *in2,
+ const KGString *in2,
  const int lx2,
  const double rf2,
  const int ly1,

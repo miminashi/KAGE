@@ -8,9 +8,8 @@
 
 #include <sys/fcntl.h>
 
-#include <glib.h>
-
 #include <png.h>
 
 #include <db.h>
 
+#include "kagestr.h"

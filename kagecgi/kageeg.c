@@ -5,8 +5,8 @@
 #include "kagecgi.h"
 #include "sysdep.h"
 
-void generateGlyphByIDS(const GString *in, GString *out, int flag){
-	GString *tmp1, *tmp2;
+void generateGlyphByIDS(const KGString *in, KGString *out, int flag){
+	KGString *tmp1, *tmp2;
 	
 	//pass this method if 'in' is not UCS parts
 	if((in->str)[0] != 'u'){
@@ -19,18 +19,18 @@ void generateGlyphByIDS(const GString *in, GString *out, int flag){
 		return;
 	}
 	
-	tmp1 = g_string_new(in->str);
-	tmp2 = g_string_new(in->str);
+	tmp1 = kg_string_new(in->str);
+	tmp2 = kg_string_new(in->str);
 	
 	//append place flag
 	if(1 <= flag && flag <= 7){
-		if(tmp1->len != 7) g_string_append(tmp1, "-");
-		if(flag == 1) g_string_append(tmp1, "01");
-		else if(flag == 2) g_string_append(tmp1, "02");
-		else if(flag == 3) g_string_append(tmp1, "03");
-		else if(flag == 4) g_string_append(tmp1, "04");
-		else if(flag == 5) g_string_append(tmp1, "05");
-		else if(flag == 6) g_string_append(tmp1, "06");
+		if(tmp1->len != 7) kg_string_append(tmp1, "-");
+		if(flag == 1) kg_string_append(tmp1, "01");
+		else if(flag == 2) kg_string_append(tmp1, "02");
+		else if(flag == 3) kg_string_append(tmp1, "03");
+		else if(flag == 4) kg_string_append(tmp1, "04");
+		else if(flag == 5) kg_string_append(tmp1, "05");
+		else if(flag == 6) kg_string_append(tmp1, "06");
 	}
 
 	generateGlyph(tmp1, out);
@@ -40,16 +40,16 @@ void generateGlyphByIDS(const GString *in, GString *out, int flag){
 	return;
 }
 
-void generateGlyph(const GString *in, GString *out){
-  GString *tmp;
-	tmp = g_string_new("");
-	g_string_set_size(out, 0);
+void generateGlyph(const KGString *in, KGString *out){
+  KGString *tmp;
+	tmp = kg_string_new("");
+	kg_string_set_size(out, 0);
 	
 	//search from parts
 	searchPartsData(in, tmp);
 	if(tmp->len != 0){
 	  tmp = CalcSizes(tmp, 1);
-	  g_string_assign(out, tmp->str);
+	  out = kg_string_assign(out, tmp->str);
 	  return;
 	}
 	
@@ -71,19 +71,19 @@ void generateGlyph(const GString *in, GString *out){
 	}
 }
 
-void doCombine(const GString *in, GString *out){
-	GString *partIDS1, *partIDS2, *partIDS3;
-	GString *partStroke1, *partStroke2, *partStroke3;
+void doCombine(const KGString *in, KGString *out){
+	KGString *partIDS1, *partIDS2, *partIDS3;
+	KGString *partStroke1, *partStroke2, *partStroke3;
 	int result[12];
 	
-	partIDS1 = g_string_new("");
-	partIDS2 = g_string_new("");
-	partIDS3 = g_string_new("");
-	partStroke1 = g_string_new("");
-	partStroke2 = g_string_new("");
-	partStroke3 = g_string_new("");
+	partIDS1 = kg_string_new("");
+	partIDS2 = kg_string_new("");
+	partIDS3 = kg_string_new("");
+	partStroke1 = kg_string_new("");
+	partStroke2 = kg_string_new("");
+	partStroke3 = kg_string_new("");
 	
-	g_string_set_size(out, 0);
+	kg_string_set_size(out, 0);
 	
 	//check first IDC
 	if(strncmp(in->str, "u2ff", 4) != 0) return;
@@ -205,7 +205,7 @@ void doCombine(const GString *in, GString *out){
 	}
 }
 
-void drawGlyph(const GString *in, const int mode){
+void drawGlyph(const KGString *in, const int mode){
 	int i, j;
 	int *buf;
 	buf = convertStroke(in->str, buf, &j);

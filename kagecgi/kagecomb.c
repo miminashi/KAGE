@@ -5,7 +5,7 @@
 #include "kagecgi.h"
 #include "sysdep.h"
 
-void combineYoko2(const GString *parts1, const GString *parts3, int *result){
+void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
     int f, g, h, i, j, k, l;
     int flg_boxL, flg_boxR;
     int Xside, YsideLa, YsideLb, YsideRa, YsideRb, YheightL, YnanameL, YsmallL;
@@ -193,11 +193,11 @@ void combineYoko2(const GString *parts1, const GString *parts3, int *result){
 	kShotai = tempShotai;
 }
 
-void combineYoko3(const GString *parts1, const GString *parts2, const GString *parts3, int *result){
+void combineYoko3(const KGString *parts1, const KGString *parts2, const KGString *parts3, int *result){
 	//not yet
 }
 
-void combineTate2(const GString *parts1, const GString *parts3, int *result){
+void combineTate2(const KGString *parts1, const KGString *parts3, int *result){
     int f, g, h, i, j, k, l;
     int flg_boxL, flg_boxR;
     int pxL, pxR, pyL, pyR;
@@ -372,11 +372,11 @@ void combineTate2(const GString *parts1, const GString *parts3, int *result){
 	kShotai = tempShotai;
 }
 
-void combineTate3(const GString *parts1, const GString *parts2, const GString *parts3, int *result){
+void combineTate3(const KGString *parts1, const KGString *parts2, const KGString *parts3, int *result){
   //not yet
 }
 
-void combineHame2(const GString *parts1, const GString *parts3, int *result){
+void combineHame2(const KGString *parts1, const KGString *parts3, int *result){
   int i;
   int *buf, strokes;
 

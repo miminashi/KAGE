@@ -10,14 +10,12 @@ KAGE/cgi needs following librarys:
 
  - Berkely DB 3
  - libpng
- - glib2.0
 
 
 CONFIGURATION
 =============
 
 Please edit `Makefile' fit with your environment.
-
 
 
 RUNNING MAKE
