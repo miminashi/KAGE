@@ -39,13 +39,13 @@ void icPolygon(kPoint *poly, int number){
 }
 
 void icBox(int x1, int y1, int x2, int y2){
-  kageCanvas[y1][x1] = kGray;
-  kageCanvas[y2][x1] = kGray;
-  kageCanvas[y1][x2] = kGray;
-  kageCanvas[y2][x2] = kGray;
+  if(kageCanvas[y1][x1] == kWhite){ kageCanvas[y1][x1] = kGray; }
+  if(kageCanvas[y2][x1] == kWhite){ kageCanvas[y2][x1] = kGray; }
+  if(kageCanvas[y1][x2] == kWhite){ kageCanvas[y1][x2] = kGray; }
+  if(kageCanvas[y2][x2] == kWhite){ kageCanvas[y2][x2] = kGray; }
 }
 
 void icDot(int x, int y){
-  kageCanvas[y][x] = kGray;
+  if(kageCanvas[y][x] == kWhite){ kageCanvas[y][x] = kGray; }
 }
 

@@ -354,9 +354,112 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
   int kari, mode;
   int tempShotai;
   int *buf, strokes;
-  
+
   *flag = 0;
   
+  int value;
+  buf = convertStroke(in->str, buf, &strokes);
+  
+  //check left side (NEW)
+  value = 200;
+  for(i = 0; i < strokes; i++){
+    switch(buf[i * 11]){
+    case 6:
+    case 7:
+      if(buf[i * 11 + 9] < value){ value = buf[i * 11 + 9]; }
+    case 2:
+    case 12:
+    case 3:
+      if(buf[i * 11 + 7] < value){ value = buf[i * 11 + 7]; }
+    case 1:
+      if(buf[i * 11 + 5] < value){ value = buf[i * 11 + 5]; }
+      if(buf[i * 11 + 3] < value){ value = buf[i * 11 + 3]; }
+    }
+  }
+  for(i = 0; i < strokes; i++){
+    if((buf[i * 11] == 1 || buf[i * 11] == 3) && // stroke #1 and #3
+       buf[i * 11 + 3] == value &&
+       buf[i * 11 + 5] == value &&
+       (buf[i * 11 + 6] - buf[i * 11 + 4]) > pngWidth * 0.9 / 4){
+      *flag = *flag | FLAG_FLAT_LEFT;
+    }
+  }
+
+  //check right side (NEW)
+  value = 0;
+  for(i = 0; i < strokes; i++){
+    switch(buf[i * 11]){
+    case 6:
+    case 7:
+      if(buf[i * 11 + 9] > value){ value = buf[i * 11 + 9]; }
+    case 2:
+    case 12:
+    case 3:
+      if(buf[i * 11 + 7] > value){ value = buf[i * 11 + 7]; }
+    case 1:
+      if(buf[i * 11 + 5] > value){ value = buf[i * 11 + 5]; }
+      if(buf[i * 11 + 3] > value){ value = buf[i * 11 + 3]; }
+    }
+  }
+  for(i = 0; i < strokes; i++){
+    if(buf[i * 11] == 1 &&
+       buf[i * 11 + 3] == value &&
+       buf[i * 11 + 5] == value &&
+       (buf[i * 11 + 6] - buf[i * 11 + 4]) > pngWidth * 0.9 / 4){
+      *flag = *flag | FLAG_FLAT_RIGHT;
+    }
+  }
+  
+  //check upper side (NEW)
+  value = 200;
+  for(i = 0; i < strokes; i++){
+    switch(buf[i * 11]){
+    case 6:
+    case 7:
+      if(buf[i * 11 + 10] < value){ value = buf[i * 11 + 10]; }
+    case 2:
+    case 12:
+    case 3:
+      if(buf[i * 11 + 8] < value){ value = buf[i * 11 + 8]; }
+    case 1:
+      if(buf[i * 11 + 6] < value){ value = buf[i * 11 + 6]; }
+      if(buf[i * 11 + 4] < value){ value = buf[i * 11 + 4]; }
+    }
+  }
+  for(i = 0; i < strokes; i++){
+    if(buf[i * 11] == 1 &&
+       buf[i * 11 + 4] == value &&
+       buf[i * 11 + 6] == value &&
+       (buf[i * 11 + 5] - buf[i * 11 + 3]) > pngWidth * 0.9 / 4){
+      *flag = *flag | FLAG_FLAT_TOP;
+    }
+  }
+
+  //check bottom side (NEW)
+  value = 0;
+  for(i = 0; i < strokes; i++){
+    switch(buf[i * 11]){
+    case 6:
+    case 7:
+      if(buf[i * 11 + 10] > value){ value = buf[i * 11 + 10]; }
+    case 2:
+    case 12:
+    case 3:
+      if(buf[i * 11 + 8] > value){ value = buf[i * 11 + 8]; }
+    case 1:
+      if(buf[i * 11 + 6] > value){ value = buf[i * 11 + 6]; }
+      if(buf[i * 11 + 4] > value){ value = buf[i * 11 + 4]; }
+    }
+  }
+  for(i = 0; i < strokes; i++){
+    if(buf[i * 11] == 1 &&
+       buf[i * 11 + 4] == value &&
+       buf[i * 11 + 6] == value &&
+       (buf[i * 11 + 5] - buf[i * 11 + 3]) > pngWidth * 0.9 / 4){
+      *flag = *flag | FLAG_FLAT_BOTTOM;
+    }
+  }
+
   DrawBox();
   tempShotai = kShotai;
   kShotai = kGothic;
@@ -364,80 +467,6 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
   kShotai = tempShotai;
   DotsWidth(&dlx1, &drx1);
   DotsHeight(&dly1, &dry1);
-  
-  //check left side
-  k = 0;
-  l = 0;
-  for(i = 0; i < pngWidth; i++){
-    flg = 0;
-    for(j = 0; j < kWidth; j++){
-      if(kageCanvas[i][dlx1 + j] != kWhite) flg = 1;
-    }
-    if(flg == 1){
-      k++;
-    }
-    else{
-      if(k > l) l = k;
-      k = 0;
-    }
-  }
-  if(k > l) l = k;
-  
-  if(l > pngWidth * 0.9 / 4) *flag = *flag | 1;
-  
-  //check right side
-  k = 0;
-  l = 0;
-  for(i = 0; i < pngWidth; i++){
-    flg = 0;
-    for(j = 0; j < kWidth; j++){
-      if(kageCanvas[i][drx1 - j] != kWhite) flg = 1;
-    }
-    if(flg == 1) k++;
-    else{
-      if(k > l) l = k;
-      k = 0;
-    }
-  }
-  if(k > l) l = k;
-  
-  if(l > pngWidth * 0.9 / 4) *flag = *flag | 2;
-  
-  //check upper side
-  k = 0;
-  l = 0;
-  for(i = 0; i < pngWidth; i++){
-    flg = 0;
-    for(j = 0; j < kWidth; j++){
-      if(kageCanvas[dly1 + j][i] != kWhite) flg = 1;
-    }
-    if(flg == 1) k++;
-    else{
-      if(k > l) l = k;
-      k = 0;
-    }
-  }
-  if(k > l) l = k;
-  
-  if(l > pngWidth * 0.9 / 4) *flag = *flag | 4;
-  
-  //check bottom side
-  k = 0;
-  l = 0;
-  for(i = 0; i < pngWidth; i++){
-    flg = 0;
-    for(j = 0; j < kWidth; j++){
-      if(kageCanvas[dry1 - j][i] != kWhite) flg = 1;
-    }
-    if(flg == 1) k++;
-    else{
-      if(k > l) l = k;
-      k = 0;
-    }
-  }
-  if(k > l) l = k;
-  
-  if(l > pngWidth * 0.9 / 4) *flag = *flag | 8;
   
   //count black dots
   *mitsudo = 0;
@@ -486,7 +515,7 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
   }
   
   //use user defined option if it exists
-  buf = convertStroke(in->str, buf, &strokes);
+  //buf = convertStroke(in->str, buf, &strokes);
   for(i = 0; i < strokes; i++){
     if(buf[i * 11 + 0] % 10 == 0){
       if(buf[i * 11 + 1] != 0) *yoko = (double)(buf[i * 11 + 1]) * 0.1;
