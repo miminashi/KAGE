@@ -27,13 +27,15 @@ int main(int argc, char *argv[]){
 	
 	//confirm request
 	type = 0;
-	//argv
-	tmp1 = g_string_new((gchar *)argv[1]);
-	if(tmp1->len != 0) type = 1;
-	//direct
+	//GET request
 	if(type == 0){
 	  tmp1 = g_string_new((gchar *)getenv("QUERY_STRING"));
 	  if(tmp1->len != 0) type = 2;
+	}
+	//argv(detect after GET request)
+	if(type == 0){
+		tmp1 = g_string_new((gchar *)argv[1]);
+		if(tmp1->len != 0) type = 1;
 	}
 	//redirect
 	if(type == 0){
@@ -48,7 +50,7 @@ int main(int argc, char *argv[]){
 	pos = tmp1->str;
 	
 	//separate token
-	if(type == 1 || type == 2){ //argv or direct
+	if(type == 1 || type == 2){ //argv or GET request
 		while(1){
 			cur = strchr(pos, '&');
 			tmp2 = g_string_new(pos);
