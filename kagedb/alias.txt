@@ -1,6 +1,7 @@
 cdp-89e0	pd0008
 cdp-8b67	pd0041
 cdp-8b72	pd0007
+cdp-8ba9	u725c
 cdp-8baf	u72ad
 gt-00458	u4eba-03
 gt-k00059	u516b-04
@@ -11,3 +12,4 @@ u2ea1	u6c35
 u2ebc	u6708-9903
 u2ebe	u8279
 u2ebf	u8279-k
+u97f3	u2ff1.u7acb.u65e5
