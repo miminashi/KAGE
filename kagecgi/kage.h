@@ -29,8 +29,6 @@ struct kPoint{
 	double Y;
 };
 
-XPoint xpoly[kResolution];
-
 struct kPoint poly[kResolution];
 struct kPoint poly2[3];
 struct kPoint poly3[5];

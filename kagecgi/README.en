@@ -11,7 +11,6 @@ KAGE/cgi needs following librarys:
  - Berkely DB 3
  - libpng
  - glib2.0
- - xlib
 
 
 CONFIGURATION
