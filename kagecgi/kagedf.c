@@ -166,6 +166,9 @@ void dfDrawFont(int a1, int a2, int a3,
       cdDrawLine(x1, y1, x2, y2, a2, 1);
       cdDrawCurve(x2, y2, x3, y3, x4, y4, 1, 7);
       break;
+    case 8:
+      icBox(x1, y1, x2, y2);
+      break;
     case 9: // may not be exist
       icDot(x1, y1);
       icDot(x2, y2);
@@ -335,6 +338,9 @@ void dfDrawFont(int a1, int a2, int a3,
     case 7:
       cdDrawLine(x1, y1, x2, y2, a2, 1);
       cdDrawCurve(x2, y2, x3, y3, x4, y4, 1, a3);
+      break;
+    case 8:
+      icBox(x1, y1, x2, y2);
       break;
     case 9: // may not be exist
       icDot(x1, y1);
