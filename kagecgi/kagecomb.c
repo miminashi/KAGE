@@ -377,8 +377,10 @@ void combineTate3(const KGString *parts1, const KGString *parts2, const KGString
 }
 
 void combineHame2(const KGString *parts1, const KGString *parts3, int *result){
-  int i;
+  int i, flag;
   int *buf, strokes;
+
+  flag = 0;
 
   //set results
   result[0] = 0;
@@ -388,12 +390,17 @@ void combineHame2(const KGString *parts1, const KGString *parts3, int *result){
   buf = convertStroke(parts1->str, buf, &strokes);
   for(i = 0; i < strokes; i++){
     if(buf[i * 11 + 0] == 9){
-
       result[8] = buf[i * 11 + 3];
       result[9] = buf[i * 11 + 4];
       result[10] = buf[i * 11 + 5];
       result[11] = buf[i * 11 + 6];
     }
   }
-	//not yet
+  if(flag == 0){ //error
+    result[8] = 50;
+    result[9] = 50;
+    result[10] = 150;
+    result[11] = 150;
+  }
+  //not yet
 }

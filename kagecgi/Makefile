@@ -8,13 +8,8 @@ BINDIR=/usr/local/bin
 SHAREDIR=/usr/local/share/kagecgi
 DBURL=http://fonts.jp/kagedb/kagedb
 
-#for cygwin
 CFLAGS=
 LIBS= -lpng -ldb
-
-#for linux
-#CFLAGS= -I/usr/local/include
-#LIBS= -L/usr/local/lib -lpng -ldb
 
 #for MacOSX with fink
 #CFLAGS= -I/sw/include -I/sw/include/db3 -I/sw/include/libpng/
