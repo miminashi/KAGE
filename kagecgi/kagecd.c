@@ -10,7 +10,6 @@ void cdDrawCurve(int x1, int y1,
 	double rad, t;
 	double x, y, v;
 	double ix, iy, ia, ib, ir;
-	int ox1, oy1, ox2, oy2;
 	int count, tt;
 	int delta;
 	double deltad;
@@ -97,7 +96,7 @@ void cdDrawCurve(int x1, int y1,
 		
 		//line SUICHOKU by vector
 		if(ix != 0 && iy != 0){
-			ir = atan(iy / ix * -1.0);
+			ir = atan(iy / ix * -1);
 			ia = sin(ir) * (double)(kMinWidthT);
 			ib = cos(ir) * (double)(kMinWidthT);
 		}
@@ -120,26 +119,17 @@ void cdDrawCurve(int x1, int y1,
 		ia = ia * deltad;
 		ib = ib * deltad;
 		
-		//swap if two lines are crossing
-		if(((x + ia) - ox1) * ((x + ia) - ox1) +
-			((y + ib) - oy1) * ((y + ib) - oy1) >
-			((x - ia) - ox1) * ((x - ia) - ox1) +
-			((y - ib) - oy1) * ((y - ib) - oy1) && count != 0){
-			ia = ia * -1;
-			ib = ib * -1;
+		//reverse if vector is going 2nd/3rd quadrants
+		if(ix <= 0){
+		  ia = ia * -1;
+		  ib = ib * -1;
 		}
 		
-		//copy as an old point
-		ox1 = x + ia;
-		oy1 = y + ib;
-		ox2 = x - ia;
-		oy2 = y - ib;
-		
 		//copy to polygon structuer
-		poly[count].X = x + ia;
-		poly[count].Y = y + ib;
-		poly[(1000 / kRate + 1) * 2 - 1 - count].X = x - ia;
-		poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y - ib;
+		poly[count].X = x - ia;
+		poly[count].Y = y - ib;
+		poly[(1000 / kRate + 1) * 2 - 1 - count].X = x + ia;
+		poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y + ib;
 		count += 1;
 	}
 	
@@ -553,27 +543,18 @@ void cdDrawCurve(int x1, int y1,
 					ib = kWidth;
 				}
 			}
-			
-			//if it is crossing, swap each other
-			if(((x + ia) - ox1) * ((x + ia) - ox1) +
-				((y + ib) - oy1) * ((y + ib) - oy1) >
-				((x - ia) - ox1) * ((x - ia) - ox1) +
-				((y - ib) - oy1) * ((y - ib) - oy1) && count != 0){
-				ia = ia * -1;
-				ib = ib * -1;
+
+			//reverse if vector is going 2nd/3rd quadrants
+			if(ix <= 0){
+			  ia = ia * -1;
+			  ib = ib * -1;
 			}
-			
-			//save old points for calculate crossing
-			ox1 = x + ia;
-			oy1 = y + ib;
-			ox2 = x - ia;
-			oy2 = y - ib;
-			
+		
 			//save to polygon
-			poly[count].X = x + ia;
-			poly[count].Y = y + ib;
-			poly[(1000 / kRate + 1) * 2 - 1 - count].X = x - ia;
-			poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y - ib;
+			poly[count].X = x - ia;
+			poly[count].Y = y - ib;
+			poly[(1000 / kRate + 1) * 2 - 1 - count].X = x + ia;
+			poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y + ib;
 			count += 1;
 		}
 		
@@ -992,14 +973,14 @@ void cdDrawLine(int tx1, int ty1, int tx2, int ty2, int ta1, int ta2){
 			if(a1 % 10 == 3){ y1 = y1 - kWidth * kKakato; }
 			if(a2 % 10 == 3){ y2 = y2 + kWidth * kKakato; }
 			
-			poly[0].X = x1 - kWidth;
-			poly[0].Y = y1;
-			poly[1].X = x2 - kWidth;
-			poly[1].Y = y2;
-			poly[2].X = x2 + kWidth;
-			poly[2].Y = y2;
-			poly[3].X = x1 + kWidth;
+			poly[3].X = x1 - kWidth;
 			poly[3].Y = y1;
+			poly[2].X = x2 - kWidth;
+			poly[2].Y = y2;
+			poly[1].X = x2 + kWidth;
+			poly[1].Y = y2;
+			poly[0].X = x1 + kWidth;
+			poly[0].Y = y1;
 			
 			icPolygon(poly, 4);
 		}
