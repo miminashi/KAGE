@@ -48,7 +48,7 @@ void generateGlyph(const KGString *in, KGString *out){
   //search from parts
   searchPartsData(in, tmp);
   if(tmp->len != 0){
-    tmp = CalcSizes(tmp, 1);
+    tmp = CalcSizes(tmp, 1);// this line may not be needed
     out = kg_string_assign(out, tmp->str);
     return;
   }

@@ -384,6 +384,8 @@ void convert99calc(const char *in, KGString *out){
   //*end = '\0';
   buf1 = kg_string_new(pname);
   generateGlyph(buf1, buf2);
+  //calc_sizes for using IDS as pname
+  buf2 = CalcSizes(buf2, 1);
   if(buf2->len == 0) return;
   
   //convert
