@@ -150,7 +150,7 @@ int main(int argc, char *argv[]){
 			closePng(pngWidth, pngHeight, kageCanvas);
 		}
 		else{
-			err = fopen("error.png", "r");
+			err = fopen(errorFileName, "r");
 			fread(errbuf, sizeof(char), errorFileSize, err);
 		//	printf("An error occurred.\r\n");
 			if(type != 1) fprintf(stdout, "Content-type: image/png\n\n");

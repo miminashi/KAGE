@@ -9,9 +9,9 @@
 
 // define for localhost environment
 #define errorFileSize 4009
-#define errorFileName "error.png"
+#define errorFileName "/usr/local/share/kagecgi/error.png"
 #define pngFilePath "/var/www/fontsjp/v0.4/"
-#define databaseFileName "../../kagedb/wiki"
+#define databaseFileName "/usr/local/share/kagecgi/kagedb"
 
 #define kBaseline 188
 #define pngWidth 200
