@@ -2,6 +2,572 @@
 //
 #include "kage.h"
 
+void cdDrawBezier(double x1, double y1,
+	double x2, double y2,
+	double x3, double y3,
+	double x4, double y4,
+	int a1, int a2){
+
+	double rad, t;
+	double x, y, v;
+	double ix, iy, ia, ib, ir;
+	int count, tt;
+	double delta;
+	double deltad;
+	double XX, XY, YX, YY;
+	
+	if(kShotai == kMincho){ // mincho
+	switch(a1){
+	case 0:
+	case 7:
+		delta = -1 * kMinWidthY * 0.5;
+		break;
+	case 1:
+	case 2:
+	case 6:
+	case 22:
+		delta = 0;
+		break;
+	case 12:
+	case 32:
+		delta = kMinWidthY;
+		break;
+	default:
+		break;
+	}
+	
+	if(x1 == x2){
+		if(y1 < y2){ y1 = y1 - delta; }
+		else{ y1 = y1 + delta; }
+	}
+	else if(y1 == y2){
+		if(x1 < x2){ x1 = x1 - delta; }
+		else{ x1 = x1 + delta; }
+	}
+	else{
+		rad = atan((double)(y2 - y1) / (double)(x2 - x1));
+		if(x1 < x2){ v = 1; } else{ v = -1; }
+		x1 = x1 - delta * cos(rad) * v;
+		y1 = y1 - delta * sin(rad) * v;
+	}
+	
+	switch(a2){
+	case 0:
+	case 1:
+	case 8:
+	case 7:
+	case 9:
+	case 15:
+	case 14:
+	case 17:
+	case 5:
+		delta = 0;
+		break;
+	default:
+		break;
+	}
+	
+	if(x3 == x4){
+		if(y3 < y4){ y4 = y4 + delta; }
+		else{ y4 = y4 - delta; }
+	}
+	else if(y3 == y4){
+		if(x3 < x4){ x4 = x4 + delta; }
+		else{ x4 = x4 - delta; }
+	}
+	else{
+		rad = atan((double)(y4 - y3) / (double)(x4 - x3));
+		if(x3 < x4){ v = 1; } else{ v = -1; }
+		x4 = x4 + delta * cos(rad) * v;
+		y4 = y4 + delta * sin(rad) * v;
+	}
+	
+	count = 0;
+	
+	for(tt = 0; tt <= 1000; tt = tt + kRate){
+		t = (double)(tt) / 1000;
+		
+		//calculate a dot
+		x = (1.0 - t) * (1.0 - t) * (1.0 - t) * x1 + 3.0 * t * (1.0 - t) * (1.0 - t) * x2 + 3 * t * t * (1.0 - t) * x3 + t * t * t * x4;
+		y = (1.0 - t) * (1.0 - t) * (1.0 - t) * y1 + 3.0 * t * (1.0 - t) * (1.0 - t) * y2 + 3 * t * t * (1.0 - t) * y3 + t * t * t * y4;
+		//KATAMUKI of vector by BIBUN
+		ix = t * t * (-3 * x1 + 9 * x2 + -9 * x3 + 3 * x4) + t * (6 * x1 + -12 * x2 + 6 * x3) + -3 * x1 + 3 * x2;
+		iy = t * t * (-3 * y1 + 9 * y2 + -9 * y3 + 3 * y4) + t * (6 * y1 + -12 * y2 + 6 * y3) + -3 * y1 + 3 * y2;
+		
+		//line SUICHOKU by vector
+		if(ix != 0 && iy != 0){
+			ir = atan(iy / ix * -1);
+			ia = sin(ir) * (double)(kMinWidthT);
+			ib = cos(ir) * (double)(kMinWidthT);
+		}
+		else if(ix == 0){
+			ia = kMinWidthT;
+			ib = 0;
+		}
+		else{
+			ia = 0;
+			ib = kMinWidthT;
+		}
+		
+		/*
+		if(a1 == 7 && a2 != 17){ deltad = sqrt(t); }
+		else if(a2 == 7 && a1 != 17){ deltad = sqrt(1.0 - t); }
+		else if(a1 == 7 && a2 == 17){ deltad = sqrt(t / 2); }
+		else if(a1 == 17 && a2 != 7){ deltad = sqrt(t / 2 + 0.5); }
+		else if(a1 != 7 && a2 == 17){ deltad = sqrt(1.0 - t / 2); }
+		else if(a1 == 17 && a2 == 7){ deltad = sqrt(0.5 - t / 2); }
+		else{ deltad = 1; }
+		*/
+		if(a1 == 7){ deltad = sqrt(t); }
+		else if(a2 == 7){ deltad = sqrt(1.0 - t); }
+		else{ deltad = 1; }
+		ia = ia * deltad;
+		ib = ib * deltad;
+		
+		//reverse if vector is going 2nd/3rd quadrants
+		if(ix <= 0){
+		  ia = ia * -1;
+		  ib = ib * -1;
+		}
+		
+		//copy to polygon structuer
+		poly[count].X = x - ia;
+		poly[count].Y = y - ib;
+		poly[(1000 / kRate + 1) * 2 - 1 - count].X = x + ia;
+		poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y + ib;
+		count += 1;
+	}
+	
+	icPolygon(poly, (1000 / kRate + 1) * 2);
+	
+	//process for head of stroke
+	rad = atan((double)(y2 - y1) / (double)(x2 - x1));
+	if(x1 < x2){ v = 1; } else{ v = -1; }
+	XX = sin(rad) * v;
+	XY = cos(rad) * v * -1;
+	YX = cos(rad) * v;
+	YY = sin(rad) * v;
+	
+	if(a1 == 12){
+		if(x1 == x2){
+			poly2[0].X = x1 - kMinWidthT;
+			poly2[0].Y = y1;
+			poly2[1].X = x1 + kMinWidthT;
+			poly2[1].Y = y1;
+			poly2[2].X = x1 - kMinWidthT;
+			poly2[2].Y = y1 - kMinWidthT;
+			icPolygon(poly2, 3);
+		}
+		else{
+			poly2[0].X = x1 - kMinWidthT * XX;
+			poly2[0].Y = y1 - kMinWidthT * XY;
+			poly2[1].X = x1 + kMinWidthT * XX;
+			poly2[1].Y = y1 + kMinWidthT * XY;
+			poly2[2].X = x1 - kMinWidthT * XX - kMinWidthT * YX;
+			poly2[2].Y = y1 - kMinWidthT * XY - kMinWidthT * YY;
+			icPolygon(poly2, 3);
+		}
+	}
+	
+	if(a1 == 0){
+		if(y1 <= y4){ //from up to bottom
+			if(x1 == x2){
+	 			poly2[0].X = x1 - kMinWidthT;
+				poly2[0].Y = y1;
+				poly2[1].X = x1 + kMinWidthT;
+				poly2[1].Y = y1;
+				poly2[2].X = x1 - kMinWidthT;
+				poly2[2].Y = y1 - kMinWidthY;
+				icPolygon(poly2, 3);
+			}
+			else{
+				poly2[0].X = x1 - kMinWidthT * XX;
+				poly2[0].Y = y1 - kMinWidthT * XY;
+				poly2[1].X = x1 + kMinWidthT * XX;
+				poly2[1].Y = y1 + kMinWidthT * XY;
+				poly2[2].X = x1 - kMinWidthT * XX - kMinWidthY * YX;
+				poly2[2].Y = y1 - kMinWidthT * XY - kMinWidthY * YY;
+				icPolygon(poly2, 3);
+			}
+		}
+		else{ //bottom to up
+			if(x1 == x2){ //is it right?
+				poly2[0].X = x1 - kMinWidthT;
+				poly2[0].Y = y1;
+				poly2[1].X = x1 + kMinWidthT;
+				poly2[1].Y = y1;
+				poly2[2].X = x1 - kMinWidthT;
+				poly2[2].Y = y1 + kMinWidthY;
+				icPolygon(poly2, 3);
+			}
+			else{
+				poly2[0].X = x1 - kMinWidthT * XX;
+				poly2[0].Y = y1 - kMinWidthT * XY;
+				poly2[1].X = x1 + kMinWidthT * XX;
+				poly2[1].Y = y1 + kMinWidthT * XY;
+				poly2[2].X = x1 + kMinWidthT * XX - kMinWidthY * YX;
+				poly2[2].Y = y1 + kMinWidthT * XY - kMinWidthY * YY;
+				icPolygon(poly2, 3);
+			}
+		}
+	}
+	
+	if(a1 == 22){ //box's up-right corner, any time same degree
+		poly3[0].X = x1 - kMinWidthT;
+		poly3[0].Y = y1 - kMinWidthY;
+		poly3[1].X = x1;
+		poly3[1].Y = y1 - kMinWidthY - kWidth;
+		poly3[2].X = x1 + kMinWidthT + kWidth;
+		poly3[2].Y = y1 + kMinWidthY;
+		poly3[3].X = x1 + kMinWidthT;
+		poly3[3].Y = y1 + kMinWidthT;
+		poly3[4].X = x1 - kMinWidthT;
+		poly3[4].Y = y1;
+		icPolygon(poly3, 5);
+	}
+	
+	if(a1 == 0){ //beginning of the stroke
+		if(y1 <= y4){ //from up to bottom
+			if(x1 == x2){
+				poly2[0].X = x1 + kMinWidthT;
+				poly2[0].Y = y1 + kMinWidthY * 0.5;
+				poly2[1].X = x1 + kMinWidthT + kMinWidthT * 0.5;
+				poly2[1].Y = y1 + kMinWidthY * 0.5 + kMinWidthY;
+				poly2[2].X = x1 + kMinWidthT;
+				poly2[2].Y = y1 + kMinWidthY * 0.5 + kMinWidthY * 2;
+				icPolygon(poly2, 3);
+			}
+			else{
+				poly2[0].X = x1 + kMinWidthT * XX + (kMinWidthY * 0.5) * YX;
+				poly2[0].Y = y1 + kMinWidthT * XY + (kMinWidthY * 0.5) * YY;
+				poly2[1].X = x1 + (kMinWidthT + kMinWidthT * 0.5) * XX + (kMinWidthY * 0.5 + kMinWidthY) * YX;
+				poly2[1].Y = y1 + (kMinWidthT + kMinWidthT * 0.5) * XY + (kMinWidthY * 0.5 + kMinWidthY) * YY;
+				poly2[2].X = x1 + kMinWidthT * XX + (kMinWidthY * 0.5 + kMinWidthY * 2) * YX;
+				poly2[2].Y = y1 + kMinWidthT * XY + (kMinWidthY * 0.5 + kMinWidthY * 2) * YY;
+				icPolygon(poly2, 3);
+			}
+		}
+		else{ //from bottom to up
+			if(x1 == x2){ //is it right?
+				poly2[0].X = x1 + kMinWidthT;
+				poly2[0].Y = y1 - kMinWidthY * 0.5;
+				poly2[1].X = x1 + kMinWidthT + kMinWidthT * 0.5;
+				poly2[1].Y = y1 - kMinWidthY * 0.5 - kMinWidthY;
+				poly2[2].X = x1 + kMinWidthT;
+				poly2[2].Y = y1 - kMinWidthY * 0.5 - kMinWidthY * 2;
+				icPolygon(poly2, 3);
+			}
+			else //SETSUGOUMEN GA KAKERUNODE HOKYOU
+				poly3[0].X = x1 - (kMinWidthT - 1) * XX + (kMinWidthY * 0.5) * YX;
+				poly3[0].Y = y1 - (kMinWidthT - 1) * XY + (kMinWidthY * 0.5) * YY;
+				poly3[1].X = x1 - (kMinWidthT - 0) * XX + (kMinWidthY * 0.5) * YX;
+				poly3[1].Y = y1 - (kMinWidthT - 0) * XY + (kMinWidthY * 0.5) * YY;
+				poly3[2].X = x1 - (kMinWidthT + kMinWidthT * 0.5) * XX + (kMinWidthY * 0.5 + kMinWidthY) * YX;
+				poly3[2].Y = y1 - (kMinWidthT + kMinWidthT * 0.5) * XY + (kMinWidthY * 0.5 + kMinWidthY) * YY;
+				poly3[3].X = x1 - (kMinWidthT - 0) * XX + (kMinWidthY * 0.5 + kMinWidthY * 2) * YX;
+				poly3[3].Y = y1 - (kMinWidthT - 0) * XY + (kMinWidthY * 0.5 + kMinWidthY * 2) * YY;
+				poly3[4].X = x1 - (kMinWidthT - 1) * XX + (kMinWidthY * 0.5 + kMinWidthY * 2) * YX;
+				poly3[4].Y = y1 - (kMinWidthT - 1) * XY + (kMinWidthY * 0.5 + kMinWidthY * 2) * YY;
+				icPolygon(poly3, 5);
+			}
+		}
+		
+		//process for tail
+		rad = atan((double)(y4 - y3) / (double)(x4 - x3));
+		if(x3 < x4){ v = 1; } else{ v = -1; }
+		YX = sin(rad) * v * -1;
+		YY = cos(rad) * v;
+		XX = cos(rad) * v;
+		XY = sin(rad) * v;
+		
+		if(a2 == 1 || a2 == 8 || a2 == 15){ //the last filled circle
+			if(x3 == x4){
+				poly3[0].X = x4 - kMinWidthT;
+				poly3[0].Y = y4;
+				poly3[1].X = x4 - kMinWidthT * 0.6;
+				poly3[1].Y = y4 + kMinWidthT * 0.6;
+				poly3[2].X = x4;
+				poly3[2].Y = y4 + kMinWidthT;
+				poly3[3].X = x4 + kMinWidthT * 0.6;
+				poly3[3].Y = y4 + kMinWidthT * 0.6;
+				poly3[4].X = x4 + kMinWidthT;
+				poly3[4].Y = y4;
+				icPolygon(poly3, 5);
+			}
+			else if(y3 == y4){
+				poly3[0].X = x4;
+				poly3[0].Y = y4 - kMinWidthT;
+				poly3[1].X = x4 + kMinWidthT * 0.6;
+				poly3[1].Y = y4 - kMinWidthT * 0.6;
+				poly3[2].X = x4 + kMinWidthT;
+				poly3[2].Y = y4;
+				poly3[3].X = x4 + kMinWidthT * 0.6;
+				poly3[3].Y = y4 + kMinWidthT * 0.6;
+				poly3[4].X = x4;
+				poly3[4].Y = y4 + kMinWidthT;
+				icPolygon(poly3, 5);
+			}
+			else{
+				poly3[0].X = x4 + sin(rad) * kMinWidthT * v;
+				poly3[0].Y = y4 - cos(rad) * kMinWidthT * v;
+				poly3[1].X = x4 + cos(rad) * kMinWidthT * 0.8 * v + sin(rad) * kMinWidthT * 0.6 * v;
+				poly3[1].Y = y4 + sin(rad) * kMinWidthT * 0.8 * v - cos(rad) * kMinWidthT * 0.6 * v;
+				poly3[2].X = x4 + cos(rad) * kMinWidthT * v;
+				poly3[2].Y = y4 + sin(rad) * kMinWidthT * v;
+				poly3[3].X = x4 + cos(rad) * kMinWidthT * 0.8 * v - sin(rad) * kMinWidthT * 0.6 * v;
+				poly3[3].Y = y4 + sin(rad) * kMinWidthT * 0.8 * v + cos(rad) * kMinWidthT * 0.6 * v;
+				poly3[4].X = x4 - sin(rad) * kMinWidthT * v;
+				poly3[4].Y = y4 + cos(rad) * kMinWidthT * v;
+				icPolygon(poly3, 5);
+			}
+		}
+		
+		/*
+		if(a2 == 17){ //the last filled half circle
+			if(x2 == x3){
+				poly3[0].X = x3 - kMinWidthT * 0.5;
+				poly3[0].Y = y3;
+				poly3[1].X = x3 - kMinWidthT * 0.6 * 0.5;
+				poly3[1].Y = y3 + kMinWidthT * 0.6 * 0.5;
+				poly3[2].X = x3;
+				poly3[2].Y = y3 + kMinWidthT * 0.5;
+				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
+				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
+				poly3[4].X = x3 + kMinWidthT * 0.5;
+				poly3[4].Y = y3;
+				icPolygon(poly3, 5);
+			}
+			else if(y2 == y3){
+				poly3[0].X = x3;
+				poly3[0].Y = y3 - kMinWidthT * 0.5;
+				poly3[1].X = x3 + kMinWidthT * 0.6 * 0.5;
+				poly3[1].Y = y3 - kMinWidthT * 0.6 * 0.5;
+				poly3[2].X = x3 + kMinWidthT * 0.5;
+				poly3[2].Y = y3;
+				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
+				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
+				poly3[4].X = x3;
+				poly3[4].Y = y3 + kMinWidthT * 0.5;
+				icPolygon(poly3, 5);
+			}
+			else{
+				poly3[0].X = x3 + sin(rad) * kMinWidthT * 0.5 * v;
+				poly3[0].Y = y3 - cos(rad) * kMinWidthT * 0.5 * v;
+				poly3[1].X = x3 + cos(rad) * kMinWidthT * 0.8 * 0.5 * v + sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
+				poly3[1].Y = y3 + sin(rad) * kMinWidthT * 0.8 * 0.5 * v - cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
+				poly3[2].X = x3 + cos(rad) * kMinWidthT * 0.5 * v;
+				poly3[2].Y = y3 + sin(rad) * kMinWidthT * 0.5 * v;
+				poly3[3].X = x3 + cos(rad) * kMinWidthT * 0.5 * 0.8 * v - sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
+				poly3[3].Y = y3 + sin(rad) * kMinWidthT * 0.5 * 0.8 * v + cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
+				poly3[4].X = x3 - sin(rad) * kMinWidthT * 0.5 * v;
+				poly3[4].Y = y3 + cos(rad) * kMinWidthT * 0.5 * v;
+				icPolygon(poly3, 5);
+			}
+		}
+		*/
+		
+		if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Sinnyu & L2RD Harai
+			if(y3 == y4){
+				poly2[0].X = x4;
+				poly2[0].Y = y4 + kMinWidthT;
+				poly2[1].X = x4;
+				poly2[1].Y = y4 - kMinWidthT;
+				poly2[2].X = x4 + kMinWidthT;
+				poly2[2].Y = y4 - kMinWidthT;
+				icPolygon(poly2, 3);
+			}
+			else{
+				poly2[0].X = x4 + kMinWidthT * YX;
+				poly2[0].Y = y4 + kMinWidthT * YY;
+				poly2[1].X = x4 - kMinWidthT * YX;
+				poly2[1].Y = y4 - kMinWidthT * YY;
+				poly2[2].X = x4 + kMinWidthT * XX - kMinWidthT * YX;
+				poly2[2].Y = y4 + kMinWidthT * XY - kMinWidthT * YY;
+				icPolygon(poly2, 3);
+			}
+		}
+		
+		if(a2 == 15){ //jump up
+			if(y3 == y4){
+				poly4[0].X = x4;
+				poly4[0].Y = y4 - kMinWidthT + 1;
+				poly4[1].X = x4 + 2;
+				poly4[1].Y = y4 - kMinWidthT - kWidth * 5;
+				poly4[2].X = x4;
+				poly4[2].Y = y4 - kMinWidthT - kWidth * 5;
+				poly4[3].X = x4 - kMinWidthT;
+				poly4[3].Y = y4 - kMinWidthT + 1;
+				icPolygon(poly4, 4);
+			}
+			else{
+				poly4[0].X = x4 + (kMinWidthT - 1) * sin(rad) * v;
+				poly4[0].Y = y4 - (kMinWidthT - 1) * cos(rad) * v;
+				poly4[1].X = x4 + 2 * cos(rad) * v + (kMinWidthT + kWidth * 5) * sin(rad) * v;
+				poly4[1].Y = y4 + 2 * sin(rad) * v - (kMinWidthT + kWidth * 5) * cos(rad) * v;
+				poly4[2].X = x4 + (kMinWidthT + kWidth * 5) * sin(rad) * v;
+				poly4[2].Y = y4 - (kMinWidthT + kWidth * 5) * cos(rad) * v;
+				poly4[3].X = x4 + (kMinWidthT - 1) * sin(rad) * v - kMinWidthT * cos(rad) * v;
+				poly4[3].Y = y4 - (kMinWidthT - 1) * cos(rad) * v - kMinWidthT * sin(rad) * v;
+				icPolygon(poly4, 4);
+			}
+		}
+		
+		if(a2 == 14){ //jump to left, allways go left
+			poly4[0].X = x4;
+			poly4[0].Y = y4;
+			poly4[1].X = x4;
+			poly4[1].Y = y4 - kMinWidthT;
+			poly4[2].X = x4 - kWidth * 4;
+			poly4[2].Y = y4 - kMinWidthT;
+			poly4[3].X = x4 - kWidth * 4;
+			poly4[3].Y = y4 - kMinWidthT * 0.5;
+			icPolygon(poly4, 4);
+		}
+	}
+	else{ //gothic
+		if(a1 % 10 == 2){
+			if(x1 == x2){
+				if(y1 < y2){ y1 = y1 - kWidth; } else{ y1 = y1 + kWidth; }
+			}
+			else if(y1 == y2){
+				if(x1 < x2){ x1 = x1 - kWidth; } else{ x1 = x1 + kWidth; }
+			}
+			else{
+				rad = atan((double)(y2 - y1) / (double)(x2 - x1));
+				if(x1 < x2){ v = 1; } else{ v = -1; }
+				x1 = x1 - kWidth * cos(rad) * v;
+				y1 = y1 - kWidth * sin(rad) * v;
+			}
+		}
+		
+		if(a1 % 10 == 3){
+			if(x1 == x2){
+				if(y1 < y2){
+					 y1 = y1 - kWidth * kKakato;
+				}
+			else{
+				 y1 = y1 + kWidth * kKakato;
+			}
+		}
+		else if(y1 == y2){
+			if(x1 < x2){
+				x1 = x1 - kWidth * kKakato;
+			}
+			else{
+				x1 = x1 + kWidth * kKakato;
+			}
+		}
+		else{
+			rad = atan((double)(y2 - y1) / (double)(x2 - x1));
+			if(x1 < x2){ v = 1; } else{ v = -1; }
+			x1 = x1 - kWidth * cos(rad) * v * kKakato;
+			y1 = y1 - kWidth * sin(rad) * v * kKakato;
+			}
+		}
+		if(a2 % 10 == 2){
+			if(x3 == x4){
+				if(y3 < y4){ y4 = y4 + kWidth; } else{ y4 = y4 - kWidth; }
+			}
+			else if(y3 == y4){
+				if(x3 < x4){ x4 = x4 + kWidth; } else{ x4 = x4 - kWidth; }
+			}
+			else{
+				rad = atan((double)(y4 - y3) / (double)(x4 - x3));
+				if(x3 < x4){ v = 1; } else{ v = -1; }
+				x4 = x4 + kWidth * cos(rad) * v;
+				y4 = y4 + kWidth * sin(rad) * v;
+			}
+		}
+		
+		if(a2 % 10 == 3){
+			if(x3 == x4){
+				if(y3 < y4){
+					y4 = y4 + kWidth * kKakato;
+				}
+				else{
+					y4 = y4 - kWidth * kKakato;
+				}
+			}
+			else if(y3 == y4){
+				if(x3 < x4){
+					x4 = x4 + kWidth * kKakato;
+				}
+				else{
+					x4 = x4 - kWidth * kKakato;
+				}
+			}
+			else{
+				rad = atan((double)(y4 - y3) / (double)(x4 - x3));
+				if(x3 < x4){ v = 1; } else{ v = -1; }
+				x4 = x4 + kWidth * cos(rad) * v * kKakato;
+				y4 = y4 + kWidth * sin(rad) * v * kKakato;
+			}
+		}
+		
+		count = 0;
+		
+		for(tt = 0; tt <= 1000; tt = tt + kRate){
+			t = (double)tt / 1000;
+			
+			//calculate a dot
+			x = (1.0 - t) * (1.0 - t) * (1.0 - t) * x1 + 3.0 * t * (1.0 - t) * (1.0 - t) * x2 + 3 * t * t * (1.0 - t) * x3 + t * t * t * x4;
+			y = (1.0 - t) * (1.0 - t) * (1.0 - t) * y1 + 3.0 * t * (1.0 - t) * (1.0 - t) * y2 + 3 * t * t * (1.0 - t) * y3 + t * t * t * y4;
+			//KATAMUKI of vector by BIBUN
+			ix = t * t * (-3 * x1 + 9 * x2 + -9 * x3 + 3 * x4) + t * (6 * x1 + -12 * x2 + 6 * x3) + -3 * x1 + 3 * x2;
+			iy = t * t * (-3 * y1 + 9 * y2 + -9 * y3 + 3 * y4) + t * (6 * y1 + -12 * y2 + 6 * y3) + -3 * y1 + 3 * y2;
+			
+			//SESSEN NI SUICHOKU NA CHOKUSEN NO KEISAN
+			if(kShotai == kMincho){ //always false ?
+				if(ix != 0 && iy != 0){
+					ir = atan(iy / ix * -1.0);
+	 				ia = sin(ir) * (double)kMinWidthT;
+					ib = cos(ir) * (double)kMinWidthT;
+				}
+				else if(ix == 0){
+					ia = kMinWidthT;
+					ib = 0;
+				}
+				else{
+					ia = 0;
+					ib = kMinWidthT;
+				}
+				ia = ia * sqrt(1.0 - t);
+				ib = ib * sqrt(1.0 - t);
+			}
+			else{
+				if(ix != 0 && iy != 0){
+					ir = atan(iy / ix * -1.0);
+					ia = sin(ir) * (double)kWidth;
+					ib = cos(ir) * (double)kWidth;
+				}
+				else if(ix == 0){
+					ia = kWidth;
+					ib = 0;
+				}
+				else{
+					ia = 0;
+					ib = kWidth;
+				}
+			}
+
+			//reverse if vector is going 2nd/3rd quadrants
+			if(ix <= 0){
+			  ia = ia * -1;
+			  ib = ib * -1;
+			}
+		
+			//save to polygon
+			poly[count].X = x - ia;
+			poly[count].Y = y - ib;
+			poly[(1000 / kRate + 1) * 2 - 1 - count].X = x + ia;
+			poly[(1000 / kRate + 1) * 2 - 1 - count].Y = y + ib;
+			count += 1;
+		}
+		
+		icPolygon(poly, (1000 / kRate + 1) * 2);
+	}
+}
+
 void cdDrawCurve(double x1, double y1,
 	double x2, double y2,
 	double x3, double y3,

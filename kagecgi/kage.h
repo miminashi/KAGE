@@ -37,6 +37,7 @@ kPoint poly4[4];
 //kagedf.c
 void dfDrawFont(int, int, int, int, int, int, int, int, int, int, int);
 //kagecd.c
+void cdDrawBezier(double, double, double, double, double, double, double, double, int, int);
 void cdDrawCurve(double, double, double, double, double, double, int, int);
 void cdDrawLine(double, double, double, double, int, int);
 //kageic.c

@@ -149,10 +149,14 @@ void dfDrawFont(int a1, int a2, int a3,
 	    	break;
 	    case 6:
 	    	if(a3 == 5){
+				/* only implimented for gothic
 				tx1 = x4 - kMage;
 				ty1 = y4;
 				tx2 = x4 + kMage * 0.5;
 				ty2 = y4 - kMage * 2;
+				*/
+				cdDrawBezier(x1, y1, x2, y2, x3, y3, x4, y4, a2, 15);
+				/*
 				if(a2 == 7 || a3 == 7){
 					cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 17);
 		  			cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, x4, y4, 17, 15);
@@ -161,8 +165,11 @@ void dfDrawFont(int a1, int a2, int a3,
 		  			cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 8);
 		  			cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, x4, y4, 1, 15);
 				}
+				*/
    		   	}
    		   	else{
+				cdDrawBezier(x1, y1, x2, y2, x3, y3, x4, y4, a2, a3);
+				/*
 				if(a2 == 7 || a3 == 7){
 		  			cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 17);
 		  			cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, x4, y4, 17, a3);
@@ -171,6 +178,7 @@ void dfDrawFont(int a1, int a2, int a3,
 	  				cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 8);
 	  				cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, x4, y4, 1, a3);
 				}
+				*/
 			}
 			break;
     	case 7:
@@ -334,13 +342,19 @@ void dfDrawFont(int a1, int a2, int a3,
 				ty1 = y4;
 				tx2 = x4 + kMage * 0.5;
 				ty2 = y4 - kMage * 2;
+				/*
 				cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 1);
 				cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, tx1, ty1, 1, 1);
+				*/
+				cdDrawBezier(x1, y1, x2, y2, x3, y3, tx1, ty1, a2, 1);
 				cdDrawCurve(tx1, ty1, x4, y4, tx2, ty2, 1, 0);
     		}
     		else{
+				/*
 				cdDrawCurve(x1, y1, x2, y2, (x2 + x3) / 2, (y2 + y3) / 2, a2, 1);
 				cdDrawCurve((x2 + x3) / 2, (y2 + y3) / 2, x3, y3, x4, y4, 1, a3);
+				*/
+				cdDrawBezier(x1, y1, x2, y2, x3, y3, x4, y4, a2, a3);
     		}
     		break;
     	case 7:
