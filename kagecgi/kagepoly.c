@@ -4,11 +4,11 @@
 #include "kage.h"
 #include "kagecgi.h"
 
-void fillPolygon(struct kPoint *p, int number, int col, unsigned char **image){
+void fillPolygon(kPoint *p, int number, int col, unsigned char **image){
   int miny, maxy;
   int cross[16], num;
   int i, j, k, l, m;
-  struct kPoint tpoly[kResolution + 2];
+  kPoint tpoly[kResolution + 2];
   int tnum;
   double a, b;
 

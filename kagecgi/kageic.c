@@ -4,7 +4,7 @@
 #include "kage.h"
 #include "kagecgi.h"
 
-void icPolygon(struct kPoint *poly, int number){
+void icPolygon(kPoint *poly, int number){
 	int i;
 	char buf[256];
 	

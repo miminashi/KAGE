@@ -18,7 +18,6 @@ int main(int argc, char *argv[]){
 	//set default
 	kShotai = kMincho;
 //	kShotai = kGothic;
-//	kDesign = 0; //jp
 	kSize = 200;
 	kType = 0; //png
 	kInput = 0; //ids or direct

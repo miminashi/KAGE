@@ -24,24 +24,15 @@ int kShotai;
 #define kMaxIDCLength 16
 #define kMaxStrokeDataLength 256 // over 12(digits per integer with +/- flag) * 11(columns) + 1(line end)
 
-struct kPoint{
+typedef struct _kPoint{
 	double X;
 	double Y;
-};
+} kPoint;
 
-struct kPoint poly[kResolution];
-struct kPoint poly2[3];
-struct kPoint poly3[5];
-struct kPoint poly4[4];
-
-struct EDGE {
-    struct EDGE *next;
-    long yTop, yBot;
-    long xNowWhole, xNowNum, xNowDen, xNowDir;
-    long xNowNumStep;
-};
-
-#define SGN(a) ( (a) > 0 ? 1 : ( (a) < 0 ? -1 : 0 ) )
+kPoint poly[kResolution];
+kPoint poly2[3];
+kPoint poly3[5];
+kPoint poly4[4];
 
 //kagedf.c
 void dfDrawFont(int, int, int, int, int, int, int, int, int, int, int);
@@ -49,6 +40,6 @@ void dfDrawFont(int, int, int, int, int, int, int, int, int, int, int);
 void cdDrawCurve(double, double, double, double, double, double, int, int);
 void cdDrawLine(double, double, double, double, int, int);
 //kageic.c
-void icPolygon(struct kPoint *, int);
+void icPolygon(kPoint *, int);
 
 #endif

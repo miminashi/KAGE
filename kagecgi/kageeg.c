@@ -6,7 +6,7 @@
 #include "sysdep.h"
 
 void generateGlyphByIDS(const GString *in, GString *out, int flag){
-	GString *tmp1, *tmp2, *tmp3, *tmp4;
+	GString *tmp1, *tmp2;
 	
 	//pass this method if 'in' is not UCS parts
 	if((in->str)[0] != 'u'){
@@ -21,24 +21,6 @@ void generateGlyphByIDS(const GString *in, GString *out, int flag){
 	
 	tmp1 = g_string_new(in->str);
 	tmp2 = g_string_new(in->str);
-//	tmp3 = g_string_new(in->str);
-//	tmp4 = g_string_new(in->str);
-	
-	//append design flag
-//	if(kDesign == 10) g_string_append(tmp1, "-10");
-//	else if(kDesign == 11) g_string_append(tmp1, "-11");
-//	else if(kDesign == 20) g_string_append(tmp1, "-20");
-//	else if(kDesign == 30) g_string_append(tmp1, "-30");
-//	else if(kDesign == 40) g_string_append(tmp1, "-40");
-//	else g_string_append(tmp1, "-00");
-//	if(kDesign == 10) g_string_append(tmp2, "-10");
-//	else if(kDesign == 11) g_string_append(tmp2, "-11");
-//	else if(kDesign == 20) g_string_append(tmp2, "-20");
-//	else if(kDesign == 30) g_string_append(tmp2, "-30");
-//	else if(kDesign == 40) g_string_append(tmp2, "-40");
-//	else g_string_append(tmp2, "-00");
-//	g_string_append(tmp3, "-00");
-//	g_string_append(tmp4, "-00");
 	
 	//append place flag
 	if(1 <= flag && flag <= 7){
@@ -51,62 +33,19 @@ void generateGlyphByIDS(const GString *in, GString *out, int flag){
 		else if(flag == 6) g_string_append(tmp1, "06");
 	}
 
-//	g_string_append(tmp2, "00");
-//	if(flag == 1) g_string_append(tmp3, "01");
-//	else if(flag == 2) g_string_append(tmp3, "02");
-//	else if(flag == 3) g_string_append(tmp3, "03");
-//	else if(flag == 4) g_string_append(tmp3, "04");
-//	else if(flag == 5) g_string_append(tmp3, "05");
-//	else if(flag == 6) g_string_append(tmp3, "06");
-//	else g_string_append(tmp3, "00");
-//	g_string_append(tmp4, "00");
-	
 	generateGlyph(tmp1, out);
 	if(out->len != 0) return;
 	generateGlyph(tmp2, out);
 	if(out->len != 0) return;
-//	generateGlyph(tmp3, out);
-//	if(out->len != 0) return;
-//	generateGlyph(tmp4, out);
 	return;
 }
 
 void generateGlyph(const GString *in, GString *out){
-	GString *tmp, *in2;
+  GString *tmp;
 	tmp = g_string_new("");
 	g_string_set_size(out, 0);
 	
-//	in2 = g_string_new(in->str);
-	
-	//1st search
-//	if(*(in2->str) == 'u' && (in2->len == 4 || in2->len == 5)){
-//		//append design flag
-//		if(kDesign == 10) g_string_append(in2, "-1000");
-//		else if(kDesign == 11) g_string_append(in2, "-1100");
-//		else if(kDesign == 20) g_string_append(in2, "-2000");
-//		else if(kDesign == 30) g_string_append(in2, "-3000");
-//		else if(kDesign == 40) g_string_append(in2, "-4000");
-//		else g_string_append(in2, "-0000");
-		
-		//search from parts(1st)
-//		searchPartsData(in2, tmp);
-//		if(tmp->len != 0){
-//			g_string_assign(out, tmp->str);
-//			return;
-//		}
-		
-		//search from alias(1st)
-//		searchAliasData(in2, tmp);
-//		if(tmp->len != 0){
-//			generateGlyph(tmp, out);
-//			if(out->len == 0) return;
-//			//save to cache ... not yet
-//			return;
-//		}
-//	}
-	
-	//2nd search
-	//search from parts(2nd)
+	//search from parts
 	searchPartsData(in, tmp);
 	if(tmp->len != 0){
 	  tmp = CalcSizes(tmp, 1);
@@ -114,7 +53,7 @@ void generateGlyph(const GString *in, GString *out){
 	  return;
 	}
 	
-	//search from alias(2nd)
+	//search from alias
 	searchAliasData(in, tmp);
 	if(tmp->len != 0){
 		generateGlyph(tmp, out);

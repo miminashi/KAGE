@@ -76,6 +76,6 @@ png_bytepp initPng(int width, int height);
 int closePng(int width, int height, png_bytepp canvas);
 int writePng(int width, int height, png_bytepp image, FILE *fp);
 
-void fillPolygon(struct kPoint *p, int number, int col, unsigned char **image);
+void fillPolygon(kPoint *p, int number, int col, unsigned char **image);
 
 #endif

@@ -373,7 +373,6 @@ void convert99calc(const char *in, GString *out){
 	int a1,x1,y1,x2,y2,option,option2;
 	char pname[kMaxStrokeDataLength];
 	int tf[12];
-	char *end;
 	
 	g_string_set_size(out, 0);
 	buf2 = g_string_new("");
