@@ -191,7 +191,9 @@ int main(int argc, char *argv[]){
 		}
 	}
 	else{ //raw(text)
+
 		if(test2->len != 0){
+			test2 = CalcSizes(test2, 1);
 			fprintf(stdout, "Content-type: text/plain\n\n");
 			fprintf(stdout, "result=%s", test2->str);
 		}
