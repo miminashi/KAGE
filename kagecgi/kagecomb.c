@@ -143,10 +143,13 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
     g = 0;
 	
 	//calculate width of each parts #2
-//    pxL = kWidth * 2 + (pngWidth - kWidth * 2 * 2) * prL * 0.5 - (lxL + rxL) / 2 * prL;
-//    pxR = kWidth * 2 + (pngWidth - kWidth * 2 * 2) * prL + kWidth * 2 * 2 + (pngWidth - kWidth * 2 * 2) * prR * 0.5 - (lxR + rxR) / 2 * prR;
-    pxL = pngWidth * prL * 0.5 - (lxL + rxL) / 2 * prL;
-    pxR = pngWidth * prL + kWidth * 4 + pngWidth * prR * 0.5 - (lxR + rxR) / 2 * prR;
+//1    pxL = kWidth * 2 + (pngWidth - kWidth * 2 * 2) * prL * 0.5 - (lxL + rxL) / 2 * prL;
+//1    pxR = kWidth * 2 + (pngWidth - kWidth * 2 * 2) * prL + kWidth * 2 * 2 + (pngWidth - kWidth * 2 * 2) * prR * 0.5 - (lxR + rxR) / 2 * prR;
+//2    pxR = pngWidth * prL + kWidth * 4 + pngWidth * prR * 0.5 - (lxR + rxR) / 2 * prR;
+//3    pxL = pngWidth * prL * 0.5 - (lxL + rxL) / 2 * prL;
+//3    pxR = pngWidth * prL + pngWidth * prR * 0.5 - (lxR + rxR) / 2 * prR;
+    pxL = 0;
+    pxR = pngWidth * prL;
 	
     DoDrawMixFont(parts1, pxL, prL, parts3, pxR, prR, pyL, pryL, pyR, pryR);
 	
@@ -159,26 +162,42 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
 		}
 	}
 	l = k;
+	//fprintf(stderr,"%d,%d\n",chk_y1,chk_y2);
 	
 	//get close both parts
 	h = pxR;
-	while(k - l < kMixdot && g < kWidth * (kKasane + 4)){
+	while(k - l < kMixdot && g < kWidth * 2 * kKasane * 2){
 		g = g + 2;
 		f = pxR - g;
         DoDrawMixFont(parts1, pxL, prL, parts3, f, prR, pyL, pryL, pyR, pryR);
 		
+		//char fn[256];
+		//FILE *fp;
+		//snprintf(fn,sizeof(fn),"%03d.png",g);
+      	//fp = fopen(fn, "w");
+      	//writePng(pngWidth, pngHeight, kageCanvas, fp);
+      	//fclose(fp);
+		
         l = 0;
         for(i = 0; i < pngWidth * 1.1; i++){
-            for(j = chk_y1; j <= chk_y2; j++){
+			for(j = chk_y1; j <= chk_y2; j++){
                 if(kageCanvas[j][i] == 0) l++;
             }
         }
     }
+	//fprintf(stderr,"%d:%d:%d\n",g,k,l);
     pxR = f;
-    if(flg_boxR % 256 / 128 != 0) pxR = pxR + kWidth * 12;
-    if(flg_boxR % 64 / 32 != 0) pxR = pxR + kWidth * 8;
-    else if(k - l > pngWidth * 0.4) pxR = pxR + kWidth * 5;
-    else pxR = pxR + kWidth * 3;
+    //if(flg_boxR % 256 / 128 != 0) pxR = pxR + kWidth * 2 * kKasane * 10 / 2;
+    //if(flg_boxR % 64 / 32 != 0) pxR = pxR + kWidth * 2 * kKasane * 8 / 2;
+    //else if(k - l > pngWidth * 0.4){
+    //	if(kShotai == kMincho) pxR = pxR + kMinWidthT * 2 * kKasane * 8 / 2;
+	//	else if(kShotai == kGothic)  pxR = pxR + kWidth * 2 * kKasane * 8 / 2;
+    //}
+    if((flg_boxL % 2 / 1 != 0) && (flg_boxR % 4 / 2 != 0)){
+    	if(kShotai == kMincho) pxR = pxR + kMinWidthT * 2 * kKasane * 6 / 2;
+    	else pxR = pxR + kWidth * 2 * kKasane * 6 / 2;
+    }
+    else pxR = pxR + kWidth * 2 * kKasane * 2 / 2;
 	
 	//set results
 	result[0] = pxL;
