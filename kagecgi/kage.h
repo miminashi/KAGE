@@ -25,6 +25,11 @@ int kShotai;
 #define kMaxIDCLength 16
 #define kMaxStrokeDataLength 256 // over 12(digits per integer with +/- flag) * 11(columns) + 1(line end)
 
+#define FLAG_FLAT_LEFT 1
+#define FLAG_FLAT_RIGHT 2
+#define FLAG_FLAT_TOP 4
+#define FLAG_FLAT_BOTTOM 8
+
 typedef struct _kPoint{
 	double X;
 	double Y;
