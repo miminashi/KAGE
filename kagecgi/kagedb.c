@@ -6,18 +6,19 @@
 #include "sysdep.h"
 
 int initDB(){
-	kDatabase = dbopen(databaseFileName, O_RDWR|O_CREAT, 0666, DB_HASH, NULL);
+	db_create(&kDatabase, NULL, 0);
+	kDatabase->open(kDatabase, databaseFileName, NULL, DB_HASH, DB_RDONLY, 0644);
 	return 0;
 }
 
 int closeDB(){
-	kDatabase->close(kDatabase);
+	kDatabase->close(kDatabase, 0);
 	return 0;
 }
 
 void searchPartsData(const GString *in, GString *out){
 	DBT dbkey, dbdata;
-	char *start, *end;
+	char *start, *end, *buf;
 	GString *temp, *temp2;
 	
 	//cut off the end '-0000' if 'in' end with it
@@ -38,12 +39,13 @@ void searchPartsData(const GString *in, GString *out){
 	dbkey.size = temp->len;
 	g_string_set_size(out, 0);
 	temp2 = g_string_new("");
-	kDatabase->get(kDatabase, &dbkey, &dbdata, 0);
+	kDatabase->get(kDatabase, NULL, &dbkey, &dbdata, 0);
 	if(dbdata.size != 0){
-	  ((char *)dbdata.data)[dbdata.size] = '\0'; //set null-stop to the result data
+		buf = (char *)malloc(dbdata.size + 1);
+		strncpy(buf, dbdata.data, dbdata.size + 1); 
 		//first:search selected shotai
-		if(kShotai == kMincho) start = strstr(dbdata.data, ",mincho,");
-		else start = strstr(dbdata.data, ",gothic,");
+		if(kShotai == kMincho) start = strstr(buf, ",mincho,");
+		else start = strstr(buf, ",gothic,");
 		if(start != NULL){
 			start = strchr((start+8), ',');
 			if(start != NULL){
@@ -59,8 +61,8 @@ void searchPartsData(const GString *in, GString *out){
 			}
 		}
 		//second:search another shotai
-		if(kShotai == kMincho) start = strstr(dbdata.data, ",gothic,");
-		else start = strstr(dbdata.data, ",mincho,");
+		if(kShotai == kMincho) start = strstr(buf, ",gothic,");
+		else start = strstr(buf, ",mincho,");
 		if(start != NULL){
 			start = strchr((start+8), ',');
 			if(start != NULL){
@@ -75,12 +77,13 @@ void searchPartsData(const GString *in, GString *out){
 				}
 			}
 		}
+		free(buf);
 	}
 }
 
 void searchAliasData(const GString *in, GString *out){
 	DBT dbkey, dbdata;
-	char *start, *end;
+	char *start, *end, *buf;
 	GString *temp;
 	
 	//cut off the end '-0000' if 'in' end with it
@@ -100,9 +103,11 @@ void searchAliasData(const GString *in, GString *out){
 	dbkey.data = temp->str;
 	dbkey.size = temp->len;
 	g_string_set_size(out, 0);
-	kDatabase->get(kDatabase, &dbkey, &dbdata, 0);
+	kDatabase->get(kDatabase, NULL, &dbkey, &dbdata, 0);
 	if(dbdata.size != 0){
-		start = strstr(dbdata.data, ",linkto,");
+		buf = (char *)malloc(dbdata.size + 1);
+		strncpy(buf, dbdata.data, dbdata.size + 1); 
+		start = strstr(buf, ",linkto,");
 		if(start != NULL){
 			start = strchr((start+8), ',');
 			if(start != NULL){

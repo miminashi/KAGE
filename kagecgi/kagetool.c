@@ -386,7 +386,7 @@ void CalcOptions(const GString *in, int *mitsudo, int *flag, double *yoko, doubl
 	buf = convertStroke(in->str, buf, &strokes);
 	for(i = 0; i < strokes; i++){
         if(buf[i * 11 + 0] % 10 == 0){
-            if(buf[i * 11 + 1] != 0){ *yoko = (double)(buf[i * 11 + 1]) * 0.1;fprintf(stderr,"@@@@@\r\n");}
+            if(buf[i * 11 + 1] != 0) *yoko = (double)(buf[i * 11 + 1]) * 0.1;
             if(buf[i * 11 + 2] != 0) *tate = (double)(buf[i * 11 + 2]) * 0.1;
             if(buf[i * 11 + 3] != 0) *flag = *flag + buf[i * 11 + 3] * 16;
         }

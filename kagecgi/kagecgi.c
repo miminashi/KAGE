@@ -7,11 +7,11 @@
 
 int main(int argc, char *argv[]){
 	GString *tmp1, *tmp2, *test1, *test2, *filename;
-	FILE *err, *fp;
+	FILE *err;
 	char errbuf[errorFileSize];
 	char *pos, *cur;
 	int dummy;
-	int i;
+	int type;
 
 	dummy = initDB();
 
@@ -25,25 +25,35 @@ int main(int argc, char *argv[]){
 	kResultText = g_string_new("");
 	kMode = 0;
 	
-	//set some param by request
-//	tmp1 = g_string_new((gchar *)argv[1]);
-	tmp1 = g_string_new((gchar *)getenv("QUERY_STRING"));
+	//confirm request
+	type = 0;
+	//argv
+	tmp1 = g_string_new((gchar *)argv[1]);
+	if(tmp1->len != 0) type = 1;
+	//direct
+	if(type == 0){
+	  tmp1 = g_string_new((gchar *)getenv("QUERY_STRING"));
+	  if(tmp1->len != 0) type = 2;
+	}
+	//redirect
+	if(type == 0){
+	  tmp1 = g_string_new((gchar *)getenv("REDIRECT_URL"));
+	  if(tmp1->len != 0) type = 3;
+	}
+	//error
+	if(type == 0){
+	  fprintf(stderr, "Request Error.\n");
+	  return 0;
+	}
 	pos = tmp1->str;
 	
 	//separate token
-	if(tmp1->len != 0){
+	if(type == 1 || type == 2){ //argv or direct
 		while(1){
 			cur = strchr(pos, '&');
 			tmp2 = g_string_new(pos);
 			if(cur != NULL) g_string_set_size(tmp2, cur - pos);
 			//got request string
-//			if(strncmp(tmp2->str, "design=jp", 9) == 0) kDesign = 0;
-//			else if(strncmp(tmp2->str, "design=cs", 9) == 0) kDesign = 10;
-//			else if(strncmp(tmp2->str, "design=ct", 9) == 0) kDesign = 11;
-//			else if(strncmp(tmp2->str, "design=kr", 9) == 0) kDesign = 20;
-//			else if(strncmp(tmp2->str, "design=vn", 9) == 0) kDesign = 30;
-//			else if(strncmp(tmp2->str, "design=un", 9) == 0) kDesign = 40;
-//			else if(strncmp(tmp2->str, "shotai=mincho", 13) == 0) kShotai = kMincho;
 			if(strncmp(tmp2->str, "shotai=mincho", 13) == 0) kShotai = kMincho;
 			else if(strncmp(tmp2->str, "shotai=gothic", 13) == 0) kShotai = kGothic;
 			else if(strncmp(tmp2->str, "shotai=skeleton", 15) == 0) kShotai = kGothic;
@@ -63,20 +73,11 @@ int main(int argc, char *argv[]){
 	}
 	else{ // redirected request
 		kInput = 0;
-		tmp1 = g_string_new((gchar *)getenv("REDIRECT_URL"));
-		pos = tmp1->str;
 		while(1){
 			cur = strchr(pos, '/');
 			tmp2 = g_string_new(pos);
 			if(cur != NULL) g_string_set_size(tmp2, cur - pos);
 			//got request string
-//			if(strncmp(tmp2->str, "jp", 2) == 0) kDesign = 0;
-//			else if(strncmp(tmp2->str, "cs", 2) == 0) kDesign = 10;
-//			else if(strncmp(tmp2->str, "ct", 2) == 0) kDesign = 11;
-//			else if(strncmp(tmp2->str, "kr", 2) == 0) kDesign = 20;
-//			else if(strncmp(tmp2->str, "vn", 2) == 0) kDesign = 30;
-//			else if(strncmp(tmp2->str, "un", 2) == 0) kDesign = 40;
-//			else if(strncmp(tmp2->str, "mincho", 6) == 0) kShotai = kMincho;
 			if(strncmp(tmp2->str, "mincho", 6) == 0) kShotai = kMincho;
 			else if(strncmp(tmp2->str, "gothic", 6) == 0) kShotai = kGothic;
 			else if(strncmp(tmp2->str, "skeleton", 8) == 0) kShotai = kGothic;
@@ -131,12 +132,6 @@ int main(int argc, char *argv[]){
 			drawGlyph(test2, 0);
 			//output to file
 			filename = g_string_new(pngFilePath);
-//			if(kDesign == 0) g_string_append(filename, "jp/");
-//			else if(kDesign == 10) g_string_append(filename, "cs/");
-//			else if(kDesign == 11) g_string_append(filename, "ct/");
-//			else if(kDesign == 20) g_string_append(filename, "kr/");
-//			else if(kDesign == 30) g_string_append(filename, "vn/");
-//			else if(kDesign == 40) g_string_append(filename, "un/");
 			if(kShotai == kMincho) g_string_append(filename, "mincho/");
 			else if(kShotai == kGothic) g_string_append(filename, "gothic/");//skeleton??
 			g_string_append(filename, test1->str);
@@ -147,7 +142,7 @@ int main(int argc, char *argv[]){
 //			writePng(pngWidth, pngHeight, kageCanvas, fp);
 //			fclose(fp);
 			//output to stdout
-			fprintf(stdout, "Content-type: image/png\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: image/png\n\n");
 			writePng(pngWidth, pngHeight, kageCanvas, stdout);
 			//done
 			closePng(pngWidth, pngHeight, kageCanvas);
@@ -156,7 +151,7 @@ int main(int argc, char *argv[]){
 			err = fopen("error.png", "r");
 			fread(errbuf, sizeof(char), errorFileSize, err);
 		//	printf("An error occurred.\r\n");
-			fprintf(stdout, "Content-type: image/png\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: image/png\n\n");
 			fwrite(errbuf, sizeof(char), errorFileSize, stdout);
 			fclose(err);
 		}
@@ -167,11 +162,11 @@ int main(int argc, char *argv[]){
 			kMode = 1;
 			drawGlyph(test2, 0);
 			g_string_append(kResultText, "</svg>\n");
-			fprintf(stdout, "Content-type: image/svg-xml\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: image/svg-xml\n\n");
 			fprintf(stdout, "%s", kResultText->str);
 		}
 		else{
-			fprintf(stdout, "Content-type: text/plain\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: text/plain\n\n");
 			fprintf(stdout, "An error occurred.");
 		}
 	}
@@ -182,11 +177,11 @@ int main(int argc, char *argv[]){
 			drawGlyph(test2, 0);
 			g_string_append(kResultText, "fill\n");
 			g_string_append(kResultText, "%%EOF\n");
-			fprintf(stdout, "Content-type: application/postscript\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: application/postscript\n\n");
 			fprintf(stdout, "%s", kResultText->str);
 		}
 		else{
-			fprintf(stdout, "Content-type: text/plain\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: text/plain\n\n");
 			fprintf(stdout, "An error occurred.");
 		}
 	}
@@ -194,11 +189,11 @@ int main(int argc, char *argv[]){
 
 		if(test2->len != 0){
 			test2 = CalcSizes(test2, 1);
-			fprintf(stdout, "Content-type: text/plain\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: text/plain\n\n");
 			fprintf(stdout, "result=%s", test2->str);
 		}
 		else{
-			fprintf(stdout, "Content-type: text/plain\n\n");
+			if(type != 1) fprintf(stdout, "Content-type: text/plain\n\n");
 			fprintf(stdout, "result=nodata");
 		}
 	}

@@ -17,6 +17,10 @@ VERSION=0.0.1
 CFLAGS= -I/usr/local/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/X11R6/include
 LIBS= -L/usr/local/lib -lpng -ldb -lglib-2.0 -L/usr/X11R6/lib -lX11
 
+#for MacOSX with fink
+#CFLAGS= -I/sw/include -I/sw/include/glib-2.0 -I/sw/lib/glib-2.0/include/ -I/sw/include/libpng/ -I/usr/include -I/usr/X11R6/include/
+#LIBS= -L/sw/lib -lpng -lglib-2.0 -L/usr/lib -ldbm -L/usr/X11R6/lib -lX11
+
 kage.cgi: kagecgi.o kagepng.o kagedf.o kagecd.o kageic.o kagepoly.o kagedb.o kageeg.o kagecomb.o kagechar.o kagetool.o
 	$(CC) $(CFLAGS) -o kage.cgi kagecgi.o kagepng.o kagedf.o kagecd.o kageic.o kagepoly.o kagedb.o kageeg.o kagecomb.o kagechar.o kagetool.o $(LIBS)
 
