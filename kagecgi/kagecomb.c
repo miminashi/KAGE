@@ -384,7 +384,7 @@ void combineTate2(const KGString *parts1, const KGString *parts3, int *result){
   k = 0;
   for(i = 0; i < pngWidth * 1.1; i++){
     for(j = chk_x1; j <= chk_x2; j++){
-      if(kageCanvas[i][j] == 0) k++;
+      if(kageCanvas[i][j] != kWhite) k++;
     }
   }
   l = k;
@@ -399,15 +399,24 @@ void combineTate2(const KGString *parts1, const KGString *parts3, int *result){
     l = 0;
     for(i = 0; i < pngWidth * 1.1; i++){
       for(j = chk_x1; j <= chk_x2; j++){
-        if(kageCanvas[i][j] == 0) l++;
+        if(kageCanvas[i][j] != kWhite) l++;
       }
     }
   }
   pyR = f;
+/*
   if(k - l > pngWidth * 0.4){
     pyR = pyR + kWidth * 4;
   } else {
     pyR = pyR + kWidth * 2;
+  }
+*/
+  if(flg_boxL & FLAG_FLAT_BOTTOM && flg_boxR & FLAG_FLAT_TOP){
+    pyR = pyR + kWidth * 4;
+  } else if(k - l > pngWidth * 0.4){
+    pyR = pyR + kWidth * 2;
+  } else {
+    pyR = pyR + kWidth;
   }
   
   //set results
