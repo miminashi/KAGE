@@ -394,6 +394,7 @@ void combineHame2(const KGString *parts1, const KGString *parts3, int *result){
       result[9] = buf[i * 11 + 4];
       result[10] = buf[i * 11 + 5];
       result[11] = buf[i * 11 + 6];
+      flag = 1;
     }
   }
   if(flag == 0){ //error
