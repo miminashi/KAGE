@@ -359,7 +359,7 @@ void cdDrawCurve(double x1, double y1,
 			}
 		}
 		
-		if(a2 == 9){
+		if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Sinnyu & L2RD Harai
 			if(y2 == y3){
 				poly2[0].X = x3;
 				poly2[0].Y = y3 + kMinWidthT;
