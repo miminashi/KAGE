@@ -15,7 +15,7 @@ $partsdir =~ s/\/?$//; # remove the last slash
 use Fcntl;
 use BerkeleyDB;
 
-tie %db, "BerkeleyDB::Hash", -Filename => "partsdb", -Flags => DB_RDONLY
+tie %db, "BerkeleyDB::Hash", -Filename => "$partsdir/partsdb", -Flags => DB_RDONLY
 or die "An error occured at opening DB file.\n";
 %db = ();
 
