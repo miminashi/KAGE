@@ -354,10 +354,10 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
   int kari, mode;
   int tempShotai;
   int *buf, strokes;
-
+  int value;
+  
   *flag = 0;
   
-  int value;
   buf = convertStroke(in->str, buf, &strokes);
   
   //check left side (NEW)

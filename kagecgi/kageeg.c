@@ -234,7 +234,7 @@ void doCombine(const KGString *in, KGString *out){
     addStrokeWithTransform(partStroke3, 3, result, out, 1);
     break;
   }
-  fprintf(stderr,"%s\n",out->str);
+  //fprintf(stderr,"%s\n",out->str);
 }
 
 void drawGlyph(const KGString *in, const int mode){
