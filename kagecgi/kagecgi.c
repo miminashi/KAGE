@@ -97,7 +97,12 @@ int main(int argc, char *argv[]){
 	
 	//clear result buffer
 	test2 = g_string_new("");
-	if(kType == 2){
+	if(kType == 1){ //svg
+	  g_string_append(kResultText, "<?xml version=\"1.0\"?>\n");
+	  g_string_append(kResultText, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
+	  g_string_append(kResultText, "<svg viewBox=\"0 0 1024 1024\">");
+	}
+	else if(kType == 2){ //eps
 		g_string_append(kResultText, "%!PS-Adobe-3.0 EPSF-3.0\n");
 		g_string_append(kResultText, "%%BoundingBox: 0 -208 1024 816\n");
 		g_string_append(kResultText, "%%Pages: 0\n");
@@ -160,11 +165,23 @@ int main(int argc, char *argv[]){
 		}
 	}
 	else if(kType == 1){ //svg(vector graphics)
+		if(test2->len != 0){
+			test2 = CalcSizes(test2, 1);
+			kMode = 1;
+			drawGlyph(test2, 0);
+			g_string_append(kResultText, "</svg>\n");
+			fprintf(stdout, "Content-type: image/svg-xml\n\n");
+			fprintf(stdout, "%s", kResultText->str);
+		}
+		else{
+			fprintf(stdout, "Content-type: text/plain\n\n");
+			fprintf(stdout, "An error occurred.");
+		}
 	}
 	else if(kType == 2){ //eps(vector graphics)
 		if(test2->len != 0){
 			test2 = CalcSizes(test2, 1);
-			kMode = 1;
+			kMode = 2;
 			drawGlyph(test2, 0);
 			g_string_append(kResultText, "fill\n");
 			g_string_append(kResultText, "%%EOF\n");
