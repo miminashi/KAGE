@@ -9,6 +9,14 @@ Get makepartsdb.pl and parts.txt, please type like follows.
 
 Then ''partsdb'' is to be created.
 
+* aliasdb : Kanji parts alias database for KAGE/cgi
+
+Get makealiasdb.pl and alias.txt, please type like follows.
+
+    % perl makealiasdb.pl .
+
+Then ''aliasdb'' is to be created.
+
 * idsdb : Kanji alias IDS database for KAGE/cgi
 
 Get makeidsdb.pl and CHISE/IDS data, please type like follows.

@@ -13,6 +13,7 @@
 #define pngFilePath "/var/www/v0.4/"
 #define partsdbFileName "/var/www/kagedb/partsdb"
 #define idsdbFileName "/var/www/kagedb/idsdb"
+#define aliasdbFileName "/var/www/kagedb/aliasdb"
 
 #define kBaseline 188
 #define pngWidth 200
@@ -25,6 +26,7 @@
 
 DB *kPartsdbDatabase;
 DB *kIdsdbDatabase;
+DB *kAliasdbDatabase;
 
 FILE *debug;
 

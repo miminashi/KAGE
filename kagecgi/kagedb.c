@@ -10,12 +10,15 @@ int initDB(){
 	kPartsdbDatabase->open(kPartsdbDatabase, NULL, partsdbFileName, NULL, DB_HASH, DB_RDONLY, 0644);
 	db_create(&kIdsdbDatabase, NULL, 0);
 	kIdsdbDatabase->open(kIdsdbDatabase, NULL, idsdbFileName, NULL, DB_HASH, DB_RDONLY, 0644);
+	db_create(&kAliasdbDatabase, NULL, 0);
+	kAliasdbDatabase->open(kAliasdbDatabase, NULL, aliasdbFileName, NULL, DB_HASH, DB_RDONLY, 0644);
 	return 0;
 }
 
 int closeDB(){
 	kPartsdbDatabase->close(kPartsdbDatabase, 0);
 	kIdsdbDatabase->close(kIdsdbDatabase, 0);
+	kAliasdbDatabase->close(kAliasdbDatabase, 0);
 	return 0;
 }
 
@@ -72,6 +75,22 @@ void searchAliasData(const KGString *in, KGString *out){
 		else if(strncmp(temp->str + temp->len - 4, "-u00", 4) == 0) kg_string_set_size(temp, temp->len - 2);
 	}
 	
+	memset(&dbkey,0,sizeof(DBT));
+	memset(&dbdata,0,sizeof(DBT));
+	dbkey.data = temp->str;
+	dbkey.size = temp->len;
+	kg_string_set_size(out, 0);
+	kAliasdbDatabase->get(kAliasdbDatabase, NULL, &dbkey, &dbdata, 0);
+	if(dbdata.size != 0){
+		buf = (char *)malloc(dbdata.size + 1);
+		strncpy(buf, dbdata.data, dbdata.size);
+		buf[dbdata.size] = '\0'; 
+		//fprintf(stderr,"%s\n",buf);
+		kg_string_append(out, buf);
+		free(buf);
+		return;
+	}
+
 	memset(&dbkey,0,sizeof(DBT));
 	memset(&dbdata,0,sizeof(DBT));
 	dbkey.data = temp->str;
