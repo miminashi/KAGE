@@ -39,6 +39,7 @@ u2ebc	v6708-03
 u2ebe	u8279
 u2ebf	u8279-k
 u2ed7	u96e8-03
+u2ff8.u20086.u4e00	u2008b
 u5f50	pd0042
 u696d	u2ff1.u4e1a.pd0026
 u6bb3	u2ff1.u51e0.u53c8
