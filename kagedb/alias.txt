@@ -1,5 +1,8 @@
+cdp-8b67	pd0041
 cdp-8baf	u72ad
 gt-00458	u4eba-03
+gt-k00064	u53c8-01
+u2e98	u624c
 u2ea1	u6c35
 u2ebc	u6708-9903
 u2ebe	u8279
