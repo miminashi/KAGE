@@ -9,7 +9,7 @@ gt-k00064	u53c8-01
 u2e86	v5182-01
 u2e98	u624c
 u2ea1	u6c35
-u2ebc	u6708-9903
+u2ebc	v6708-03
 u2ebe	u8279
 u2ebf	u8279-k
 u97f3	u2ff1.u7acb.u65e5
