@@ -242,7 +242,7 @@ void drawGlyph(const KGString *in, const int mode){
   int *buf;
   buf = convertStroke(in->str, buf, &j);
   for(i = 0; i < j; i++){
-    if(mode == 0){ //normal
+    if(mode == DRAW_GLYPH_MODE_NORMAL){ //normal
       dfDrawFont(buf[i * 11 + 0],
                  buf[i * 11 + 1],
                  buf[i * 11 + 2],
@@ -255,7 +255,7 @@ void drawGlyph(const KGString *in, const int mode){
                  buf[i * 11 + 9],
                  buf[i * 11 + 10]);
     }
-    else if(mode == 1){ //without decoration
+    else if(mode == DRAW_GLYPH_MODE_WITHOUT_DECORATION){ //without decoration
       dfDrawFont(buf[i * 11 + 0],
                  0,
                  0,
@@ -270,5 +270,35 @@ void drawGlyph(const KGString *in, const int mode){
     }
   }
   free(buf);
+}
+
+KGString* finalAdjustment(const KGString *in){
+  int i, j, k, l, m, n;
+  int *buf;
+  KGString *temp;
+  
+  n = kShotai;
+  kShotai = kGothic;
+  temp = kg_string_new("");
+  
+  DrawBox();
+  drawGlyph(in, DRAW_GLYPH_MODE_WITHOUT_DECORATION);
+  
+  buf = convertStroke(in->str, buf, &j);
+  for(i = 0; i < j; i++){
+    m = 0;
+    if(buf[i * 11 + 2] == 13){
+      for(k = buf[i * 11 + 5] - kMinWidthT; k < buf[i * 11 + 5] + kMinWidthT; k++){
+        for(l = buf[i * 11 + 6] + kWidth * kKakato * 0.5; l < buf[i * 11 + 6] + kWidth * kKakato + pngHeight * 0.1; l++){
+          if(0 <= l && l < canvasHeight && 0 <= k && k < canvasHeight && kageCanvas[l][k] != kWhite) m++;
+        }
+      }
+      if(m != 0) buf[i * 11 + 2] = 23;
+    }
+  }
+  convertArray(buf, temp, j, 0);
+  free(buf);
+  kShotai = n;
+  return kg_string_new(temp->str);
 }
 

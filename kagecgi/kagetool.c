@@ -58,7 +58,7 @@ void PartsWidth(const KGString *in, int *lx, int *rx){
   DrawBox();
   tempShotai = kShotai;
   kShotai = kGothic;
-  drawGlyph(in, 1);
+  drawGlyph(in, DRAW_GLYPH_MODE_WITHOUT_DECORATION);
   kShotai = tempShotai;
   DotsWidth(lx, rx);
   /*
@@ -122,7 +122,7 @@ void PartsHeight(const KGString *in, int *ly, int *ry){
   DrawBox();
   tempShotai = kShotai;
   kShotai = kGothic;
-  drawGlyph(in, 1);
+  drawGlyph(in, DRAW_GLYPH_MODE_WITHOUT_DECORATION);
   kShotai = tempShotai;
   DotsHeight(ly, ry);
 	/*
@@ -463,7 +463,7 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
   DrawBox();
   tempShotai = kShotai;
   kShotai = kGothic;
-  drawGlyph(in, 1);
+  drawGlyph(in, DRAW_GLYPH_MODE_WITHOUT_DECORATION);
   kShotai = tempShotai;
   DotsWidth(&dlx1, &drx1);
   DotsHeight(&dly1, &dry1);

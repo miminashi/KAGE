@@ -41,6 +41,9 @@ int kShotai;
 #define FLAG_SURROUND_TOP 4
 #define FLAG_SURROUND_BOTTOM 8
 
+#define DRAW_GLYPH_MODE_NORMAL 0
+#define DRAW_GLYPH_MODE_WITHOUT_DECORATION 1
+
 typedef struct _kPoint{
 	double X;
 	double Y;

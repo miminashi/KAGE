@@ -45,6 +45,7 @@ void searchAliasData(const KGString *in, KGString *out);
 void searchCacheData(const KGString *in, KGString *out);
 void doCombine(const KGString *in, KGString *out);
 void drawGlyph(const KGString *in, const int mode);
+KGString* finalAdjustment(const KGString *in);
 
 int isIDS(const KGString *in);
 void divideInto2(const KGString *in, KGString *partIDS1, KGString *partIDS3);

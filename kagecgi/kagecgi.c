@@ -125,13 +125,15 @@ int main(int argc, char *argv[]){
     //	  kg_string_append(test2, test1->str);
   }
   
+  if(test2->len != 0) test2 = finalAdjustment(test2);
+  
   if(kType == 0){ //png(image)
     if(test2->len != 0){
       if(kInput != 1){ //0 and 2
 	test2 = CalcSizes(test2, 1);
       }
       DrawBox();
-      drawGlyph(test2, 0);
+      drawGlyph(test2, DRAW_GLYPH_MODE_NORMAL);
       //output to file
       filename = kg_string_new(pngFilePath);
       if(kShotai == kMincho) kg_string_append(filename, "mincho/");
@@ -162,7 +164,7 @@ int main(int argc, char *argv[]){
     if(test2->len != 0){
       test2 = CalcSizes(test2, 1);
       kMode = 1;
-      drawGlyph(test2, 0);
+      drawGlyph(test2, DRAW_GLYPH_MODE_NORMAL);
       kg_string_append(kResultText, "</g></svg>\n");
       if(type != 1) fprintf(stdout, "Content-type: image/svg-xml\n\n");
       fprintf(stdout, "%s", kResultText->str);
@@ -176,7 +178,7 @@ int main(int argc, char *argv[]){
     if(test2->len != 0){
       test2 = CalcSizes(test2, 1);
       kMode = 2;
-      drawGlyph(test2, 0);
+      drawGlyph(test2, DRAW_GLYPH_MODE_NORMAL);
       kg_string_append(kResultText, "fill\n");
       kg_string_append(kResultText, "%%EOF\n");
       if(type != 1) fprintf(stdout, "Content-type: application/postscript\n\n");
