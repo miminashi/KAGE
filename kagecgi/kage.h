@@ -10,6 +10,10 @@ int kShotai;
 #define kMincho 0
 #define kGothic 1
 
+#define kWhite 0xFF
+#define kBlack 0
+#define kGray 1
+
 #define kMage 10
 #define kRate 20
 #define kResolution (1000 / kRate + 1) * 2
@@ -55,5 +59,7 @@ void cdDrawCurve(double, double, double, double, double, double, int, int);
 void cdDrawLine(double, double, double, double, int, int);
 //kageic.c
 void icPolygon(kPoint *, int);
+void icBox(int, int, int, int);
+void icDot(int, int);
 
 #endif

@@ -9,7 +9,7 @@ void icPolygon(kPoint *poly, int number){
   char buf[256];
   
   if(kMode == 0){ //normal
-    fillPolygon(poly, number, 0, kageCanvas);
+    fillPolygon(poly, number, kBlack, kageCanvas);
   }
   else if(kMode == 1){ //output for svg
     sprintf(buf, "<path d=\"M ");
@@ -37,3 +37,15 @@ void icPolygon(kPoint *poly, int number){
     kg_string_append(kResultText, "closepath\n");
   }
 }
+
+void icBox(int x1, int y1, int x2, int y2){
+  kageCanvas[y1][x1] = kGray;
+  kageCanvas[y2][x1] = kGray;
+  kageCanvas[y1][x2] = kGray;
+  kageCanvas[y2][x2] = kGray;
+}
+
+void icDot(int x, int y){
+  kageCanvas[y][x] = kGray;
+}
+

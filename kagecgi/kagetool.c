@@ -6,62 +6,62 @@
 #include "sysdep.h"
 
 void DotsWidth(int *dlx, int *drx){
-	int i, j;
-	
-    *dlx = 0;
-    *drx = 0;
-    for(i = 0; i < canvasWidth && *dlx == 0; i++){
-		for(j = 0; j < canvasHeight; j++){
-			if(kageCanvas[j][i] == 0){
-				*dlx = i;
-				break;
-			}
-		}
-	}
-	
-	for(i = canvasWidth - 1; i >= 0 && *drx == 0; i--){
-		for(j = 0; j < canvasHeight; j++){
-			if(kageCanvas[j][i] == 0){
-				*drx = i;
-				break;
-			}
-		}
-	}
+  int i, j;
+  
+  *dlx = 0;
+  *drx = 0;
+  for(i = 0; i < canvasWidth && *dlx == 0; i++){
+    for(j = 0; j < canvasHeight; j++){
+      if(kageCanvas[j][i] != kWhite){
+        *dlx = i;
+        break;
+      }
+    }
+  }
+  
+  for(i = canvasWidth - 1; i >= 0 && *drx == 0; i--){
+    for(j = 0; j < canvasHeight; j++){
+      if(kageCanvas[j][i] != kWhite){
+        *drx = i;
+        break;
+      }
+    }
+  }
 }
 
 void DotsHeight(int *dly, int *dry){
-    int i, j;
-	
-    *dly = 0;
-	*dry = 0;
-    for(j = 0; j < canvasHeight && *dly == 0; j++){
-        for(i = 0; i < canvasWidth; i++){
-            if(kageCanvas[j][i] == 0){
-                *dly = j;
-                break;
-            }
-        }
+  int i, j;
+  
+  *dly = 0;
+  *dry = 0;
+  for(j = 0; j < canvasHeight && *dly == 0; j++){
+    for(i = 0; i < canvasWidth; i++){
+      if(kageCanvas[j][i] != kWhite){
+        *dly = j;
+        break;
+      }
     }
-	
-    for(j = canvasHeight - 1; j >= 0 && *dry == 0; j--){
-        for(i = 0; i < canvasWidth; i++){
-            if(kageCanvas[j][i] == 0){
-                *dry = j;
-                break;
-            }
-        }
+  }
+  
+  for(j = canvasHeight - 1; j >= 0 && *dry == 0; j--){
+    for(i = 0; i < canvasWidth; i++){
+      if(kageCanvas[j][i] != kWhite){
+        *dry = j;
+        break;
+      }
     }
+  }
 }
 
 void PartsWidth(const KGString *in, int *lx, int *rx){
-	int tempShotai;
-    DrawBox();
-    tempShotai = kShotai;
-    kShotai = kGothic;
-    drawGlyph(in, 1);
-    kShotai = tempShotai;
-    DotsWidth(lx, rx);
-	/*
+  int tempShotai;
+  DrawBox();
+  tempShotai = kShotai;
+  kShotai = kGothic;
+  drawGlyph(in, 1);
+  kShotai = tempShotai;
+  DotsWidth(lx, rx);
+  /*
     int i;
 	int *buf, strokes;
 	double t, x;
@@ -118,13 +118,13 @@ void PartsWidth(const KGString *in, int *lx, int *rx){
 }
 
 void PartsHeight(const KGString *in, int *ly, int *ry){
-	int tempShotai;
-    DrawBox();
-    tempShotai = kShotai;
-    kShotai = kGothic;
-    drawGlyph(in, 1);
-    kShotai = tempShotai;
-    DotsHeight(ly, ry);
+  int tempShotai;
+  DrawBox();
+  tempShotai = kShotai;
+  kShotai = kGothic;
+  drawGlyph(in, 1);
+  kShotai = tempShotai;
+  DotsHeight(ly, ry);
 	/*
     int i;
 	int *buf, strokes;
@@ -208,90 +208,90 @@ void PartsHeight(const KGString *in, int *ly, int *ry){
 }
 
 KGString * CalcSizes(const KGString *in, int mode){
-    int i, j, k, basewidth, one_lineX, one_lineY;
-    int dlx1, drx1, dly1, dry1;
-	int px1, py1;
-    double pr1, pry1;
-	
-    int mitsuT, flg_boxT, widthT, heightT;
-    double tateT, yokoT;
-    int cutx, cuty;
-	
-	int *buf, strokes;
-	int tf[12];
-	KGString *out;
-	
-	out = kg_string_new("");
-    basewidth = pngWidth * 0.9;
-	
-    if(mode == 0){
-        //temporary adjustment X-axis
-        PartsWidth(in, &dlx1, &drx1);
-        if(dlx1 == drx1){
-            pr1 = 1.0;
-            px1 = pngWidth / 2 - dlx1;
-            one_lineX = 1;
-        }
-        else{
-            pr1 = (double)basewidth/(drx1 - dlx1);
-            px1 = (pngWidth-basewidth)/2 - (double)(dlx1 * pr1);
-            one_lineX = 0;
-        }
-		
-        //temporary adjustment Y-axis
-        PartsHeight(in, &dly1, &dry1);
-        if(dly1 == dry1){
-            pry1 = 1.0;
-            py1 = pngWidth / 2 - dly1;
-            one_lineY = 1;
-        }
-		else{
-            pry1 = (double)basewidth/(dry1 - dly1);
-            py1 = (pngWidth-basewidth)/2 - (double)(dly1 * pry1);
-            one_lineY = 0;
-        }
+  int i, j, k, basewidth, one_lineX, one_lineY;
+  int dlx1, drx1, dly1, dry1;
+  int px1, py1;
+  double pr1, pry1;
+  
+  int mitsuT, flg_boxT, widthT, heightT;
+  double tateT, yokoT;
+  int cutx, cuty;
+  
+  int *buf, strokes;
+  int tf[12];
+  KGString *out;
+  
+  out = kg_string_new("");
+  basewidth = pngWidth * 0.9;
+  
+  if(mode == 0){
+    //temporary adjustment X-axis
+    PartsWidth(in, &dlx1, &drx1);
+    if(dlx1 == drx1){
+      pr1 = 1.0;
+      px1 = pngWidth / 2 - dlx1;
+      one_lineX = 1;
     }
-	else{
-        PartsWidth(in, &dlx1, &drx1);
-        PartsHeight(in, &dly1, &dry1);
-		
-        cutx = 0;
-        cuty = 0;
-		
-        CalcOptions(in, &mitsuT, &flg_boxT, &yokoT, &tateT);
-		
-        widthT = basewidth;
-        heightT = basewidth;
-		
-        if(flg_boxT % 2 / 1 != 0){
-            widthT = widthT - kWidth * 3;
-            cutx++;
-        }
-        if(flg_boxT % 4 / 2 != 0){
-            widthT = widthT - kWidth * 3;
-            cutx++;
-        }
-        if(flg_boxT % 8 / 4 != 0){
-            heightT = heightT - kWidth * 3;
-            cuty++;
-        }
-        if(flg_boxT % 16 / 8 != 0){
-            heightT = heightT - kWidth * 3;
-            cuty++;
-        }
-		
-        //especially get small the 'mouth'
-        if(mode == 2 && flg_boxT % 16 == 15){
-            widthT = widthT - kWidth * (max(0, 16 - (int)yokoT * 4));
-            heightT = heightT - kWidth * (max(0, 16 - (int)tateT * 4));
-		}
-        //'dot' as same as 'mouth'
-        if(mode == 2 && tateT == 1 && yokoT == 1){
-            widthT = pngWidth * 0.9 * 0.5;
-            heightT = pngWidth * 0.9 * 0.5;
-        }
-		
-          /*
+    else{
+      pr1 = (double)basewidth/(drx1 - dlx1);
+      px1 = (pngWidth-basewidth)/2 - (double)(dlx1 * pr1);
+      one_lineX = 0;
+    }
+    
+    //temporary adjustment Y-axis
+    PartsHeight(in, &dly1, &dry1);
+    if(dly1 == dry1){
+      pry1 = 1.0;
+      py1 = pngWidth / 2 - dly1;
+      one_lineY = 1;
+    }
+    else{
+      pry1 = (double)basewidth/(dry1 - dly1);
+      py1 = (pngWidth-basewidth)/2 - (double)(dly1 * pry1);
+      one_lineY = 0;
+    }
+  }
+  else{
+    PartsWidth(in, &dlx1, &drx1);
+    PartsHeight(in, &dly1, &dry1);
+    
+    cutx = 0;
+    cuty = 0;
+    
+    CalcOptions(in, &mitsuT, &flg_boxT, &yokoT, &tateT);
+    
+    widthT = basewidth;
+    heightT = basewidth;
+    
+    if(flg_boxT % 2 / 1 != 0){
+      widthT = widthT - kWidth * 3;
+      cutx++;
+    }
+    if(flg_boxT % 4 / 2 != 0){
+      widthT = widthT - kWidth * 3;
+      cutx++;
+    }
+    if(flg_boxT % 8 / 4 != 0){
+      heightT = heightT - kWidth * 3;
+      cuty++;
+    }
+    if(flg_boxT % 16 / 8 != 0){
+      heightT = heightT - kWidth * 3;
+      cuty++;
+    }
+    
+    //especially get small the 'mouth'
+    if(mode == 2 && flg_boxT % 16 == 15){
+      widthT = widthT - kWidth * (max(0, 16 - (int)yokoT * 4));
+      heightT = heightT - kWidth * (max(0, 16 - (int)tateT * 4));
+    }
+    //'dot' as same as 'mouth'
+    if(mode == 2 && tateT == 1 && yokoT == 1){
+      widthT = pngWidth * 0.9 * 0.5;
+      heightT = pngWidth * 0.9 * 0.5;
+    }
+    
+    /*
 if(flg_boxT % 64 / 32 != 0){
             buf = convertStroke(in->str, buf, &strokes);
             for(i = 0; i < strokes; i++){
@@ -339,230 +339,230 @@ if(flg_boxT % 64 / 32 != 0){
 }
 
 void DrawBox(){
-	int i, j;
-	
-	for(i = 0; i < canvasWidth; i++){
-		for(j = 0; j < canvasHeight; j++){
-			kageCanvas[j][i] = 0xFF;
-		}
-	}
+  int i, j;
+  
+  for(i = 0; i < canvasWidth; i++){
+    for(j = 0; j < canvasHeight; j++){
+      kageCanvas[j][i] = kWhite;
+    }
+  }
 }
 
 void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, double *tate){
     int i, j, k, l, flg;
-    int dlx1, drx1, dly1, dry1;
-    int kari, mode;
-	int tempShotai;
-	int *buf, strokes;
-	
-    *flag = 0;
-	
-    DrawBox();
-    tempShotai = kShotai;
-    kShotai = kGothic;
-    drawGlyph(in, 1);
-    kShotai = tempShotai;
-    DotsWidth(&dlx1, &drx1);
-    DotsHeight(&dly1, &dry1);
-	
-	//check left side
-    k = 0;
-    l = 0;
-    for(i = 0; i < pngWidth; i++){
-        flg = 0;
-        for(j = 0; j < kWidth; j++){
-            if(kageCanvas[i][dlx1 + j] == 0) flg = 1;
-        }
-        if(flg == 1){
-        	k++;
-        }
-        else{
-            if(k > l) l = k;
-            k = 0;
-        }
+  int dlx1, drx1, dly1, dry1;
+  int kari, mode;
+  int tempShotai;
+  int *buf, strokes;
+  
+  *flag = 0;
+  
+  DrawBox();
+  tempShotai = kShotai;
+  kShotai = kGothic;
+  drawGlyph(in, 1);
+  kShotai = tempShotai;
+  DotsWidth(&dlx1, &drx1);
+  DotsHeight(&dly1, &dry1);
+  
+  //check left side
+  k = 0;
+  l = 0;
+  for(i = 0; i < pngWidth; i++){
+    flg = 0;
+    for(j = 0; j < kWidth; j++){
+      if(kageCanvas[i][dlx1 + j] != kWhite) flg = 1;
     }
-    if(k > l) l = k;
-    
-    if(l > pngWidth * 0.9 / 4) *flag = *flag | 1;
-	
-    //check right side
-    k = 0;
-    l = 0;
-    for(i = 0; i < pngWidth; i++){
-        flg = 0;
-        for(j = 0; j < kWidth; j++){
-            if(kageCanvas[i][drx1 - j] == 0) flg = 1;
-        }
-        if(flg == 1) k++;
-        else{
-            if(k > l) l = k;
-            k = 0;
-        }
+    if(flg == 1){
+      k++;
     }
-    if(k > l) l = k;
-	
-    if(l > pngWidth * 0.9 / 4) *flag = *flag | 2;
-	
-    //check upper side
-    k = 0;
-    l = 0;
-    for(i = 0; i < pngWidth; i++){
-        flg = 0;
-		for(j = 0; j < kWidth; j++){
-            if(kageCanvas[dly1 + j][i] == 0) flg = 1;
-        }
-        if(flg == 1) k++;
-        else{
-            if(k > l) l = k;
-            k = 0;
-        }
+    else{
+      if(k > l) l = k;
+      k = 0;
     }
-    if(k > l) l = k;
-	
-    if(l > pngWidth * 0.9 / 4) *flag = *flag | 4;
-	
-    //check bottom side
-    k = 0;
-    l = 0;
-    for(i = 0; i < pngWidth; i++){
-        flg = 0;
-        for(j = 0; j < kWidth; j++){
-            if(kageCanvas[dry1 - j][i] == 0) flg = 1;
-        }
-        if(flg == 1) k++;
-        else{
-            if(k > l) l = k;
-            k = 0;
-        }
+  }
+  if(k > l) l = k;
+  
+  if(l > pngWidth * 0.9 / 4) *flag = *flag | 1;
+  
+  //check right side
+  k = 0;
+  l = 0;
+  for(i = 0; i < pngWidth; i++){
+    flg = 0;
+    for(j = 0; j < kWidth; j++){
+      if(kageCanvas[i][drx1 - j] != kWhite) flg = 1;
     }
-    if(k > l) l = k;
-	
-    if(l > pngWidth * 0.9 / 4) *flag = *flag | 8;
-	
-    //count black dots
-    *mitsudo = 0;
-    for(i = 0; i < pngHeight; i++){
-        for(j = 0; j < pngWidth; j++){
-            if(kageCanvas[i][j] == 0) *mitsudo += 1;
-        }
+    if(flg == 1) k++;
+    else{
+      if(k > l) l = k;
+      k = 0;
     }
-	
-    //calculate X-axis complexity
-    *yoko = 0;
-    for(i = dly1; i <= dry1; i++){
-        mode = 0;
-        kari = 0;
-        for(j = dlx1; j <= drx1; j++){
-			if(kageCanvas[i][j] == 0 &&
-             kageCanvas[i][j+1] == 0 &&
-             kageCanvas[i][j+2] == 0){
-                if(mode == 0){
-                    mode = 1;
-                    kari++;
-                }
-            }
-            else if(mode == 1) mode = 0;
-        }
-        if(kari > *yoko) *yoko = kari;
+  }
+  if(k > l) l = k;
+  
+  if(l > pngWidth * 0.9 / 4) *flag = *flag | 2;
+  
+  //check upper side
+  k = 0;
+  l = 0;
+  for(i = 0; i < pngWidth; i++){
+    flg = 0;
+    for(j = 0; j < kWidth; j++){
+      if(kageCanvas[dly1 + j][i] != kWhite) flg = 1;
     }
-	
-    //calculate Y-axis complexity
-    *tate = 0;
-    for(i = dlx1; i <= drx1; i++){
-        mode = 0;
-        kari = 0;
-        for(j = dly1; j <= dry1; j++){
-            if(kageCanvas[j][i] == 0 &&
-             kageCanvas[j+1][i] == 0 &&
-             kageCanvas[j+2][i] == 0){
-                if(mode == 0){
-                    mode = 1;
-                    kari++;
-                }
-            }
-            else if(mode == 1) mode = 0;
-        }
-        if(kari > *tate) *tate = kari;
+    if(flg == 1) k++;
+    else{
+      if(k > l) l = k;
+      k = 0;
     }
-	
-    //use user defined option if it exists
-	buf = convertStroke(in->str, buf, &strokes);
-	for(i = 0; i < strokes; i++){
-        if(buf[i * 11 + 0] % 10 == 0){
-            if(buf[i * 11 + 1] != 0) *yoko = (double)(buf[i * 11 + 1]) * 0.1;
-            if(buf[i * 11 + 2] != 0) *tate = (double)(buf[i * 11 + 2]) * 0.1;
-            if(buf[i * 11 + 3] != 0) *flag = *flag + buf[i * 11 + 3];
-        }
+  }
+  if(k > l) l = k;
+  
+  if(l > pngWidth * 0.9 / 4) *flag = *flag | 4;
+  
+  //check bottom side
+  k = 0;
+  l = 0;
+  for(i = 0; i < pngWidth; i++){
+    flg = 0;
+    for(j = 0; j < kWidth; j++){
+      if(kageCanvas[dry1 - j][i] != kWhite) flg = 1;
     }
-    free(buf);
+    if(flg == 1) k++;
+    else{
+      if(k > l) l = k;
+      k = 0;
+    }
+  }
+  if(k > l) l = k;
+  
+  if(l > pngWidth * 0.9 / 4) *flag = *flag | 8;
+  
+  //count black dots
+  *mitsudo = 0;
+  for(i = 0; i < pngHeight; i++){
+    for(j = 0; j < pngWidth; j++){
+      if(kageCanvas[i][j] != kWhite) *mitsudo += 1;
+    }
+  }
+  
+  //calculate X-axis complexity
+  *yoko = 0;
+  for(i = dly1; i <= dry1; i++){
+    mode = 0;
+    kari = 0;
+    for(j = dlx1; j <= drx1; j++){
+      if(kageCanvas[i][j] != kWhite &&
+         kageCanvas[i][j+1] != kWhite &&
+         kageCanvas[i][j+2] != kWhite){
+        if(mode == 0){
+          mode = 1;
+          kari++;
+        }
+      }
+      else if(mode == 1) mode = 0;
+    }
+    if(kari > *yoko) *yoko = kari;
+  }
+  
+  //calculate Y-axis complexity
+  *tate = 0;
+  for(i = dlx1; i <= drx1; i++){
+    mode = 0;
+    kari = 0;
+    for(j = dly1; j <= dry1; j++){
+      if(kageCanvas[j][i] != kWhite &&
+         kageCanvas[j+1][i] != kWhite &&
+         kageCanvas[j+2][i] != kWhite){
+        if(mode == 0){
+          mode = 1;
+          kari++;
+        }
+      }
+      else if(mode == 1) mode = 0;
+    }
+    if(kari > *tate) *tate = kari;
+  }
+  
+  //use user defined option if it exists
+  buf = convertStroke(in->str, buf, &strokes);
+  for(i = 0; i < strokes; i++){
+    if(buf[i * 11 + 0] % 10 == 0){
+      if(buf[i * 11 + 1] != 0) *yoko = (double)(buf[i * 11 + 1]) * 0.1;
+      if(buf[i * 11 + 2] != 0) *tate = (double)(buf[i * 11 + 2]) * 0.1;
+      if(buf[i * 11 + 3] != 0) *flag = *flag + buf[i * 11 + 3];
+    }
+  }
+  free(buf);
 }
 
 void DoDrawParts(const KGString *in, const int lx1, const double rf1, const int ly1, const double rfy1){
-    int i;
-	int *buf, strokes;
-	
-    DrawBox();
-   	buf = convertStroke(in->str, buf, &strokes);
-	for(i = 0; i < strokes; i++){
-		dfDrawFont(buf[i * 11 + 0],
-		 buf[i * 11 + 1],
-		 buf[i * 11 + 2],
-		 buf[i * 11 + 3] * rf1 + lx1,
-		 buf[i * 11 + 4] * rfy1 + ly1,
-		 buf[i * 11 + 5] * rf1 + lx1,
-		 buf[i * 11 + 6] * rfy1 + ly1,
-		 buf[i * 11 + 7] * rf1 + lx1,
-		 buf[i * 11 + 8] * rfy1 + ly1,
-		 buf[i * 11 + 9] * rf1 + lx1,
-		 buf[i * 11 + 10] * rfy1 + ly1);
-    }
-	free(buf);
+  int i;
+  int *buf, strokes;
+  
+  DrawBox();
+  buf = convertStroke(in->str, buf, &strokes);
+  for(i = 0; i < strokes; i++){
+    dfDrawFont(buf[i * 11 + 0],
+               buf[i * 11 + 1],
+               buf[i * 11 + 2],
+               buf[i * 11 + 3] * rf1 + lx1,
+               buf[i * 11 + 4] * rfy1 + ly1,
+               buf[i * 11 + 5] * rf1 + lx1,
+               buf[i * 11 + 6] * rfy1 + ly1,
+               buf[i * 11 + 7] * rf1 + lx1,
+               buf[i * 11 + 8] * rfy1 + ly1,
+               buf[i * 11 + 9] * rf1 + lx1,
+               buf[i * 11 + 10] * rfy1 + ly1);
+  }
+  free(buf);
 }
 
 void DoDrawMixFont(const KGString *in1,
- const int lx1,
- const double rf1,
- const KGString *in2,
- const int lx2,
- const double rf2,
- const int ly1,
- const double rfy1,
- const int ly2,
- const double rfy2){
-    int i;
-	int *buf, strokes;
-	
-	DrawBox();
-   	buf = convertStroke(in1->str, buf, &strokes);
-	for(i = 0; i < strokes; i++){
-		dfDrawFont(buf[i * 11 + 0],
-		 buf[i * 11 + 1],
-		 buf[i * 11 + 2],
-		 buf[i * 11 + 3] * rf1 + lx1,
-		 buf[i * 11 + 4] * rfy1 + ly1,
-		 buf[i * 11 + 5] * rf1 + lx1,
-		 buf[i * 11 + 6] * rfy1 + ly1,
-		 buf[i * 11 + 7] * rf1 + lx1,
-		 buf[i * 11 + 8] * rfy1 + ly1,
-		 buf[i * 11 + 9] * rf1 + lx1,
-		 buf[i * 11 + 10] * rfy1 + ly1);
-    }
-	free(buf);
-	
-   	buf = convertStroke(in2->str, buf, &strokes);
-	for(i = 0; i < strokes; i++){
-		dfDrawFont(buf[i * 11 + 0],
-		 buf[i * 11 + 1],
-		 buf[i * 11 + 2],
-		 buf[i * 11 + 3] * rf2 + lx2,
-		 buf[i * 11 + 4] * rfy2 + ly2,
-		 buf[i * 11 + 5] * rf2 + lx2,
-		 buf[i * 11 + 6] * rfy2 + ly2,
-		 buf[i * 11 + 7] * rf2 + lx2,
-		 buf[i * 11 + 8] * rfy2 + ly2,
-		 buf[i * 11 + 9] * rf2 + lx2,
-		 buf[i * 11 + 10] * rfy2 + ly2);
-    }
-	free(buf);
+                   const int lx1,
+                   const double rf1,
+                   const KGString *in2,
+                   const int lx2,
+                   const double rf2,
+                   const int ly1,
+                   const double rfy1,
+                   const int ly2,
+                   const double rfy2){
+  int i;
+  int *buf, strokes;
+  
+  DrawBox();
+  buf = convertStroke(in1->str, buf, &strokes);
+  for(i = 0; i < strokes; i++){
+    dfDrawFont(buf[i * 11 + 0],
+               buf[i * 11 + 1],
+               buf[i * 11 + 2],
+               buf[i * 11 + 3] * rf1 + lx1,
+               buf[i * 11 + 4] * rfy1 + ly1,
+               buf[i * 11 + 5] * rf1 + lx1,
+               buf[i * 11 + 6] * rfy1 + ly1,
+               buf[i * 11 + 7] * rf1 + lx1,
+               buf[i * 11 + 8] * rfy1 + ly1,
+               buf[i * 11 + 9] * rf1 + lx1,
+               buf[i * 11 + 10] * rfy1 + ly1);
+  }
+  free(buf);
+  
+  buf = convertStroke(in2->str, buf, &strokes);
+  for(i = 0; i < strokes; i++){
+    dfDrawFont(buf[i * 11 + 0],
+               buf[i * 11 + 1],
+               buf[i * 11 + 2],
+               buf[i * 11 + 3] * rf2 + lx2,
+               buf[i * 11 + 4] * rfy2 + ly2,
+               buf[i * 11 + 5] * rf2 + lx2,
+               buf[i * 11 + 6] * rfy2 + ly2,
+               buf[i * 11 + 7] * rf2 + lx2,
+               buf[i * 11 + 8] * rfy2 + ly2,
+               buf[i * 11 + 9] * rf2 + lx2,
+               buf[i * 11 + 10] * rfy2 + ly2);
+  }
+  free(buf);
 }
 

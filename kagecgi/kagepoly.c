@@ -81,10 +81,10 @@ void fillPolygon(kPoint *p, int number, int col, unsigned char **image){
     }
     if(num != 0){
       //(for debug)
-      if(num % 2 != 0){
-	fprintf(stderr,"y:%d(%d)\n",j,num);
-	for(k=0;k<num;k++) fprintf(stderr,"%d+",cross[k]);
-      }
+      //if(num % 2 != 0){
+	//fprintf(stderr,"y:%d(%d)\n",j,num);
+	//for(k=0;k<num;k++) fprintf(stderr,"%d+",cross[k]);
+      //}
       //sort crossing point
       for(k = 0; k < num - 1; k++){
 	for(l = num - 1; l > k; l--){
