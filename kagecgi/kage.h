@@ -24,6 +24,7 @@ int kShotai;
 #define kKasane 3
 #define kMixdot (kWidth * 2) * (kWidth * 2 - 1)
 #define kL2RDfatten 1.1
+#define kUroko 24
 
 #define kMaxIDSSequenceLength 16
 #define kMaxIDCLength 16

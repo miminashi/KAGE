@@ -1,6 +1,7 @@
 //kagecd.c
 //
 #include "kage.h"
+#include "kagecgi.h"
 
 void cdDrawBezier(double x1, double y1,
 	double x2, double y2,
@@ -1033,10 +1034,11 @@ void cdDrawCurve(double x1, double y1,
 }
 
 void cdDrawLine(double tx1, double ty1, double tx2, double ty2, int ta1, int ta2){
-	double rad;
-	double v, x1, y1, x2, y2;
-	int a1, a2;
-	double XX, XY, YX, YY;
+  double rad;
+  double v, x1, y1, x2, y2;
+  int a1, a2;
+  double XX, XY, YX, YY;
+  int uroko;
 	
 	if(kShotai == kMincho){ //mincho
 		x1 = tx1;
@@ -1231,13 +1233,17 @@ void cdDrawLine(double tx1, double ty1, double tx2, double ty2, int ta1, int ta2
 				
 				//UROKO
 				if(a2 == 0){
-					poly2[0].X = x2;
-					poly2[0].Y = y2 - kMinWidthY;
-					poly2[1].X = x2 - 24;
-					poly2[1].Y = y2;
-					poly2[2].X = x2 - 12;
-					poly2[2].Y = y2 - 12;
-					icPolygon(poly2, 3);
+                                  uroko = kUroko;
+                                  if((x2 - x1 - kWidth) < uroko){
+                                    uroko = max((x2 - x1 - kWidth), 4);
+                                  }
+                                  poly2[0].X = x2;
+                                  poly2[0].Y = y2 - kMinWidthY;
+                                  poly2[1].X = x2 - uroko;
+                                  poly2[1].Y = y2;
+                                  poly2[2].X = x2 - uroko / 2;
+                                  poly2[2].Y = y2 - uroko / 2;
+                                  icPolygon(poly2, 3);
 				}
 			}
 		}
@@ -1277,12 +1283,16 @@ void cdDrawLine(double tx1, double ty1, double tx2, double ty2, int ta1, int ta2
 				
 				//UROKO
 				if(a2 == 0){
+                                  uroko = kUroko;
+                                  if((x2 - x1 - kWidth * cos(rad)) < uroko * cos(rad)){
+                                    uroko = max(((x2 - x1) / cos(rad) - kWidth), 4);
+                                  }
 					poly2[0].X = x2 + sin(rad) * kMinWidthY;
 					poly2[0].Y = y2 - cos(rad) * kMinWidthY;
-					poly2[1].X = x2 - cos(rad) * 24;
-					poly2[1].Y = y2 - sin(rad) * 24;
-					poly2[2].X = x2 - cos(rad) * 12 + sin(rad) * 12;
-					poly2[2].Y = y2 - sin(rad) * 12 - cos(rad) * 12;
+					poly2[1].X = x2 - cos(rad) * uroko;
+					poly2[1].Y = y2 - sin(rad) * uroko;
+					poly2[2].X = x2 - cos(rad) * uroko / 2 + sin(rad) * uroko / 2;
+					poly2[2].Y = y2 - sin(rad) * uroko / 2 - cos(rad) * uroko / 2;
 					icPolygon(poly2, 3);
 				}
 			}
