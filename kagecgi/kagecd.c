@@ -109,15 +109,6 @@ void cdDrawBezier(double x1, double y1,
 			ib = kMinWidthT;
 		}
 		
-		/*
-		if(a1 == 7 && a2 != 17){ deltad = sqrt(t); }
-		else if(a2 == 7 && a1 != 17){ deltad = sqrt(1.0 - t); }
-		else if(a1 == 7 && a2 == 17){ deltad = sqrt(t / 2); }
-		else if(a1 == 17 && a2 != 7){ deltad = sqrt(t / 2 + 0.5); }
-		else if(a1 != 7 && a2 == 17){ deltad = sqrt(1.0 - t / 2); }
-		else if(a1 == 17 && a2 == 7){ deltad = sqrt(0.5 - t / 2); }
-		else{ deltad = 1; }
-		*/
 		if(a1 == 7){ deltad = sqrt(t); }
 		else if(a2 == 7){ deltad = sqrt(1.0 - t); }
 		else{ deltad = 1; }
@@ -321,50 +312,6 @@ void cdDrawBezier(double x1, double y1,
 				icPolygon(poly3, 5);
 			}
 		}
-		
-		/*
-		if(a2 == 17){ //the last filled half circle
-			if(x2 == x3){
-				poly3[0].X = x3 - kMinWidthT * 0.5;
-				poly3[0].Y = y3;
-				poly3[1].X = x3 - kMinWidthT * 0.6 * 0.5;
-				poly3[1].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[2].X = x3;
-				poly3[2].Y = y3 + kMinWidthT * 0.5;
-				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[4].X = x3 + kMinWidthT * 0.5;
-				poly3[4].Y = y3;
-				icPolygon(poly3, 5);
-			}
-			else if(y2 == y3){
-				poly3[0].X = x3;
-				poly3[0].Y = y3 - kMinWidthT * 0.5;
-				poly3[1].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[1].Y = y3 - kMinWidthT * 0.6 * 0.5;
-				poly3[2].X = x3 + kMinWidthT * 0.5;
-				poly3[2].Y = y3;
-				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[4].X = x3;
-				poly3[4].Y = y3 + kMinWidthT * 0.5;
-				icPolygon(poly3, 5);
-			}
-			else{
-				poly3[0].X = x3 + sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[0].Y = y3 - cos(rad) * kMinWidthT * 0.5 * v;
-				poly3[1].X = x3 + cos(rad) * kMinWidthT * 0.8 * 0.5 * v + sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[1].Y = y3 + sin(rad) * kMinWidthT * 0.8 * 0.5 * v - cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[2].X = x3 + cos(rad) * kMinWidthT * 0.5 * v;
-				poly3[2].Y = y3 + sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[3].X = x3 + cos(rad) * kMinWidthT * 0.5 * 0.8 * v - sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[3].Y = y3 + sin(rad) * kMinWidthT * 0.5 * 0.8 * v + cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[4].X = x3 - sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[4].Y = y3 + cos(rad) * kMinWidthT * 0.5 * v;
-				icPolygon(poly3, 5);
-			}
-		}
-		*/
 		
 		if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Sinnyu & L2RD Harai
 			if(y3 == y4){
@@ -675,12 +622,9 @@ void cdDrawCurve(double x1, double y1,
 			ib = kMinWidthT;
 		}
 		
-		if(a1 == 7 && a2 != 17){ deltad = sqrt(t); }
-		else if(a2 == 7 && a1 != 17){ deltad = sqrt(1.0 - t); }
-		else if(a1 == 7 && a2 == 17){ deltad = sqrt(t / 2); }
-		else if(a1 == 17 && a2 != 7){ deltad = sqrt(t / 2 + 0.5); }
-		else if(a1 != 7 && a2 == 17){ deltad = sqrt(1.0 - t / 2); }
-		else if(a1 == 17 && a2 == 7){ deltad = sqrt(0.5 - t / 2); }
+		if(a1 == 7 && a2 == 0){ deltad = sqrt(t) * kL2RDfatten; } //L2RD: fatten
+		else if(a1 == 7){ deltad = sqrt(t); }
+		else if(a2 == 7){ deltad = sqrt(1.0 - t); }
 		else{ deltad = 1; }
 		ia = ia * deltad;
 		ib = ib * deltad;
@@ -883,65 +827,23 @@ void cdDrawCurve(double x1, double y1,
 			}
 		}
 		
-		if(a2 == 17){ //the last filled half circle
-			if(x2 == x3){
-				poly3[0].X = x3 - kMinWidthT * 0.5;
-				poly3[0].Y = y3;
-				poly3[1].X = x3 - kMinWidthT * 0.6 * 0.5;
-				poly3[1].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[2].X = x3;
-				poly3[2].Y = y3 + kMinWidthT * 0.5;
-				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[4].X = x3 + kMinWidthT * 0.5;
-				poly3[4].Y = y3;
-				icPolygon(poly3, 5);
-			}
-			else if(y2 == y3){
-				poly3[0].X = x3;
-				poly3[0].Y = y3 - kMinWidthT * 0.5;
-				poly3[1].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[1].Y = y3 - kMinWidthT * 0.6 * 0.5;
-				poly3[2].X = x3 + kMinWidthT * 0.5;
-				poly3[2].Y = y3;
-				poly3[3].X = x3 + kMinWidthT * 0.6 * 0.5;
-				poly3[3].Y = y3 + kMinWidthT * 0.6 * 0.5;
-				poly3[4].X = x3;
-				poly3[4].Y = y3 + kMinWidthT * 0.5;
-				icPolygon(poly3, 5);
-			}
-			else{
-				poly3[0].X = x3 + sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[0].Y = y3 - cos(rad) * kMinWidthT * 0.5 * v;
-				poly3[1].X = x3 + cos(rad) * kMinWidthT * 0.8 * 0.5 * v + sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[1].Y = y3 + sin(rad) * kMinWidthT * 0.8 * 0.5 * v - cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[2].X = x3 + cos(rad) * kMinWidthT * 0.5 * v;
-				poly3[2].Y = y3 + sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[3].X = x3 + cos(rad) * kMinWidthT * 0.5 * 0.8 * v - sin(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[3].Y = y3 + sin(rad) * kMinWidthT * 0.5 * 0.8 * v + cos(rad) * kMinWidthT * 0.6 * 0.5 * v;
-				poly3[4].X = x3 - sin(rad) * kMinWidthT * 0.5 * v;
-				poly3[4].Y = y3 + cos(rad) * kMinWidthT * 0.5 * v;
-				icPolygon(poly3, 5);
-			}
-		}
-		
 		if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Sinnyu & L2RD Harai
 			if(y2 == y3){
 				poly2[0].X = x3;
-				poly2[0].Y = y3 + kMinWidthT;
+				poly2[0].Y = y3 + kMinWidthT * kL2RDfatten;
 				poly2[1].X = x3;
-				poly2[1].Y = y3 - kMinWidthT;
-				poly2[2].X = x3 + kMinWidthT;
-				poly2[2].Y = y3 - kMinWidthT;
+				poly2[1].Y = y3 - kMinWidthT * kL2RDfatten;
+				poly2[2].X = x3 + kMinWidthT * kL2RDfatten;
+				poly2[2].Y = y3 - kMinWidthT * kL2RDfatten;
 				icPolygon(poly2, 3);
 			}
 			else{
-				poly2[0].X = x3 + kMinWidthT * YX;
-				poly2[0].Y = y3 + kMinWidthT * YY;
-				poly2[1].X = x3 - kMinWidthT * YX;
-				poly2[1].Y = y3 - kMinWidthT * YY;
-				poly2[2].X = x3 + kMinWidthT * XX - kMinWidthT * YX;
-				poly2[2].Y = y3 + kMinWidthT * XY - kMinWidthT * YY;
+				poly2[0].X = x3 + kMinWidthT * kL2RDfatten * YX;
+				poly2[0].Y = y3 + kMinWidthT * kL2RDfatten * YY;
+				poly2[1].X = x3 - kMinWidthT * kL2RDfatten * YX;
+				poly2[1].Y = y3 - kMinWidthT * kL2RDfatten * YY;
+				poly2[2].X = x3 + kMinWidthT * kL2RDfatten * XX - kMinWidthT * kL2RDfatten * YX;
+				poly2[2].Y = y3 + kMinWidthT * kL2RDfatten * XY - kMinWidthT * kL2RDfatten * YY;
 				icPolygon(poly2, 3);
 			}
 		}
