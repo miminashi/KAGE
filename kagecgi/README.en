@@ -8,7 +8,7 @@ PREREQUISITES
 
 KAGE/cgi needs following librarys:
 
- - Berkely DB 3
+ - Berkely DB 4
  - libpng
 
 
