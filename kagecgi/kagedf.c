@@ -1,6 +1,7 @@
 //kagedf.c
 //
 #include "kage.h"
+#include "kagecgi.h"
 
 void dfDrawFont(int a1, int a2, int a3,
 	int x1, int y1,
@@ -186,6 +187,8 @@ void dfDrawFont(int a1, int a2, int a3,
     	  cdDrawCurve(x2, y2, x3, y3, x4, y4, 1, 7);
     	  break;
     	case 9: // may not be exist
+          kageCanvas[y1][x1] = 0;
+          kageCanvas[y2][x2] = 0;
     	  break;
     	default:
     	  break;
@@ -362,6 +365,8 @@ void dfDrawFont(int a1, int a2, int a3,
     		cdDrawCurve(x2, y2, x3, y3, x4, y4, 1, a3);
     		break;
     	case 9: // may not be exist
+          kageCanvas[y1][x1] = 0;
+          kageCanvas[y2][x2] = 0;
     		break;
     	default:
 			break;

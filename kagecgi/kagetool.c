@@ -291,28 +291,31 @@ KGString * CalcSizes(const KGString *in, int mode){
             heightT = pngWidth * 0.9 * 0.5;
         }
 		
-		if(flg_boxT % 64 / 32 != 0){
-			buf = convertStroke(in->str, buf, &strokes);
-			for(i = 0; i < strokes; i++){
-                if(buf[i * 11 + 0] == 0) j = buf[i * 11 + 4];// j : center line
+          /*
+if(flg_boxT % 64 / 32 != 0){
+            buf = convertStroke(in->str, buf, &strokes);
+            for(i = 0; i < strokes; i++){
+              if(buf[i * 11 + 0] == 0) j = buf[i * 11 + 4];// j : center line
             }
             free(buf);
             k = max(j - dlx1, drx1 - j);// k : distance from center line
             pr1 = (basewidth * 0.5) / k;
-			
+            
             if(k == j - dlx1) px1 = 0;
             else px1 = pngWidth * 0.5 - j * pr1;
-        }
-        else if(dlx1 == drx1){
+          }
+        else
+*/
+          if(dlx1 == drx1){
             pr1 = 1.0;
             px1 = pngWidth / 2 - dlx1;
-        }
-        else{
+          }
+          else{
             pr1 = (double)widthT/(drx1 - dlx1);
             px1 = pngWidth / 2 - (double)((dlx1 + drx1) / 2 * pr1);
             if(flg_boxT % 2 / 1 != 0 && flg_boxT % 4 / 2 == 0) px1 = px1 + kWidth * 1.5;
             if(flg_boxT % 2 / 1 == 0 && flg_boxT % 4 / 2 != 0) px1 = px1 - kWidth * 1.5;
-        }
+          }
 		
         if(dly1 == dry1){
             pry1 = 1.0;
@@ -488,7 +491,7 @@ void CalcOptions(const KGString *in, int *mitsudo, int *flag, double *yoko, doub
         if(buf[i * 11 + 0] % 10 == 0){
             if(buf[i * 11 + 1] != 0) *yoko = (double)(buf[i * 11 + 1]) * 0.1;
             if(buf[i * 11 + 2] != 0) *tate = (double)(buf[i * 11 + 2]) * 0.1;
-            if(buf[i * 11 + 3] != 0) *flag = *flag + buf[i * 11 + 3] * 16;
+            if(buf[i * 11 + 3] != 0) *flag = *flag + buf[i * 11 + 3];
         }
     }
     free(buf);

@@ -18,6 +18,9 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
   double yokoL, tateL, yokoR, tateR;
   int *buf, strokes;
   int tempShotai;
+  int bodyline1[pngWidth], bodyline2[pngWidth];
+  double complex;
+  int tooclose;
   
   //initialize
   pxL = 0;
@@ -41,6 +44,9 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
   
   CalcOptions(parts1, &mitsuL, &flg_boxL, &yokoL, &tateL);
   CalcOptions(parts3, &mitsuR, &flg_boxR, &yokoR, &tateR);
+  
+  //get thin when the left parts is radical
+  if(flg_boxL & FLAG_RADICAL_LEFT) yokoL = yokoL / 2;
   
   //left parts Y-axis processing #1
   
@@ -132,60 +138,89 @@ void combineYoko2(const KGString *parts1, const KGString *parts3, int *result){
   prL = rL;
   prR = rR;
   
-  //calculate width of each parts #1
-  PartsWidth(parts1, &lxL, &rxL);
-  PartsWidth(parts3, &lxR, &rxR);
-  g = 0;
-  
-  //calculate width of each parts #2
   pxL = 0;
   pxR = pngWidth * prL;
   
-  DoDrawMixFont(parts1, pxL, prL, parts3, pxR, prR, pyL, pryL, pyR, pryR);
-  
-  //count dots for check crossing over
-  DotsHeight(&chk_y1, &chk_y2);
-  k = 0;
-  for(i = 0; i < pngWidth * 1.1; i++){
-    for(j = chk_y1; j <= chk_y2; j++){
-      if(kageCanvas[j][i] == 0) k++;
-    }
-  }
-  l = k;
-  
-  //get close both parts
-  h = pxR;
-  while(k - l < kMixdot && g < kWidth * 2 * kKasane * 2){
-    g = g + 2;
-    f = pxR - g;
-    DoDrawMixFont(parts1, pxL, prL, parts3, f, prR, pyL, pryL, pyR, pryR);
-    
-    //FOR DEBUG
-    //char fn[256];
-    //FILE *fp;
-    //snprintf(fn,sizeof(fn),"%03d.png",g);
-    //fp = fopen(fn, "w");
-    //writePng(pngWidth, pngHeight, kageCanvas, fp);
-    //fclose(fp);
-    
-    l = 0;
-    for(i = 0; i < pngWidth * 1.1; i++){
-      for(j = chk_y1; j <= chk_y2; j++){
-        if(kageCanvas[j][i] == 0) l++;
+  //scan body line of left parts
+  DoDrawParts(parts1, pxL, prL, pyL, pryL);
+  for(i = 0; i < pngWidth; i++){
+    bodyline1[i] = 0;
+    for(j = pngWidth - 1; j >= 0; j--){
+      if(kageCanvas[i][j] == 0 ||
+         kageCanvas[i + 1][j] == 0 ||
+         kageCanvas[i + 2][j] == 0 ||
+         kageCanvas[i + 3][j] == 0 ||
+         kageCanvas[i + 4][j] == 0 ||
+         kageCanvas[i + 5][j] == 0 ||
+         kageCanvas[i + 6][j] == 0 ||
+         kageCanvas[i + 7][j] == 0){
+/*
+         kageCanvas[i + 7][j] == 0 ||
+         kageCanvas[i + 8][j] == 0 ||
+         kageCanvas[i + 9][j] == 0 ||
+         kageCanvas[i + 10][j] == 0){
+*/
+        bodyline1[i] = j;
+        j = -1;
       }
     }
   }
-  pxR = f;
   
-  if(flg_boxL & FLAG_FLAT_RIGHT && flg_boxR & FLAG_FLAT_LEFT){
-    if(kShotai == kMincho){
-      pxR = pxR + kMinWidthT * 2 * kKasane * 3 / 2;
-    } else {
-      pxR = pxR + kWidth * 2 * kKasane * 3 / 2;
+  //scan body line of right parts
+  DoDrawParts(parts3, pxR, prR, pyR, pryR);
+  for(i = 0; i < pngWidth; i++){
+    bodyline2[i] = pngWidth;
+    for(j = 0; j < pngWidth; j++){
+      if(kageCanvas[i][j] == 0 ||
+         kageCanvas[i + 1][j] == 0 ||
+         kageCanvas[i + 2][j] == 0 ||
+         kageCanvas[i + 3][j] == 0 ||
+         kageCanvas[i + 4][j] == 0 ||
+         kageCanvas[i + 5][j] == 0 ||
+         kageCanvas[i + 6][j] == 0 ||
+         kageCanvas[i + 7][j] == 0){
+/*
+         kageCanvas[i + 7][j] == 0 ||
+         kageCanvas[i + 8][j] == 0 ||
+         kageCanvas[i + 9][j] == 0 ||
+         kageCanvas[i + 10][j] == 0){
+*/
+        bodyline2[i] = j;
+        j = pngWidth;
+      }
     }
-  } else {
-    pxR = pxR + kWidth * 2 * kKasane * 2 / 2;
   }
+  
+  //calculate the most thin length of two parts and fix right parts
+  k = pngWidth;
+  for(i = 0; i < pngWidth; i++){
+    if(bodyline2[i] - bodyline1[i] < k){
+      k = bodyline2[i] - bodyline1[i];
+    }
+  }
+  if(k < 0){ k = 0; }
+  k = min(kMixdot, k);
+  pxR = pxR - k;
+  
+  //calculate if the two are too close
+  tooclose = 0;
+  for(i = 0; i < pngWidth; i++){
+    if((bodyline2[i] - bodyline1[i]) - k < kWidth * 2){ // must be seperate with shotai?
+      tooclose++;
+    }
+  }
+  
+  //final adjustment
+  if(kShotai == kMincho){
+    k = kMinWidthT;
+  } else {
+    k = kWidth;
+  }
+  complex = 1 / ((yokoL + yokoR) / 2);
+  if(tooclose > pngWidth * 0.25){
+    complex = complex * 1.5;
+  }
+  pxR = pxR + pow((complex * (double)k), 2.3);
   
   //set results
   result[0] = pxL;
@@ -271,6 +306,15 @@ void combineTate2(const KGString *parts1, const KGString *parts3, int *result){
   
   CalcOptions(parts1, &mitsuL, &flg_boxL, &yokoL, &tateL);
   CalcOptions(parts3, &mitsuR, &flg_boxR, &yokoR, &tateR);
+  
+  if(flg_boxL & FLAG_REPLACE_2FF1_TO_2FF5){
+    combineHame2((KGString *)parts1, (KGString *)parts3, (int *)result,
+                 FLAG_SURROUND_LEFT |
+                 FLAG_SURROUND_RIGHT |
+                 FLAG_SURROUND_TOP);
+    kShotai = tempShotai;
+    return;
+  }
   
   //calculate ratio
   rL = tateL;

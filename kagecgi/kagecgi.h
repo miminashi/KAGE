@@ -21,8 +21,8 @@
 #define canvasWidth 400
 #define canvasHeight 400
 
-#define min(x1,x2) ((x1) > (x2))? (x2):(x1)
-#define max(x1,x2) ((x1) > (x2))? (x1):(x2)
+#define min(x1,x2) (((x1) > (x2))? (x2):(x1))
+#define max(x1,x2) (((x1) > (x2))? (x1):(x2))
 
 DB *kPartsdbDatabase;
 DB *kIdsdbDatabase;
