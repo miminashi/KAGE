@@ -1,7 +1,9 @@
 b-a5dc	u793a
+b-a8ae	u8eca
 c1-4464	pd0040
 c1-454b	u65e5
 cdp-8958	u6708-04
+cdp-8976	u9963
 cdp-897c	u5f50
 cdp-89c5	pd0021
 cdp-89c6	pd0029
