@@ -48,19 +48,27 @@ void generateGlyph(const KGString *in, KGString *out){
   //search from parts
   searchPartsData(in, tmp);
   if(tmp->len != 0){
+    //fprintf(stderr, "partsFound:%s\n",tmp->str);
     tmp = CalcSizes(tmp, 1);// this line may not be needed
     out = kg_string_assign(out, tmp->str);
     return;
   }
+  //else{
+  //  fprintf(stderr, "partsNotFound:%s\n",in->str);
+  //}
   
   //search from alias
   searchAliasData(in, tmp);
   if(tmp->len != 0){
+    //fprintf(stderr, "aliasFound:%s(%d)\n",tmp->str,tmp->len);
     generateGlyph(tmp, out);
     if(out->len == 0) return;
     //save to cache ... not yet
     return;
   }
+  //else{
+  //  fprintf(stderr, "aliasNotFound:%s\n",in->str);
+  //}
   
   //check if its IDS
   if(isIDS(in)){
