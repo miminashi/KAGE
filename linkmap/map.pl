@@ -18,13 +18,13 @@ $txt = "txt";
 $png = "png";
 $svg = "svg";
 #$graphviz = '"C:\Program Files\ATT\Graphviz\bin\dot.exe"';
-$graphviz = '/usr/local/bin/dot';
+$graphviz = '/usr/bin/dot';
 $html = "html";
-$fontGB = "SimSun";
-$fontJP = "'ＭＳ 明朝'";
-$fontUCS = "'ＭＳ 明朝', SimSun, 'SimSun (Founder Extended)'";
-$fontBIG5 = "MingLiU";
-$fontKS = "BatangChe";
+$fontGB = "serif, SimSun, 'AR_PL_ShanHeiSun_Uni', 'AR_PL_SungtiL_GB', '文鼎ＰＬ简报宋', STSong";
+$fontJP = "'ＭＳ 明朝', 'IPAMincho', 'Sazanami Mincho', 'ヒラギノ明朝 Pro W3', HiraMinPro-W3";
+$fontUCS = "'ＭＳ 明朝', 'IPAMincho', 'Sazanami Mincho', SimSun, 'SimSun (Founder Extended)', 'AR_PL_ShanHeiSun_Uni', 'AR_PL_Mingti2L_Big5', 'AR_PL_SungtiL_GB', '文鼎ＰＬ简报宋', '文鼎ＰＬ細上海宋', UnBatang, 'Baekmuk Batang', '은 신문', 'ヒラギノ明朝 Pro W3', STSong, 'LiSong Pro', AppleMyungjo";
+$fontBIG5 = "MingLiU, 'AR_PL_Mingti2L_Big5', '文鼎ＰＬ細上海宋', 'LiSong Pro'";
+$fontKS = "BatangChe, UnBatang, 'Baekmuk Batang', '은 신문', AppleMyungjo";
 
 #-----------------------------------------------------------------------------
 &init_chise;
@@ -67,11 +67,13 @@ $dummy = `$graphviz -Tpng -o$file.$png $file.$txt`;
 #create svg
 $dummy = `$graphviz -Tsvg -o$file.$svg $file.$txt`;
 
+#<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
 #create html
 open FH, "<:utf8", "$file.$svg";
 open FH2, ">:utf8", "$file.$html";
 print FH2 <<EOT;
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
