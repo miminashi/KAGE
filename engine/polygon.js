@@ -1,16 +1,16 @@
-function Polygon(_index){
+function Polygon(number){
   // method
-  function push(_x, _y){ // void
+  function push(x, y){ // void
     var temp = new Object();
-    temp.x = _x;
-    temp.y = _y;
+    temp.x = x;
+    temp.y = y;
     this.array.push(temp);
   }
   Polygon.prototype.push = push;
   
-  function set(_index, _x, _y){ // void
-    this.array[_index].x = _x;
-    this.array[_index].y = _y;
+  function set(index, x, y){ // void
+    this.array[index].x = x;
+    this.array[index].y = y;
   }
   Polygon.prototype.set = set;
   
@@ -19,8 +19,8 @@ function Polygon(_index){
   }
   Polygon.prototype.reverse = reverse;
   
-  function concat(_poly){ // void
-    this.array = this.array.concat(_poly.array);
+  function concat(poly){ // void
+    this.array = this.array.concat(poly.array);
   }
   Polygon.prototype.concat = concat;
   
@@ -28,8 +28,8 @@ function Polygon(_index){
   this.array = new Array();
   
   // initialize
-  if(_index){
-    for(var i = 0; i < _index; i++){
+  if(number){
+    for(var i = 0; i < number; i++){
       this.push(0, 0);
     }
   }

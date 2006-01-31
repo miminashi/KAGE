@@ -1,7 +1,7 @@
 function Polygons(){
   // method
-  function push(_polygon){ // void
-    this.array.push(_polygon);
+  function push(polygon){ // void
+    this.array.push(polygon);
   }
   Polygons.prototype.push = push;
   
