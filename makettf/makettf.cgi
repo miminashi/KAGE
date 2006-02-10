@@ -24,25 +24,6 @@ if($fontname_en eq ""){
 if($fontname_ja eq ""){
     $fontname_ja = $fontname_en;
 }
-$partsdata = $form->param('partsdata');
-$partsdata =~ s/[\;\&\#\"\'\%\\]//g;
-$mappingtable = $form->param('mappingtable');
-$mappingtable =~ s/[\;\&\#\"\'\%\\\$\:]//g;
-@unicoderange = ();
-for(my $i = 0; $i < 16; $i++){
-    $unicoderange[$i] = $form->param("unicoderange$i");
-    $unicoderange[$i] =~ s/[^0-9a-fA-F\-]//g;
-    if($unicoderange[$i] eq ""){
-	$unicoderange[$i] = "--";
-    }
-}
-for(my $i = 0; $i < 4; $i++){
-    $codepagerange[$i] = $form->param("codepagerange$i");
-    $codepagerange[$i] =~ s/[^0-9a-fA-F]//g;
-    if($codepagerange[$i] eq ""){
-	$codepagerange[$i] = "00";
-    }
-}
 
 #open FH, "<", "parts.txt";
 #$temp = "";
