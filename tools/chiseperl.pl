@@ -10,6 +10,7 @@
 #            $var get_feature_value($feature, $char_id);
 #            $var set_feature_value($feature, $char_id, $value);
 #            $var create_new_char($feature, $value);
+#            $char_id decode_char($feature_char, $int);
 
 use chise_tools;
 use chise;
@@ -78,6 +79,13 @@ sub update_chise{ # save added data to database
   foreach(@chise_ft){
     chise::chise_feature_sync($_);
   }
+}
+
+sub decode_char{ # feature, int -> charID, 0
+  if(scalar(@_) != 2){
+    return 0;
+  }
+  return chise::chise_ds_decode_char($chise_ds, chise_tools::get_uchar($_[0]), $_[1]);
 }
 
 1;
