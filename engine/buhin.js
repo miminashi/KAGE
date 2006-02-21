@@ -14,6 +14,7 @@ function Buhin(number){
         return this.array[i].data;
       }
     }
+    return ""; // no data
   }
   Buhin.prototype.search = search;
   

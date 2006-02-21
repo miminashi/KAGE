@@ -1,25 +1,63 @@
 function Kage(){
-  // method
-  function drawFont(polygons, glyph){ // void
-    // [glyph] : [stroke]$[stroke]$.....
-    // [stroke] : [column]:[column]:.....
-    var strokes = glyph.split("$");
-    for(var i = 0; i < strokes.length; i++){
-      var columns = strokes[i].split(":");
-      if(Math.floor(columns[0] ! 99){
-        dfDrawFont(this, polygons,
-                   Math.floor(columns[0]),
-                   Math.floor(columns[1]), Math.floor(columns[2]),
-                   Math.floor(columns[3]), Math.floor(columns[4]),
-                   Math.floor(columns[5]), Math.floor(columns[6]),
-                   Math.floor(columns[7]), Math.floor(columns[8]),
-                   Math.floor(columns[9]), Math.floor(columns[10]));
-      } else {
-        //buhin
-      }
-    }
+	// method
+	function drawFont(polygons, glyph){ // void
+		// [glyph] : [stroke]$[stroke]$.....
+		// [stroke] : [column]:[column]:.....
+		var strokes = glyph.split("$");
+		for(var i = 0; i < strokes.length; i++){
+			var columns = strokes[i].split(":");
+			if(Math.floor(columns[0]) != 99){
+				dfDrawFont(this, polygons,
+									 Math.floor(columns[0]),
+									 Math.floor(columns[1]), Math.floor(columns[2]),
+									 Math.floor(columns[3]), Math.floor(columns[4]),
+									 Math.floor(columns[5]), Math.floor(columns[6]),
+									 Math.floor(columns[7]), Math.floor(columns[8]),
+									 Math.floor(columns[9]), Math.floor(columns[10]));
+			} else {
+				var buhin = this.kBuhin.search(columns[7]);
+				if(buhin != ""){
+					this.drawBuhin(polygons, buhin,
+												 Math.floor(columns[3]),
+												 Math.floor(columns[4]),
+												 Math.floor(columns[5]),
+												 Math.floor(columns[6]));
+				}
+			}
+		}
+	}
+	Kage.prototype.drawFont = drawFont;
+	
+  function drawBuhin(polygons, glyph, x1, y1, x2, y2){
+		var strokes = glyph.split("$");
+		for(var i = 0; i < strokes.length; i++){
+			var columns = strokes[i].split(":");
+			if(Math.floor(columns[0]) != 99){
+				dfDrawFont(this, polygons,
+									 Math.floor(columns[0]),
+									 Math.floor(columns[1]),
+									 Math.floor(columns[2]),
+									 x1 + Math.floor(columns[3]) * (x2 - x1) / 200,
+									 y1 + Math.floor(columns[4]) * (y2 - y1) / 200,
+									 x1 + Math.floor(columns[5]) * (x2 - x1) / 200,
+									 y1 + Math.floor(columns[6]) * (y2 - y1) / 200,
+									 x1 + Math.floor(columns[7]) * (x2 - x1) / 200,
+									 y1 + Math.floor(columns[8]) * (y2 - y1) / 200,
+									 x1 + Math.floor(columns[9]) * (x2 - x1) / 200,
+									 y1 + Math.floor(columns[10]) * (y2 - y1) / 200);
+			} else {
+				var buhin = this.kBuhin.search(columns[7]);
+				if(buhin != ""){
+					this.drawBuhin(polygons, buhin,
+												 x1 + Math.floor(columns[3]) * (x2 - x1) / 200,
+												 y1 + Math.floor(columns[4]) * (y2 - y1) / 200,
+												 x1 + Math.floor(columns[5]) * (x2 - x1) / 200,
+												 y1 + Math.floor(columns[6]) * (y2 - y1) / 200);
+				}
+			}
+		}
   }
-  Kage.prototype.drawFont = drawFont;
+  Kage.prototype.drawBuhin = drawBuhin;
   
   //properties
   Kage.prototype.kMincho = 0;
