@@ -1,6 +1,14 @@
 function Kage(){
   // method
-  function drawFont(polygons, glyph){ // void
+  function makeGlyph(polygons, target){ // void
+    var buhin = this.kBuhin.search(target);
+    if(buhin != ""){
+      this.drawGlyph(polygons, buhin);
+    }
+  }
+  Kage.prototype.makeGlyph = makeGlyph;
+
+  function drawGlyph(polygons, glyph){ // void
     // [glyph] : [stroke]$[stroke]$.....
     // [stroke] : [column]:[column]:.....
     var strokes = glyph.split("$");
@@ -26,9 +34,9 @@ function Kage(){
       }
     }
   }
-  Kage.prototype.drawFont = drawFont;
+  Kage.prototype.drawGlyph = drawGlyph;
   
-  function drawBuhin(polygons, glyph, x1, y1, x2, y2){
+  function drawBuhin(polygons, glyph, x1, y1, x2, y2){ // void
     var strokes = glyph.split("$");
     for(var i = 0; i < strokes.length; i++){
       var columns = strokes[i].split(":");
