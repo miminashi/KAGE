@@ -2,15 +2,15 @@ function Polygon(number){
   // method
   function push(x, y){ // void
     var temp = new Object();
-    temp.x = x;
-    temp.y = y;
+    temp.x = Math.floor(x);
+    temp.y = Math.floor(y);
     this.array.push(temp);
   }
   Polygon.prototype.push = push;
   
   function set(index, x, y){ // void
-    this.array[index].x = x;
-    this.array[index].y = y;
+    this.array[index].x = Math.floor(x);
+    this.array[index].y = Math.floor(y);
   }
   Polygon.prototype.set = set;
   
