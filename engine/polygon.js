@@ -23,7 +23,7 @@ function Polygon(number){
     this.array = this.array.concat(poly.array);
   }
   Polygon.prototype.concat = concat;
-  
+
   // property
   this.array = new Array();
   
