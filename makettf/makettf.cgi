@@ -1,67 +1,40 @@
 #!/usr/bin/perl
 use utf8;
+binmode STDOUT, ":utf8";
+
 use CGI;
+$form = new CGI;
 
 $FONTFORGE = "/usr/local/bin/fontforge";
 $PERL = "/usr/bin/perl";
-$ECHO = "/bin/echo";
 $RM = "/bin/rm";
-$TEMP = "/tmp/tempKAGE";
-$KAGESCRIPT = "/home/kamichi/perl";
-$FMT = "svg";
 $LICENSE = 'Created by KAGE system. (http://fonts.jp/)';
+$TEMP="temp";
 
-$form = new CGI;
+$RANDOM = sprintf("%05X", rand() * 0x100000);
+$TEMPDIR = "/tmp/makettf_$RANDOM";
+mkdir($TEMPDIR);
 
-$fontname_en = $form->param('fontname-en');
-$fontname_en =~ s/[\;\&\#\"\'\%\\\$\:\!\=\~\^\`]//g;
-$fontname_ja = $form->param('fontname-ja');
-$fontname_ja =~ s/[\;\&\#\"\'\%\\\$\:\!\=\~\^\`]//g;
-utf8::decode($fontname_ja);
-if($fontname_en eq ""){
-    $fontname_en = "Untitled";
-}
-if($fontname_ja eq ""){
-    $fontname_ja = $fontname_en;
-}
+&makehead();
+&makefoot();
+&makeparts();
+$dummy = `$PERL makettf.pl $TEMPDIR $TEMP mincho 3`;
+&sendfont();
 
-#open FH, "<", "parts.txt";
-#$temp = "";
-#%parts = ();
-#foreach(<FH>){
-#    $temp .= $_;
-#    @temp = split(/ \t|\r\n|\r|\n/, $_);
-#    $parts{$temp[0]} = $temp[1];
-#}
-#close FH;
-@temp2 = split(/\r\n|\r|\n/, $partsdata);
-$temp = "";
-%parts = ();
-foreach(@temp2){
-    $temp .= $_;
-    @temp = split(/ |\t|\r\n|\r|\n/, $_);
-    $parts{$temp[0]} = $temp[1];
-}
-open FH, ">", "$TEMP.parts.txt";
-$temp =~ s/ /\t/g;
-print FH $temp;
-close FH;
-
-#open FH, "<", "map.txt";
-#%map = ();
-#foreach(<FH>){
-#    @temp = split(/\t|\r\n|\r|\n/, $_);
-#    $map{$temp[0]} = $temp[1];
-#}
-#close FH;
-@temp2 = split(/\r\n|\r|\n/, $mappingtable);
-%map = ();
-foreach(@temp2){
-    @temp = split(/ |\t|\r\n|\r|\n/, $_);
-    $map{$temp[0]} = $temp[1];
-}
-
-$script =<<"EOT";
+sub makehead{
+    $fontname_en = $form->param('fontname-en');
+    $fontname_en =~ s/[\;\&\#\"\'\%\\\$\:\!\=\~\^\`]//g;
+    $fontname_ja = $form->param('fontname-ja');
+    $fontname_ja =~ s/[\;\&\#\"\'\%\\\$\:\!\=\~\^\`]//g;
+    utf8::decode($fontname_ja);
+    if($fontname_en eq ""){
+	$fontname_en = "Untitled";
+    }
+    if($fontname_ja eq ""){
+	$fontname_ja = $fontname_en;
+    }
+    open FH, ">:utf8", "$TEMPDIR/head.txt";
+    print FH <<"EOT";
 New()
 Reencode("UnicodeFull")
 SetTTFName(0x409,0,"$LICENSE")
@@ -70,53 +43,40 @@ SetTTFName(0x409,4,"$fontname_en")
 SetTTFName(0x411,1,"$fontname_ja")
 SetTTFName(0x411,4,"$fontname_ja")
 EOT
-
-foreach(sort(keys %map)){
-    $temp = $parts{$map{$_}};
-    $dummy = `cd $KAGESCRIPT; $ECHO '$temp' | $PERL $KAGESCRIPT/kagepre.pl $TEMP.parts.txt | $PERL $KAGESCRIPT/kage$FMT.pl > $TEMP.$_.$FMT`;
-    &addglyph($_);
-}
-&makefont;
-
-sub addglyph{
-    $script .=<<"EOT";
-Select(0u$_[0])
-Clear()
-Import("$TEMP.$_[0].$FMT")
-#Import("$TEMP.$_[0].$FMT",0,2)
-RemoveOverlap()
-Simplify()
-SetWidth(1000)
-SetVWidth(1000)
-Move(0, 50)
-RoundToInt()
-AutoHint()
-EOT
-}
-
-sub makefont{
-    $script .= "Generate(\"$TEMP.ttf\", \"\", 0)\n";
-    $script .= "Quit()\n";
-    open FH, ">:utf8", "$TEMP.scr";
-    print FH $script;
     close FH;
-    
-    $dummy = `export LANG=utf-8; $FONTFORGE -script $TEMP.scr 2>/dev/null`;
-    
+}
+
+sub makefoot{
+    open FH, ">:utf8", "$TEMPDIR/foot.txt";
+    close FH;
+}
+
+sub makeparts{
+    my $temp = $form->param('partsdata');
+    utf8::decode($temp);
+    open FH, ">:utf8", "$TEMPDIR/parts.txt";
+    print FH $temp;
+    close FH;
+}
+
+sub sendfont{
     my $fdata = "";
     my $fsize = 0;
     my @bdata;
-    open FH, "<$TEMP.ttf";
-    $fsize = -s FH;
-    read FH, $fdata, $fsize;
-    close FH;
     print <<"EOT";
 Content-type: application/octet-stream
 Content-Disposition: attachment; filename = $fontname_en.ttf
 
-$fdata
 EOT
-    
-    $dummy = `$RM $TEMP*`;
+    open FH, "<:utf8", "$TEMPDIR/$TEMP.ttf";
+    while(1){
+	$readed = read FH, $fdata, 1024;
+	utf8::decode($fdata);
+	print $fdata;
+	if($readed <= 0){
+	    last;
+	}
+    }
+    close FH;
+    $dummy = `$RM -r $TEMPDIR`;
 }
-

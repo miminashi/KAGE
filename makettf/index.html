@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<html>
+<head>
+<title>TTF(TrueType)フォント生成 (試作)</title>
+</head>
+<body>
+<h1>TTF(TrueType)フォント生成</h1>
+<form action="makettf.cgi" method="POST">
+フォント名(英語)：<input type="text" name="fontname-en" value="Test" size="20"><br>
+フォント名(漢字)：<input type="text" name="fontname-ja" value="テスト" size="20"><br>
+部品データ<br>
+<textarea wrap="off" name="partsdata" cols="80" rows="10">30A8 2:7:8:66:2:95:16:110:33$1:0:2:28:56:102:56$1:22:4:103:56:103:196$1:0:2:3:92:66:92$2:22:7:66:92:48:146:1:178$2:0:7:186:66:163:89:125:112$2:7:0:107:60:130:144:196:182
+一 2:7:8:66:2:95:16:110:33$1:0:2:28:56:102:56$1:22:4:103:56:103:196$1:0:2:3:92:66:92$2:22:7:66:92:48:146:1:178$2:0:7:186:66:163:89:125:112$2:7:0:107:60:130:144:196:182
+</textarea>
+<br>
+<input type="submit" value="生成">
+</form>
+<hr>
+部品データは１部品＝１行で、「部品名、スペース、部品データ」の順に記述します。<br>実際に生成されるコードポイントは、部品名が「単独の文字」「[単独の文字]」「コードポイント16進数(頭にUu,+-を付けても可)」のいずれかとなります。<br>
+<ul>
+<li>(例)</li>
+<li>30A8</li>
+<li>U+30A8</li>
+<li>u30a8</li>
+<li>u-00020000</li>
+<li>一</li>
+<li>[壱]</li>
+</ul>
+<hr>
+注意<br>
+TrueTypeフォントを生成するソフトウェアfontforge の制約により、以下の条件を満たさない場合には生成したフォントをWord2002で利用できません。
+<dl>
+<dt>日本語フォント</dt><dd>U+30A8「（カタカナ）エ」を含めてください</dd>
+<dt>簡体字中国語フォント</dt><dd>U+3105「ボポモフォB」を含めてください</dd>
+<dt>繁体字中国語フォント</dt><dd>U+592E「央」を含めてください</dd>
+<dt>韓国語フォント</dt><dd>U+3131「ハングル字母1番目」を含めてください</dd>
+</dl>
+<hr>
+<div align="right">fonts.jp</div>
+</body>
+</html>
+
+
