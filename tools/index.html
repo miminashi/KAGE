@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+ <link rel="stylesheet" type="text/css" href="../green.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>chise_swig_perl</title>
+</head>
+<body>
+
+<div class="main">
+
+<img src="../images/logo2.gif">
+<h1>chise_swig_perl</h1>
+
+<h2>これは何？</h2>
+
+<p>chiseライブラリ（concord + libchise)をPerlで利用するための仕組みです。SWIGを利用しています。Cygwinでも利用可能です。</p>
+
+<h2>ダウンロード</h2>
+
+<p><a href="http://cvs.m17n.org/viewcvs/chise/kage/tools/">CVSリポジトリ</a>より入手してください。</p>
+
+<blockquote><pre>% cvs -d:pserver:anonymous@cvs.m17n.org:/cvs/chise co kage/tools</pre></blockquote>
+
+<h2>内容</h2>
+
+<dl>
+<dt>chise.i</dt>
+<dd>SWIG定義インターフェイスファイル</dd>
+<dt>chiseperl.pl</dt>
+<dd>簡単にlibchiseを使うための高級（？）ライブラリ</dd>
+</dl>
+
+<h2>ビルド</h2>
+
+<p>すでにconcordとlibchiseが使える状態であると仮定します。Cygwin等適宜ディレクトリを読みかえてください。</p>
+
+<blockquote><pre>
+% swig -c++ -perl -I/usr/local/include chise.i
+% g++ -c chise_wrap.cxx -I/usr/lib/perl/5.8/CORE
+% g++ -shared -lchise chise_wrap.o -o chise.so -Wl,-rpath,/usr/local/lib
+</pre></blockquote>
+
+<p>（上記はCGI等で利用するために -Wl,-rpath,/usr/local/lib のオプションを含めてライブラリパスも埋め込んでいます）</p>
+
+<h3>完了</h3>
+
+<p>最終的に以下のファイルを利用します</p>
+
+<ul>
+<li>chise.pm</li>
+<li>chise.so または chise.dll</li><li>chiseperl.pl</li>
+</ul>
+
+<h2>活用</h2>
+
+<p>chise.hを元に、libchiseの関数を呼び出してもいいのですが、chiseperl.plを活用するともう少し簡単にlibchiseをPerlから利用できます。</p>
+
+<h3>関数</h3>
+
+<dl>
+<dt>void init_chise();</dt>
+<dd>初期化します。必ず実行してください</dd>
+<dt>void close_chise();</dt>
+<dd>バッファ等を開放します</dd>
+<dt>void update_chise();</dt>
+<dd>chise_feature_sync相当関数。新オブジェクトの割り当てや、素性の更新処理をデータベースに反映させます。</dd>
+<dt>void search_newid();</dt>
+<dd>未使用の文字オブジェクトIDを探します。内部用です。</dd>
+<dt>$var get_feature_value($feature, $char_id);</dt>
+<dd>chise_char_gets_feature_value相当。素性名とcharIDから素性を得ます</dd>
+<dt>$var set_feature_value($feature, $char_id, $value);</dt>
+<dd>chise_char_set_feature_value相当。素性をセットします</dd>
+<dt>$var create_new_char($feature, $value);</dt>
+<dd>新しい文字オブジェクトを生成します</dd>
+<dt>$char_id decode_char($feature_char, $int);</dt>
+<dd>chise_ds_decode_char相当。CCSとコードからUCSコードを得ます（？）</dd>
+</dl>
+
+<h3>グローバル変数</h3>
+
+<p>いわゆるPerlのモジュールっぽくない実装になっています。基本的に内部でしか使いません。</p>
+
+<dl>
+<dt>$chise_ds</dt>
+<dd>CHISEデータベースセットのハンドル</dd>
+<dt>@chise_feature</dt>
+<dd>素性の一覧リスト（文字列）</dd>
+<dt>@chise_ft</dt>
+<dd>全素性のハンドル</dd>
+<dt>$chise_newid</dt>
+<dd>void search_newid();の結果が格納されます</dd>
+</dl>
+
+<h3>サンプルは？</h3>
+
+<p>すみません。準備中です。たとえば<a href="../chise_linkmap/">CHISE漢字連環図</a>を参考することができます。</p>
+
+<h3>ところで</h3>
+
+<p>現在Cygwinでコンパイルはできますが、現在のlibchiseバージョンに対応したCHISE文字データベースをCygwin上で用意することはできません。この問題はもうすぐ解決されるはずです。</p>
+
+<h2>リンク</h2>
+
+<ul>
+<li><a href="http://www.kanji.zinbun.kyoto-u.ac.jp/projects/chise/">CHISE Project</a></li>
+<li><a href="http://www.swig.org/Doc1.3/Perl5.html">SWIG on Perl</a> 大変参考になります。</li>
+<li><a href="../chise_linkmap/">CHISE漢字連環図</a> chise_swig_perl を実際に利用しています。</li>
+</ul>
+
+<hr class="footer">
+KAMICHI Koichi -- fonts.jp
+
+</div>
+
+</body>
+</html>
