@@ -15,8 +15,8 @@
 use chise;
 
 sub init_chise{
-#$chise_ds = chise::CHISE_DS_open($chise::CHISE_DS_BERKELEY_DB, $chise::chise_system_db_dir, 0, 0755);
-  $chise_ds = chise::CHISE_DS_open(0, $chise::chise_system_db_dir, 0, 0755);
+  $chise_ds = chise::CHISE_DS_open($chise::CONCORD_Backend_Berkeley_DB,
+				   $chise::chise_system_db_dir, 0, 0755);
   chise::listup_feature($chise_ds);
   @chise_feature = split(/\n/, chise::get_char($chise::feature));
   @chise_ft = ();
