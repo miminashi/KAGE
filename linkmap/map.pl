@@ -172,7 +172,7 @@ foreach(<FH>){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
     print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: EUDC; font-size: 40px;\">";
-    printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise_tools::get_uchar('=big5-pua'), eval('0x'.$3)));
+    printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise::get_uchar('=big5-pua'), eval('0x'.$3)));
     print FH2 "</div>";
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0208\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
