@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$random = sprintf "%05X", int(rand()*0x100000);
+$random = "linkmap_".(sprintf "%05X", int(rand()*0x100000));
 
 use CGI;
 $cgi = new CGI;
