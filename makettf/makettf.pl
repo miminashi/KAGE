@@ -101,7 +101,7 @@ else{
 }
 @temp = split(/\r\n|\r|\n/, $temp);
 foreach(@temp){
-  @temp2 = split(/ |\t/, $_);
+  @temp2 = split(/ +|\t/, $_);
   $buhin{$temp2[0]} = $temp2[1];
 }
 

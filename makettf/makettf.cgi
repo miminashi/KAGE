@@ -5,7 +5,6 @@ binmode STDOUT, ":utf8";
 use CGI;
 $form = new CGI;
 
-$FONTFORGE = "/usr/local/bin/fontforge";
 $PERL = "/usr/bin/perl";
 $RM = "/bin/rm";
 $LICENSE = 'Created by KAGE system. (http://fonts.jp/)';
