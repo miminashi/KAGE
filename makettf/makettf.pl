@@ -101,8 +101,10 @@ else{
 }
 @temp = split(/\r\n|\r|\n/, $temp);
 foreach(@temp){
-  @temp2 = split(/ +|\t/, $_);
-  $buhin{$temp2[0]} = $temp2[1];
+  if($_ =~ m/:/){
+    @temp2 = split(/ |\t/, $_);
+    $buhin{$temp2[0]} = $temp2[1];
+  }
 }
 
 # parse target codepoint

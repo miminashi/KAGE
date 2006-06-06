@@ -5,6 +5,7 @@ binmode STDOUT, ":utf8";
 use CGI;
 $form = new CGI;
 
+$FONTFORGE = "/usr/local/bin/fontforge";
 $PERL = "/usr/bin/perl";
 $RM = "/bin/rm";
 $LICENSE = 'Created by KAGE system. (http://fonts.jp/)';
@@ -67,10 +68,12 @@ Content-type: application/octet-stream
 Content-Disposition: attachment; filename = $fontname_en.ttf
 
 EOT
-    open FH, "<:utf8", "$TEMPDIR/$TEMP.ttf";
+    binmode STDOUT => ":raw";
+    #open FH, "<:utf8", "$TEMPDIR/$TEMP.ttf";
+    open FH, "<$TEMPDIR/$TEMP.ttf";
     while(1){
 	$readed = read FH, $fdata, 1024;
-	utf8::decode($fdata);
+	#utf8::decode($fdata);
 	print $fdata;
 	if($readed <= 0){
 	    last;
