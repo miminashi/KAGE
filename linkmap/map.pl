@@ -12,19 +12,12 @@ $y = 14;
 %family = ();
 %object = ();
 @list= ();
-#$file = "map";
 $file= @ARGV[1];
 $txt = "txt";
 $png = "png";
 $svg = "svg";
-#$graphviz = '"C:\Program Files\ATT\Graphviz\bin\dot.exe"';
 $graphviz = '/usr/bin/dot';
 $html = "html";
-$fontGB = "serif, SimSun, 'AR_PL_ShanHeiSun_Uni', 'AR_PL_SungtiL_GB', '文鼎ＰＬ简报宋', STSong";
-$fontJP = "'ＭＳ 明朝', 'IPAMincho', 'Sazanami Mincho', 'ヒラギノ明朝 Pro W3', HiraMinPro-W3";
-$fontUCS = "'ＭＳ 明朝', 'IPAMincho', 'Sazanami Mincho', SimSun, 'SimSun (Founder Extended)', 'AR_PL_ShanHeiSun_Uni', 'AR_PL_Mingti2L_Big5', 'AR_PL_SungtiL_GB', '文鼎ＰＬ简报宋', '文鼎ＰＬ細上海宋', UnBatang, 'Baekmuk Batang', '은 신문', 'ヒラギノ明朝 Pro W3', STSong, 'LiSong Pro', AppleMyungjo";
-$fontBIG5 = "MingLiU, 'AR_PL_Mingti2L_Big5', '文鼎ＰＬ細上海宋', 'LiSong Pro'";
-$fontKS = "BatangChe, UnBatang, 'Baekmuk Batang', '은 신문', AppleMyungjo";
 
 #-----------------------------------------------------------------------------
 &init_chise;
@@ -52,7 +45,6 @@ foreach(sort(keys %family)){
 }
 foreach(sort(keys %char)){
   printf FH "\t\"%X\" [ label = \"$char{$_}\", shape = \"record\" ];\r\n", $_;
-  #printf FH "\t\"%X\" [ label = \"$char{$_}\", shape = \"record\", fontname = \"simhei.ttf\" ];\r\n", $_;
 }
 foreach(sort(keys %link)){
   @temp = split(/-/, $_);
@@ -67,8 +59,6 @@ $dummy = `$graphviz -Tpng -o$file.$png $file.$txt`;
 #create svg
 $dummy = `$graphviz -Tsvg -o$file.$svg $file.$txt`;
 
-#<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
-
 #create html
 open FH, "<:utf8", "$file.$svg";
 open FH2, ">:utf8", "$file.$html";
@@ -76,6 +66,8 @@ print FH2 <<EOT;
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="map.css">
+<title>chise_linkmap : u$ARGV[0]</title>
 </head>
 <body>
 <img src="$file.$png" usemap="#object" border="0">
@@ -84,7 +76,7 @@ foreach(<FH>){
   if(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=cns11643\&\#45\;([1-9])\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left;\">";
+    print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/CNS$3/$4.gif\">\r\n";
     print FH2 "</div>";
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jef\&\#45\;china3\:([0-9A-F]{4})/){
@@ -92,7 +84,7 @@ foreach(<FH>){
     $top = int($2 / $rate) + $y;
     $target = $3;
     $target =~ tr/A-F/a-f/;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left;\">";
+    print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     print FH2 "<img src=\"http://kanji.zinbun.kyoto-u.ac.jp/db/CHINA3/Gaiji/$target.gif\" width=\"40\" height=\"40\">\r\n";
     print FH2 "</div>";
   #} elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gb2312\:([0-9A-F]{4})/){
@@ -106,7 +98,7 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gb2312\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: $fontGB; font-size: 40px;\">";
+    print FH2 "<div class=\"gb\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'gb2312-raw', 'utf-8');
@@ -116,7 +108,7 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0208\@19(78|83|90|97)\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left;\">";
+    print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     $ku = int(eval('0x'.$4) / 0x100) - 0x20;
     $ten = sprintf "%02d", eval('0x'.$4) % 0x100 - 0x20;
     print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/JIS-$3/$ku-$ten.gif\">\r\n";
@@ -124,7 +116,7 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0212\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left;\">";
+    print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     $ku = int(eval('0x'.$3) / 0x100) - 0x20;
     $ten = sprintf "%02d", eval('0x'.$3) % 0x100 - 0x20;
     print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/JIS-SP/$ku-$ten.gif\">\r\n";
@@ -138,13 +130,13 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=ucs\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x - 20;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: $fontUCS; font-size: 40px;\">";
+    print FH2 "<div class=\"ucs\" style=\"top: $top; left: $left;\">";
     print FH2 "[".pack('U',eval('0x'.$3))."]\r\n";
     print FH2 "</div>";
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=big5\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: $fontBIG5; font-size: 40px;\">";
+    print FH2 "<div class=\"big5\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'big5', 'utf-8');
@@ -171,13 +163,13 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=big5\&\#45\;cdp\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: EUDC; font-size: 40px;\">";
+    print FH2 "<div class=\"cdp\" style=\"top: $top; left: $left;\">";
     printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise::get_uchar('=big5-pua'), eval('0x'.$3)));
     print FH2 "</div>";
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0208\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: $fontJP; font-size: 40px;\">";
+    print FH2 "<div class=\"jis\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'jis0208-raw', 'utf-8');
@@ -187,7 +179,7 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=ks\&\#45\;x1001\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: $fontKS; font-size: 40px;\">";
+    print FH2 "<div class=\"ks\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'ksc5601-raw', 'utf-8');
@@ -198,7 +190,7 @@ foreach(<FH>){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
     $number = sprintf("%02d", $3);
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: GT2000-$number; font-size: 40px;\">";
+    print FH2 "<div class=\"gt$number\" style=\"top: $top; left: $left;\">";
     $char = $4;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'jis0208-raw', 'utf-8');
@@ -208,7 +200,7 @@ foreach(<FH>){
   } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gt\&\#45\;pj\&\#45\;(k[12]):([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
     $top = int($2 / $rate) + $y;
-    print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: GT2000-$3; font-size: 40px;\">";
+    print FH2 "<div class=\"gt$3\" style=\"top: $top; left: $left;\">";
     $char = $4;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
     Encode::from_to($char, 'jis0208-raw', 'utf-8');
