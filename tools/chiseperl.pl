@@ -2,7 +2,8 @@
 #
 # Copyright (C) 2005,2006 KAMICHI Koichi.
 #
-# global : $chise_ds, @chise_feature, @chise_ft, $chise_newid
+# global : $chise_ds, %chise_feature, $chise_newid
+#          (deprecated: @chise_feature, @chise_ft)
 # function : void init_chise();
 #            void close_chise();
 #            void update_chise();
@@ -18,11 +19,21 @@ sub init_chise{
   $chise_ds = chise::CHISE_DS_open($chise::CHISE_DS_Berkeley_DB,
 				   $chise::chise_system_db_dir, 0, 0755);
   chise::listup_feature($chise_ds);
-  @chise_feature = split(/\n/, chise::get_char($chise::feature));
-  @chise_ft = ();
-  foreach(@chise_feature){
-    push(@chise_ft, chise::chise_ds_get_feature($chise_ds, chise::get_uchar($_)));
+  # deprecated begin
+  #@chise_feature = split(/\n/, chise::get_char($chise::feature));
+  #@chise_ft = ();
+  #foreach(@chise_feature){
+  #  push(@chise_ft, chise::chise_ds_get_feature($chise_ds, chise::get_uchar($_)));
+  #  $chise_ft{$_} = chise::chise_ds_get_feature($chise_ds, chise::get_uchar($_));
+  #}
+  # deprecated end
+  my @temp = split(/\n/, chise::get_char($chise::feature));
+  %chise_feature = ();
+  foreach(@temp){
+    $chise_feature{$_} = chise::chise_ds_get_feature($chise_ds, chise::get_uchar($_));
   }
+  @chise_feature = keys(%chise_feature);
+  @chise_ft = values(%chise_feature);
   $chise_newid = 0x0F0000;
 }
 
