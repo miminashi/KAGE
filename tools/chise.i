@@ -12,51 +12,6 @@
 #include <chise.h>
 %}
 
-// This tells SWIG to treat char ** as a special case
-%typemap(in) char ** {
-	AV *tempav;
-  	I32 len;
-	int i;
-	SV  **tv;
-	if (!SvROK($input))
-	    croak("Argument $argnum is not a reference.");
-        if (SvTYPE(SvRV($input)) != SVt_PVAV)
-	    croak("Argument $argnum is not an array.");
-        tempav = (AV*)SvRV($input);
-	len = av_len(tempav);
-	$1 = (char **) malloc((len+2)*sizeof(char *));
-	for (i = 0; i <= len; i++) {
-	    tv = av_fetch(tempav, i, 0);	
-	    $1[i] = (char *) SvPV(*tv,PL_na);
-        }
-	$1[i] = NULL;
-};
-
-// This cleans up the char ** array after the function call
-%typemap(freearg) char ** {
-	free($1);
-}
-
-// Creates a new Perl array and places a NULL-terminated char ** into it
-%typemap(out) char ** {
-	AV *myav;
-	SV **svs;
-	int i = 0,len = 0;
-	/* Figure out how many elements we have */
-	while ($1[len])
-	   len++;
-	svs = (SV **) malloc(len*sizeof(SV *));
-	for (i = 0; i < len ; i++) {
-	    svs[i] = sv_newmortal();
-	    sv_setpv((SV*)svs[i],$1[i]);
-	};
-	myav =	av_make(len,svs);
-	free(svs);
-        $result = newRV((SV*)myav);
-        sv_2mortal($result);
-        argvi++;
-}
-
 %include concord.h
 %include chise.h
 
@@ -73,7 +28,9 @@ char *get_char(unsigned char *argv){
   return (char *)argv;
 }
 
-unsigned char buffer[1024];
+unsigned char *feature;
+int feature_size = 102400;
+unsigned char *buffer;
 int buffer_size = 1024;
 
 void clear_buffer(){
@@ -83,8 +40,14 @@ void clear_buffer(){
   }
 }
 
-unsigned char feature[102400];
-int feature_size = 102400;
+void allocate_buffer(){
+  feature = (unsigned char *)malloc(feature_size * sizeof(unsigned char));
+  buffer = (unsigned char *)malloc(buffer_size * sizeof(unsigned char));
+}
+void free_buffer(){
+  free(feature);
+  free(buffer);
+}
 
 static int
 name_map_func (CHISE_DS *ds, unsigned char *name)
@@ -93,13 +56,142 @@ name_map_func (CHISE_DS *ds, unsigned char *name)
   strcat((char *)feature, (char *)"\n");
   return 0;
 }
-
 void listup_feature(CHISE_DS *ds){
   int i;
   for(i = 0; i < feature_size; i++){
     feature[i] = 0;
   }
   chise_ds_foreach_char_feature_name (ds, &name_map_func);
+}
+
+%}
+
+%perlcode %{
+sub new{
+  my $class = shift;
+  chise::allocate_buffer();
+  my $chise_ds = chise::CHISE_DS_open($chise::CHISE_DS_Berkeley_DB,
+                                      $chise::chise_system_db_dir,
+                                      0,
+                                      0755);
+  chise::listup_feature($chise_ds);
+  my @chise_feature = split(/\n/, chise::get_char($chise::feature));
+  my $chise_newid = -1;
+  return bless {
+    chise_ds => $chise_ds,
+    chise_feature => \@chise_feature,
+    chise_newid => $chise_newid}, $class;
+}
+sub DESTROY{
+  my $self = shift;
+  chise::free_buffer();
+  if(define($self->{chise_ds})){ # Strange to say, chise_ds has already unavailable
+    chise::CHISE_DS_close($self->{chise_ds});
+  }
+}
+sub get_feature_list{ # original
+  my $self = shift;
+  my $hash = $self->{chise_feature};
+  return @$hash;
+}
+sub ds_get_ccs{
+  my $self = shift;
+  return chise::chise_ds_get_ccs($self->{chise_ds},
+                                 chise::get_uchar($_[0]));
+}
+sub ds_get_feature{
+  my $self = shift;
+  return chise::chise_ds_get_feature($self->{chise_ds},
+                                     chise::get_uchar($_[0]));
+}
+sub ds_get_property{
+  my $self = shift;
+  return chise::chise_ds_get_property($self->{chise_ds},
+                                      chise::get_uchar($_[0]));
+}
+sub ds_decode_char{
+  my $self = shift;
+  return chise::chise_ds_decode_char($self->{chise_ds},
+                                     chise::get_uchar($_[0]),
+                                     $_[1]);
+}
+sub ccs_decode{
+  my $self = shift;
+  return chise::chise_ccs_decode($_[0],
+                                 $_[1]);
+}
+sub feature_gets_property_value{ # use feature/property strings directly
+  my $self = shift;
+  chise::clear_buffer();
+  chise::chise_feature_gets_property_value($self->ds_get_feature($_[0]),
+                                           $self->ds_get_property($_[1]),
+                                           $chise::buffer,
+                                           $chise::buffer_size);
+  return chise::get_char($chise::buffer);
+}
+sub feature_gets_property_value_by_handle{
+  my $self = shift;
+  chise::clear_buffer();
+  chise::chise_feature_gets_property_value($_[0],
+                                           $_[1],
+                                           $chise::buffer,
+                                           $chise::buffer_size);
+  return chise::get_char($chise::buffer);
+}
+sub char_gets_feature_value{ # use feature string directly
+  my $self = shift;
+  chise::clear_buffer();
+  chise::chise_char_gets_feature_value($_[0],
+                                       $self->ds_get_feature($_[1]),
+                                       $chise::buffer,
+                                       $chise::buffer_size);
+  return chise::get_char($chise::buffer);
+}
+sub char_gets_feature_value_by_handle{
+  my $self = shift;
+  chise::clear_buffer();
+  chise::chise_char_gets_feature_value($_[0],
+                                       $_[1],
+                                       $chise::buffer,
+                                       $chise::buffer_size);
+  return chise::get_char($chise::buffer);
+}
+sub system_db_dir{
+  my $self = shift;
+  return chise::get_char($chise::chise_system_db_dir);
+}
+sub db_dir{
+  my $self = shift;
+  return chise::get_char($chise::chise_db_dir);
+}
+sub db_format_version{
+  my $self = shift;
+  return chise::get_char($chise::chise_db_format_version);
+}
+sub ds_location{
+  my $self = shift;
+  return chise::get_char(chise::chise_ds_location($self->{chise_ds}));
+}
+sub get_newid{ # original : search new char_id and update $chise_newid
+  my $self = shift;
+  if($self->{chise_newid} < 0){
+    $self->{chise_newid} = 0x0F0000;
+    my @feature = $self->get_feature_list();
+    while(1){
+      my $found = 0;
+      foreach(@feature){
+        if($self->char_gets_feature_value($self->{chise_newid}, $_) ne ""){
+          $found = 1;
+          last;
+        }
+      }
+      if($found == 0){
+        last;
+      }
+      $self->{chise_newid}++;
+    }
+  }
+  return $self->{chise_newid};
 }
 
 %}
