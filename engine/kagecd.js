@@ -1112,7 +1112,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
     }
     else{ //for others, use x-axis
       rad = Math.atan((y2 - y1) / (x2 - x1));
-      if((Math.abs(y2 - y1) < Math.abs(x2 - x1)) && (a1 != 6) && (a2 != 6)){ //ASAI KAUDO
+      if((Math.abs(y2 - y1) < Math.abs(x2 - x1)) && (a1 != 6) && (a2 != 6) && !(x1 > x2)){ //ASAI KAUDO
         poly = new Polygon(4);
         switch(a1){ //must be 0 or 2
         case 0:
