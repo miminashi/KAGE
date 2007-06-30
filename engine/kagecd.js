@@ -1,3 +1,5 @@
+// may be it can join 3curve and 4curve. the difference is may be only calculating x,y,ix,iy
+
 function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
   var rad, t;
   var x, y, v;
@@ -15,7 +17,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
       delta = -1 * kage.kMinWidthY * 0.5;
       break;
     case 1:
-    case 2:
+    case 2: // must be 32
     case 6:
     case 22:
       delta = 0;
@@ -49,9 +51,9 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
     case 8:
     case 7:
     case 9:
-    case 15:
-    case 14:
-    case 17:
+    case 15: // it can change to 15->5
+    case 14: // it can change to 14->4
+    case 17: // no need
     case 5:
       delta = 0;
       break;
@@ -244,7 +246,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
     XX = Math.cos(rad) * v;
     XY = Math.sin(rad) * v;
     
-    if(a2 == 1 || a2 == 8 || a2 == 15){ //the last filled circle
+    if(a2 == 1 || a2 == 8 || a2 == 15){ //the last filled circle ... it can change to 15->5
       if(x3 == x4){
         poly = Polygon();
         poly.push(x4 - kage.kMinWidthT, y4);
@@ -293,7 +295,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
       }
     }
     
-    if(a2 == 15){ //jump up
+    if(a2 == 15){ //jump up ... it can change to 15->5
       if(y3 == y4){
         poly = new Polygon();
         poly.push(x4, y4 - kage.kMinWidthT + 1);
@@ -315,7 +317,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
       }
     }
     
-    if(a2 == 14){ //jump to left, allways go left
+    if(a2 == 14){ //jump to left, allways go left ... it can change to 14->4
       poly = new Polygon();
       poly.push(x4, y4);
       poly.push(x4, y4 - kage.kMinWidthT);
@@ -485,7 +487,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       delta = -1 * kage.kMinWidthY * 0.5;
       break;
     case 1:
-    case 2:
+    case 2: // ... must be 32
     case 6:
     case 22:
       delta = 0;
@@ -518,9 +520,9 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
     case 1:
     case 7:
     case 9:
-    case 15:
-    case 14:
-    case 17:
+    case 15: // it can change to 15->5
+    case 14: // it can change to 14->4
+    case 17: // no need
     case 5:
       delta = 0;
       break;
@@ -640,7 +642,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
         }
       }
       else{ //bottom to up
-        if(x1 == x2){ //is it right?
+        if(x1 == x2){ //is it right? ... no need
           poly = new Polygon();
           poly.push(x1 - kage.kMinWidthT, y1);
           poly.push(x1 + kage.kMinWidthT, y1);
@@ -720,7 +722,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
     XX = Math.cos(rad) * v;
     XY = Math.sin(rad) * v;
     
-    if(a2 == 1 || a2 == 8 || a2 == 15){ //the last filled circle
+    if(a2 == 1 || a2 == 8 || a2 == 15){ //the last filled circle ... it can change 15->5
       if(x2 == x3){
         poly = new Polygon();
         poly.push(x3 - kage.kMinWidthT, y3);
@@ -752,7 +754,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       }
     }
     
-    if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Math.sinnyu & L2RD Harai
+    if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Math.sinnyu & L2RD Harai ... no need for a2=9
       if(y2 == y3){
         poly = new Polygon();
         poly.push(x3, y3 + kage.kMinWidthT * kage.kL2RDfatten);
@@ -770,7 +772,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       }
     }
     
-    if(a2 == 15){ //jump up
+    if(a2 == 15){ //jump up ... it can change 15->5
       if(y2 == y3){
         poly = new Polygon();
         poly.push(x3, y3 - kage.kMinWidthT + 1);
@@ -792,7 +794,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       }
     }
     
-    if(a2 == 14){ //jump to left, allways go left
+    if(a2 == 14){ //jump to left, allways go left ... it can change 14->4
       poly = new Polygon();
       poly.push(x3, y3);
       poly.push(x3, y3 - kage.kMinWidthT);
@@ -969,7 +971,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         poly.set(0, x1 + kage.kMinWidthT, y1 + kage.kMinWidthY / 2);
         break;
       case 1:
-      case 6:
+      case 6: //... no need
       case 22:
         poly.set(3, x1 - kage.kMinWidthT, y1);
         poly.set(0, x1 + kage.kMinWidthT, y1);
@@ -986,7 +988,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
       
       switch(a2){
       case 0:
-        if(a1 == 6){ //KAGI's tail
+        if(a1 == 6){ //KAGI's tail ... no need
           poly.set(2, x2 - kage.kMinWidthT, y2);
           poly.set(1, x2 + kage.kMinWidthT, y2);
         }
@@ -1033,7 +1035,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         polygons.push(poly);
       }
       
-      if((a1 == 6 && a2 == 0) || a2 == 1){ //KAGI NO YOKO BOU NO SAIGO NO MARU
+      if((a1 == 6 && a2 == 0) || a2 == 1){ //KAGI NO YOKO BOU NO SAIGO NO MARU ... no need only used at 1st=yoko
         poly = new Polygon();
         poly.push(x2 - kage.kMinWidthT, y2);
         poly.push(x2 - kage.kMinWidthT * 0.6, y2 + kage.kMinWidthT * 0.6);
@@ -1053,7 +1055,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         poly.push(x1, y1 + kage.kMinWidthT);
         polygons.push(poly);
         
-        if(a2 == 1 || a2 == 0 || a2 == 5){
+        if(a2 == 1 || a2 == 0 || a2 == 5){ // no need a2=1
           //KAGI NO YOKO BOU NO SAIGO NO MARU
           poly = new Polygon();
           poly.push(x2, y2 - kage.kMinWidthT);
@@ -1194,7 +1196,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
                      y2 + Math.cos(rad) * kage.kMinWidthT * v + kage.kMinWidthT * 0.5 * Math.sin(rad) * v);
           }
           break;
-        case 1:
+        case 1: // is needed?
         case 5:
           poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v, y2 - Math.cos(rad) * kage.kMinWidthT * v);
           poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthT * v, y2 + Math.cos(rad) * kage.kMinWidthT * v);
