@@ -65,7 +65,7 @@ function Polygons(){
 	buffer += "%%CreationDate: " + new Date() + "\n";
 	buffer += "%%EndComments\n";
 	buffer += "%%EndProlog\n";
-	buffer += "%%Page \"Kanji glyph\" 1\n";
+	buffer += "%%Page: \"Kanji glyph\" 1\n";
 	buffer += "newpath\n";
 	
 	for(var i = 0; i < this.array.length; i++){
