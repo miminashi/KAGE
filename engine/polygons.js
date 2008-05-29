@@ -40,7 +40,7 @@ function Polygons(){
   
   function generateSVG(){ // string
     var buffer = "";
-    buffer += "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" baseProfile=\"full\">\n";
+    buffer += "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" baseProfile=\"full\" viewBox=\"0 0 199 199\">\n";
     buffer += "<g fill=\"black\">\n";
     for(var i = 0; i < this.array.length; i++){
       buffer += "<polygon points=\"";
