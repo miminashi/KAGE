@@ -54,7 +54,37 @@ function Polygons(){
     return buffer;
   }
   Polygons.prototype.generateSVG = generateSVG;
-  
+
+    function generateEPS(){ // string
+	var buffer = "";
+	buffer += "%!PS-Adobe-3.0 EPSF-3.0\n";
+	buffer += "%%BoundingBox: 0 -208 1024 816\n";
+	buffer += "%%Pages: 0\n";
+	buffer += "%%Title: Kanji glyph\n";
+	buffer += "%%Creator: GlyphWiki powered by KAGE system\n";
+	buffer += "%%CreationDate: " + new Date() + "\n";
+	buffer += "%%EndComments\n";
+	buffer += "%%EndProlog\n";
+	buffer += "%%Page \"Kanji glyph\" 1\n";
+	buffer += "newpath\n";
+	
+	for(var i = 0; i < this.array.length; i++){
+	    for(var j = 0; j < this.array[i].array.length; j++){
+		buffer += (this.array[i].array[j].x * 5) + " " + (1000 - this.array[i].array[j].y * 5 - 200) + " ";
+		if(j == 0){
+		    buffer += "moveto\n";
+		} else {
+		    buffer += "lineto\n";
+		}
+	    }
+	    buffer += "closepath\n";
+	}
+	buffer += "fill\n";
+	buffer += "%%EOF\n";
+	return buffer;
+    }
+    Polygons.prototype.generateEPS = generateEPS;
+
   // property
   this.array = new Array();
   
