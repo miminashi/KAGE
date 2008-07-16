@@ -92,14 +92,14 @@ function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
           tx2 = x2 + kage.kMage * Math.cos(rad) * v;
           ty2 = y2 + kage.kMage * Math.sin(rad) * v;
         }
-        tx3 = x3 - kage.kMage;
+				tx3 = x3;
         ty3 = y3;
-        tx4 = x3 + kage.kMage * 0.5; // ... not used
-        ty4 = y3 - kage.kMage * 2; // ... not used
         
         cdDrawLine(kage, polygons, x1, y1, tx1, ty1, a2, 1);
         cdDrawCurve(kage, polygons, tx1, ty1, x2, y2, tx2, ty2, 1, 1);
-        cdDrawLine(kage, polygons, tx2, ty2, tx3, ty3, 6, 5); // bolder by force
+				if(tx3 - tx2 > 0){ // for closer position
+					cdDrawLine(kage, polygons, tx2, ty2, tx3, ty3, 6, 5); // bolder by force
+				}
       }
       else{
         if(x1 == x2){
@@ -178,14 +178,14 @@ rate = 6;
           tx2 = x2 + kage.kMage * Math.cos(rad) * v * rate;
           ty2 = y2 + kage.kMage * Math.sin(rad) * v * rate;
         }
-        tx3 = x3 - kage.kMage;
+				tx3 = x3;
         ty3 = y3;
-        tx4 = x3 + kage.kMage * 0.5; // ... not used
-        ty4 = y3 - kage.kMage * 2; // ... not used
         
         cdDrawLine(kage, polygons, x1, y1, tx1, ty1, a2, 1);
         cdDrawCurve(kage, polygons, tx1, ty1, x2, y2, tx2, ty2, 1, 1);
-        cdDrawLine(kage, polygons, tx2, ty2, tx3, ty3, 6, 5); // bolder by force
+				if(tx3 - tx2 > 0){ // for closer position
+					cdDrawLine(kage, polygons, tx2, ty2, tx3, ty3, 6, 5); // bolder by force
+				}
       }
       else{
         if(x1 == x2){
