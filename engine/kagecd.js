@@ -642,11 +642,11 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
         }
       }
       else{ //bottom to up
-        if(x1 == x2){ //is it right? ... no need
+        if(x1 == x2){
           poly = new Polygon();
           poly.push(x1 - kage.kMinWidthT, y1);
           poly.push(x1 + kage.kMinWidthT, y1);
-          poly.push(x1 - kage.kMinWidthT, y1 + kage.kMinWidthY);
+          poly.push(x1 + kage.kMinWidthT, y1 - kage.kMinWidthY);
           polygons.push(poly);
         }
         else{
@@ -665,7 +665,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       poly.push(x1, y1 - kage.kMinWidthY - kage.kWidth);
       poly.push(x1 + kage.kMinWidthT + kage.kWidth, y1 + kage.kMinWidthY);
       poly.push(x1 + kage.kMinWidthT, y1 + kage.kMinWidthT);
-      poly.push(x1 - kage.kMinWidthT, y1);
+      poly.push(x1, y1 + kage.kMinWidthT);
       polygons.push(poly);
     }
     
