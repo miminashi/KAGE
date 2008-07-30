@@ -189,7 +189,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
       poly.push(x1, y1 - kage.kMinWidthY - kage.kWidth);
       poly.push(x1 + kage.kMinWidthT + kage.kWidth, y1 + kage.kMinWidthY);
       poly.push(x1 + kage.kMinWidthT, y1 + kage.kMinWidthT);
-      poly.push(x1 - kage.kMinWidthT, y1);
+      poly.push(x1, y1 + kage.kMinWidthT);
       polygons.push(poly);
     }
     
