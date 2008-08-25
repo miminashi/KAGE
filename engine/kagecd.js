@@ -9,6 +9,7 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
   var deltad;
   var XX, XY, YX, YY;
   var poly, poly2;
+	var hosomi;
   
   if(kage.kShotai == kage.kMincho){ // mincho
     switch(a1){
@@ -76,6 +77,11 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
       y4 = y4 + delta * Math.sin(rad) * v;
     }
     
+		hosomi = 0.5;
+		if(Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) < 50){
+			hosomi += 0.4 * (1 - Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) / 50);
+		}
+
     poly = new Polygon();
     poly2 = new Polygon();
     for(tt = 0; tt <= 1000; tt = tt + kage.kRate){
@@ -103,9 +109,20 @@ function cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a1, a2){
         ib = kage.kMinWidthT;
       }
       
-      if(a1 == 7){ deltad = Math.sqrt(t); }
-      else if(a2 == 7){ deltad = Math.sqrt(1.0 - t); }
+      if(a1 == 7 && a2 == 0){ // L2RD: fatten
+        deltad = Math.pow(t, hosomi) * kage.kL2RDfatten;
+			}
+      else if(a1 == 7){
+				deltad = Math.pow(t, hosomi);
+			}
+			else if(a2 == 7){
+				deltad = Math.pow(1.0 - t, hosomi);
+			}
       else{ deltad = 1; }
+
+			if(deltad < 0.15){
+				deltad = 0.15;
+			}
       ia = ia * deltad;
       ib = ib * deltad;
       
@@ -472,6 +489,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
   var deltad;
   var XX, XY, YX, YY;
   var poly, poly2;
+	var hosomi;
   
   if(kage.kShotai == kage.kMincho){ // mincho
     switch(a1){
@@ -540,6 +558,11 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       x3 = x3 + delta * Math.cos(rad) * v;
       y3 = y3 + delta * Math.sin(rad) * v;
     }
+
+		hosomi = 0.5;
+		if(Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) < 50){
+			hosomi += 0.4 * (1 - Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) / 50);
+		}
     
     poly = new Polygon();
     poly2 = new Polygon();
@@ -570,10 +593,20 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
         ib = kage.kMinWidthT;
       }
       
-      if(a1 == 7 && a2 == 0){ deltad = Math.sqrt(t) * kage.kL2RDfatten; } //L2RD: fatten
-      else if(a1 == 7){ deltad = Math.sqrt(t); }
-      else if(a2 == 7){ deltad = Math.sqrt(1.0 - t); }
+      if(a1 == 7 && a2 == 0){ // L2RD: fatten
+					deltad = Math.pow(t, hosomi) * kage.kL2RDfatten;
+			}
+      else if(a1 == 7){
+				deltad = Math.pow(t, hosomi);
+			}
+			else if(a2 == 7){
+				deltad = Math.pow(1.0 - t, hosomi);
+			}
       else{ deltad = 1; }
+
+			if(deltad < 0.15){
+				deltad = 0.15;
+			}
       ia = ia * deltad;
       ib = ib * deltad;
       
@@ -937,7 +970,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
 function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
   var rad;
   var v, x1, y1, x2, y2;
-  var a1, a2;
+  var a1, a2, opt1, opt2;
   var XX, XY, YX, YY;
   var poly;
   
@@ -946,8 +979,10 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
     y1 = ty1;
     x2 = tx2;
     y2 = ty2;
-    a1 = ta1;
-    a2 = ta2;
+    a1 = ta1 % 100;
+    a2 = ta2 % 100;
+    opt1 = Math.floor(ta1 / 100);
+    opt2 = Math.floor(ta2 / 100);
     
     if(x1 == x2){ //if TATE stroke, use y-axis
       poly = new Polygon(4);
@@ -988,12 +1023,12 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         poly.set(1, x2 + kage.kMinWidthT, y2);
         break;
       case 13:
-        poly.set(2, x2 - kage.kMinWidthT, y2 + kage.kWidth * kage.kKakato + kage.kMinWidthT);
-        poly.set(1, x2 + kage.kMinWidthT, y2 + kage.kWidth * kage.kKakato);
+        poly.set(2, x2 - kage.kMinWidthT, y2 + kage.kAdjustKakatoL[opt2] + kage.kMinWidthT);
+        poly.set(1, x2 + kage.kMinWidthT, y2 + kage.kAdjustKakatoL[opt2]);
         break;
       case 23:
-        poly.set(2, x2 - kage.kMinWidthT, y2 + kage.kWidth * kage.kKakato * 0.5 + kage.kMinWidthT);
-        poly.set(1, x2 + kage.kMinWidthT, y2 + kage.kWidth * kage.kKakato * 0.5);
+        poly.set(2, x2 - kage.kMinWidthT, y2 + kage.kAdjustKakatoR[opt2] + kage.kMinWidthT);
+        poly.set(1, x2 + kage.kMinWidthT, y2 + kage.kAdjustKakatoR[opt2]);
         break;
       case 32:
         poly.set(2, x2 - kage.kMinWidthT, y2 + kage.kMinWidthY);
@@ -1028,7 +1063,7 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         poly.push(x2, y2 + kage.kMinWidthT);
         poly.push(x2 + kage.kMinWidthT * 0.6, y2 + kage.kMinWidthT * 0.6);
         poly.push(x2 + kage.kMinWidthT, y2);
-	poly.reverse(); // for fill-rule
+        poly.reverse(); // for fill-rule
         polygons.push(poly);
       }
     }
@@ -1188,17 +1223,17 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
           poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthT * v, y2 + Math.cos(rad) * kage.kMinWidthT * v);
           break;
         case 13:
-          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v + kage.kWidth * kage.kKakato * Math.cos(rad) * v,
-                   y2 - Math.cos(rad) * kage.kMinWidthT * v + kage.kWidth * kage.kKakato * Math.sin(rad) * v);
-          poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthT * v + (kage.kWidth * kage.kKakato + kage.kMinWidthT) * Math.cos(rad) * v,
-                   y2 + Math.cos(rad) * kage.kMinWidthT * v + (kage.kWidth * kage.kKakato + kage.kMinWidthT) * Math.sin(rad) * v);
+          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v + kage.kAdjustKakatoL[opt2] * Math.cos(rad) * v,
+                   y2 - Math.cos(rad) * kage.kMinWidthT * v + kage.kAdjustKakatoL[opt2] * Math.sin(rad) * v);
+          poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthT * v + (kage.kAdjustKakatoL[opt2] + kage.kMinWidthT) * Math.cos(rad) * v,
+                   y2 + Math.cos(rad) * kage.kMinWidthT * v + (kage.kAdjustKakatoL[opt2] + kage.kMinWidthT) * Math.sin(rad) * v);
           break;
         case 23:
-          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v + kage.kWidth * kage.kKakato * 0.5 * Math.cos(rad) * v,
-                   y2 - Math.cos(rad) * kage.kMinWidthT * v + kage.kWidth * kage.kKakato * 0.5 * Math.sin(rad) * v);
+          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v + kage.kAdjustKakatoR[opt2] * Math.cos(rad) * v,
+                   y2 - Math.cos(rad) * kage.kMinWidthT * v + kage.kAdjustKakatoR[opt2] * Math.sin(rad) * v);
           poly.set(2,
-                   x2 - Math.sin(rad) * kage.kMinWidthT * v + (kage.kWidth * kage.kKakato * 0.5 + kage.kMinWidthT) * Math.cos(rad) * v,
-                   y2 + Math.cos(rad) * kage.kMinWidthT * v + (kage.kWidth * kage.kKakato * 0.5 + kage.kMinWidthT) * Math.sin(rad) * v);
+                   x2 - Math.sin(rad) * kage.kMinWidthT * v + (kage.kAdjustKakatoR[opt2] + kage.kMinWidthT) * Math.cos(rad) * v,
+                   y2 + Math.cos(rad) * kage.kMinWidthT * v + (kage.kAdjustKakatoR[opt2] + kage.kMinWidthT) * Math.sin(rad) * v);
           break;
         case 32:
           poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthT * v + kage.kMinWidthY * Math.cos(rad) * v,

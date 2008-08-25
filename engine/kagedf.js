@@ -1,7 +1,7 @@
 function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
   var tx1, tx2, tx3, tx4, ty1, ty2, ty3, ty4, v;
   var rad;
-  
+	
   if(kage.kShotai == kage.kMincho){
     switch(a1 % 100){ // ... no need to divide
     case 0:
@@ -144,7 +144,7 @@ function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
       cdDrawLine(kage, polygons, x3, y3, x4, y4, 6, a3);
       break;
     case 13:
-rate = 6;
+      rate = 6;
       if(a3 == 5){
         if(x1 == x2){
           if(y1 < y2){ v = 1; } else{ v = -1; }

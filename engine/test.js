@@ -8,6 +8,7 @@ load("buhin.js");
 load("kage.js");
 load("kagecd.js");
 load("kagedf.js");
+load("2d.js");
 
 kage = new Kage();
 polygons = new Polygons();
