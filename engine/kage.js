@@ -3,7 +3,7 @@ function Kage(){
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
     if(glyphData != ""){
-      this.drawStrokesArray(polygons, this.adjustKakato(this.getEachStrokes(glyphData)));
+      this.drawStrokesArray(polygons, this.adjustUroko(this.adjustKakato(this.getEachStrokes(glyphData))));
     }
   }
   Kage.prototype.makeGlyph = makeGlyph;
@@ -63,148 +63,46 @@ function Kage(){
   }
   Kage.prototype.getEachStrokesOfBuhin = getEachStrokesOfBuhin;
   
+	function adjustUroko(strokesArray){ // strokesArray
+    for(var i = 0; i < strokesArray.length; i++){
+      if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0){ // c‚ÍƒEƒƒR‚È‚¢‚Ì‚Å–³Ž‹B‚Å‚àŒvŽZ—Ê‚ª–³‘Ê
+        for(var k = 0; k < this.kAdjustUrokoLengthStep; k++){
+          var tx, ty, tlen;
+          if(strokesArray[i][4] == strokesArray[i][6]){ // ‰¡
+            tx = strokesArray[i][5] - this.kAdjustUrokoLine[k];
+            ty = strokesArray[i][6] - 0.5;
+            tlen = strokesArray[i][5] - strokesArray[i][3];
+          } else {
+            var rad = Math.atan((strokesArray[i][6] - strokesArray[i][4]) / (strokesArray[i][5] - strokesArray[i][3]));
+            tx = strokesArray[i][5] - this.kAdjustUrokoLine[k] * Math.cos(rad) - 0.5 * Math.sin(rad);
+            ty = strokesArray[i][6] - this.kAdjustUrokoLine[k] * Math.sin(rad) - 0.5 * Math.cos(rad);
+            tlen = Math.sqrt((strokesArray[i][6] - strokesArray[i][4]) * (strokesArray[i][6] - strokesArray[i][4]) +
+                             (strokesArray[i][5] - strokesArray[i][3]) * (strokesArray[i][5] - strokesArray[i][3]));
+          }
+          if(tlen < this.kAdjustUrokoLength[k] ||
+             isCrossWithOthers(strokesArray, i, tx, ty, strokesArray[i][5], strokesArray[i][6])
+             ){
+            strokesArray[i][2] += (this.kAdjustUrokoLengthStep - k) * 100;
+            k = Infinity;
+          }
+        }
+      }
+    }
+    return strokesArray;
+  }
+  Kage.prototype.adjustUroko = adjustUroko;
+	
   function adjustKakato(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
       if(strokesArray[i][0] == 1 &&
          (strokesArray[i][2] == 13 || strokesArray[i][2] == 23)){
         for(var k = 0; k < this.kAdjustKakatoStep; k++){
-          var crossing = 0;
-          for(var j = 0; j < strokesArray.length && !crossing; j++){
-            if(i == j){ continue; }
-            switch(strokesArray[j][0]){
-            case 0:
-            case 8:
-            case 9:
-              break;
-            case 6:
-            case 7:
-              if(!crossing && isCross(strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[j][9],
-                         strokesArray[j][10],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[j][9],
-                         strokesArray[j][10],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[j][9],
-                         strokesArray[j][10],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[j][9],
-                         strokesArray[j][10],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-            case 2:
-            case 12:
-            case 3:
-              if(!crossing && isCross(strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[j][7],
-                         strokesArray[j][8],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-            default:
-              if(!crossing && isCross(strokesArray[j][3],
-                         strokesArray[j][4],
-                         strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][3],
-                         strokesArray[j][4],
-                         strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][3],
-                         strokesArray[j][4],
-                         strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-              if(!crossing && isCross(strokesArray[j][3],
-                         strokesArray[j][4],
-                         strokesArray[j][5],
-                         strokesArray[j][6],
-                         strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1],
-                         strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
-                         strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])){
-                crossing++;
-              }
-            }
-          }
-          if(crossing){
+          if(isCrossBoxWithOthers(strokesArray, i,
+                               strokesArray[i][5] - this.kAdjustKakatoRangeX / 2,
+                               strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
+                               strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
+                               strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])
+             ){
             strokesArray[i][2] += (3 - k) * 100;
             k = Infinity;
           }
@@ -296,18 +194,28 @@ function Kage(){
   Kage.prototype.kMincho = 0;
   Kage.prototype.kGothic = 1;
   this.kShotai = this.kMincho;
-  this.kMage = 10;
+	
   this.kRate = 100;
+	
   this.kMinWidthY = 2;
   this.kMinWidthT = 6;
   this.kWidth = 5;
-  this.kAdjustKakatoL = ([14, 9, 5, 2]); // èª¿æ•´æ¸ˆã¿ã‚«ã‚«ãƒˆç”¨
-  this.kAdjustKakatoR = ([8, 6, 4, 2]); // èª¿æ•´æ¸ˆã¿ã‚«ã‚«ãƒˆç”¨
-  this.kAdjustKakatoRangeX = 20; // å½±éŸ¿åˆ¤å®šçŸ©å½¢ã®å¤§ãã•
-  this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // å½±éŸ¿åˆ¤å®šçŸ©å½¢ã®å¤§ãã•
-  this.kAdjustKakatoStep = 3; // å½±éŸ¿åˆ¤å®šçŸ©å½¢ã®æ®µéšŽ
   this.kKakato = 3;
   this.kL2RDfatten = 1.1;
+  this.kMage = 10;
+	
+  this.kAdjustKakatoL = ([14, 9, 5, 2]); // ’²®Ï‚ÝƒJƒJƒg—p 000,100,200,300
+  this.kAdjustKakatoR = ([8, 6, 4, 2]); // ’²®Ï‚ÝƒJƒJƒg—p 000,100,200,300
+  this.kAdjustKakatoRangeX = 20; // ‰e‹¿”»’è‹éŒ`‚Ì‘å‚«‚³
+  this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // ‰e‹¿”»’è‹éŒ`‚Ì‘å‚«‚³‹«ŠEi3—Ìˆæj
+  this.kAdjustKakatoStep = 3; // ‰e‹¿”»’è‹éŒ`‚Ì’iŠK
+	
+  this.kAdjustUrokoX = ([24, 20, 16, 12]); // ’²®Ï‚ÝƒTƒCƒY 000,100,200,300
+  this.kAdjustUrokoY = ([12, 11, 9, 8]); // ’²®Ï‚ÝƒTƒCƒY 000,100,200,300
+  this.kAdjustUrokoLength = ([22, 36, 50]); // ‰e‹¿”»’è’·‚³‚Ì’iŠK
+  this.kAdjustUrokoLengthStep = 3; // ‰e‹¿”»’è’·‚³‚Ì’iŠK
+  this.kAdjustUrokoLine = ([22, 26, 30]); // Œð·‚Ì‰e‹¿”»’èBLength‚Æ‘Î‰ž
+	
   this.kBuhin = new Buhin();
   
   return this;

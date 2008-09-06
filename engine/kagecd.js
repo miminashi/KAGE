@@ -603,7 +603,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
 				deltad = Math.pow(1.0 - t, hosomi);
 			}
       else{ deltad = 1; }
-
+      
 			if(deltad < 0.15){
 				deltad = 0.15;
 			}
@@ -1099,36 +1099,20 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
         }
       }
       else{
+        //always same
         poly = new Polygon(4);
-        switch(a1){
-        case 0:
-          poly.set(0, x1, y1 - kage.kMinWidthY);
-          poly.set(3, x1, y1 + kage.kMinWidthY);
-          break;
-        case 2:
-          poly.set(0, x1 - kage.kMinWidthT, y1 - kage.kMinWidthY);
-          poly.set(3, x1 - kage.kMinWidthT, y1 + kage.kMinWidthY);
-          break;
-        }
-        
-        switch(a2){
-        case 0:
-          poly.set(1, x2, y2 - kage.kMinWidthY);
-          poly.set(2, x2, y2 + kage.kMinWidthY);
-          break;
-        case 2:
-          poly.set(1, x2 + kage.kMinWidthT, y2 - kage.kMinWidthY);
-          poly.set(2, x2 + kage.kMinWidthT, y2 + kage.kMinWidthY);
-        }
-        
+        poly.set(0, x1, y1 - kage.kMinWidthY);
+        poly.set(1, x2, y2 - kage.kMinWidthY);
+        poly.set(2, x2, y2 + kage.kMinWidthY);
+        poly.set(3, x1, y1 + kage.kMinWidthY);
         polygons.push(poly);
         
         //UROKO
         if(a2 == 0){
           poly = new Polygon();
           poly.push(x2, y2 - kage.kMinWidthY);
-          poly.push(x2 - 24, y2);
-          poly.push(x2 - 12, y2 - 12);
+          poly.push(x2 - kage.kAdjustUrokoX[opt2], y2);
+          poly.push(x2 - kage.kAdjustUrokoX[opt2] / 2, y2 - kage.kAdjustUrokoY[opt2]);
           polygons.push(poly);
         }
       }
@@ -1136,40 +1120,20 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
     else{ //for others, use x-axis
       rad = Math.atan((y2 - y1) / (x2 - x1));
       if((Math.abs(y2 - y1) < Math.abs(x2 - x1)) && (a1 != 6) && (a2 != 6) && !(x1 > x2)){ //ASAI KAUDO
+        //always same
         poly = new Polygon(4);
-        switch(a1){ //must be 0 or 2
-        case 0:
-          poly.set(0, x1 + Math.sin(rad) * kage.kMinWidthY, y1 - Math.cos(rad) * kage.kMinWidthY);
-          poly.set(3, x1 - Math.sin(rad) * kage.kMinWidthY, y1 + Math.cos(rad) * kage.kMinWidthY);
-          break;
-        case 2:
-          poly.set(0, x1 + Math.sin(rad) * kage.kMinWidthY - kage.kMinWidthT * Math.cos(rad),
-                   y1 - Math.cos(rad) * kage.kMinWidthY - kage.kMinWidthT * Math.sin(rad));
-          poly.set(3, x1 - Math.sin(rad) * kage.kMinWidthY - kage.kMinWidthT * Math.cos(rad),
-                   y1 + Math.cos(rad) * kage.kMinWidthY - kage.kMinWidthT * Math.sin(rad));
-          break;
-        }
-        
-        switch(a2){ //must be 0 or 2
-        case 0:
-          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthY, y2 - Math.cos(rad) * kage.kMinWidthY);
-          poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthY, y2 + Math.cos(rad) * kage.kMinWidthY);
-          break;
-        case 2:
-          poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthY + kage.kMinWidthT * Math.cos(rad),
-                   y2 - Math.cos(rad) * kage.kMinWidthY + kage.kMinWidthT * Math.sin(rad));
-          poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthY + kage.kMinWidthT * Math.cos(rad),
-                   y2 + Math.cos(rad) * kage.kMinWidthY + kage.kMinWidthT * Math.sin(rad));
-        }
-        
+        poly.set(0, x1 + Math.sin(rad) * kage.kMinWidthY, y1 - Math.cos(rad) * kage.kMinWidthY);
+        poly.set(1, x2 + Math.sin(rad) * kage.kMinWidthY, y2 - Math.cos(rad) * kage.kMinWidthY);
+        poly.set(2, x2 - Math.sin(rad) * kage.kMinWidthY, y2 + Math.cos(rad) * kage.kMinWidthY);
+        poly.set(3, x1 - Math.sin(rad) * kage.kMinWidthY, y1 + Math.cos(rad) * kage.kMinWidthY);
         polygons.push(poly);
         
         //UROKO
         if(a2 == 0){
           poly = new Polygon();
           poly.push(x2 + Math.sin(rad) * kage.kMinWidthY, y2 - Math.cos(rad) * kage.kMinWidthY);
-          poly.push(x2 - Math.cos(rad) * 24, y2 - Math.sin(rad) * 24);
-          poly.push(x2 - Math.cos(rad) * 12 + Math.sin(rad) * 12, y2 - Math.sin(rad) * 12 - Math.cos(rad) * 12);
+          poly.push(x2 - Math.cos(rad) * kage.kAdjustUrokoX[opt2], y2 - Math.sin(rad) * kage.kAdjustUrokoX[opt2]);
+          poly.push(x2 - Math.cos(rad) * kage.kAdjustUrokoX[opt2] / 2 + Math.sin(rad) * kage.kAdjustUrokoX[opt2] / 2, y2 - Math.sin(rad) * kage.kAdjustUrokoY[opt2] - Math.cos(rad) * kage.kAdjustUrokoY[opt2]);
           polygons.push(poly);
         }
       }
