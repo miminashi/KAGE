@@ -25,7 +25,20 @@ function Polygon(number){
     this.array = this.array.concat(poly.array);
   }
   Polygon.prototype.concat = concat;
-
+	
+  function shift(){ // void
+    this.array.shift();
+  }
+  Polygon.prototype.shift = shift;
+	
+  function unshift(x, y){ // void
+    var temp = new Object();
+    temp.x = Math.floor(x*10)/10;
+    temp.y = Math.floor(y*10)/10;
+    this.array.unshift(temp);
+  }
+  Polygon.prototype.unshift = unshift;
+	
   // property
   this.array = new Array();
   

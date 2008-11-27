@@ -3,7 +3,7 @@ function Kage(){
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
     if(glyphData != ""){
-      this.drawStrokesArray(polygons, this.adjustUroko(this.adjustKakato(this.getEachStrokes(glyphData))));
+      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko(this.adjustKakato(this.getEachStrokes(glyphData)))));
     }
   }
   Kage.prototype.makeGlyph = makeGlyph;
@@ -91,6 +91,25 @@ function Kage(){
     return strokesArray;
   }
   Kage.prototype.adjustUroko = adjustUroko;
+	
+	function adjustKirikuchi(strokesArray){ // strokesArray
+    for(var i = 0; i < strokesArray.length; i++){
+      if(strokesArray[i][0] == 2 && strokesArray[i][1] == 32 &&
+         strokesArray[i][3] > strokesArray[i][5] &&
+         strokesArray[i][4] < strokesArray[i][6]){
+        for(var j = 0; j < strokesArray.length; j++){ // no need to skip when i == j
+          if(strokesArray[j][0] == 1 &&
+             strokesArray[j][3] < strokesArray[i][3] && strokesArray[j][5] > strokesArray[i][3] &&
+             strokesArray[j][4] == strokesArray[i][4] && strokesArray[j][4] == strokesArray[j][6]){
+            strokesArray[i][1] = 132;
+            j = strokesArray.length;
+          }
+        }
+      }
+    }
+    return strokesArray;
+  }
+  Kage.prototype.adjustKirikuchi = adjustKirikuchi;
 	
   function adjustKakato(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){

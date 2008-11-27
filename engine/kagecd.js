@@ -492,7 +492,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
 	var hosomi;
   
   if(kage.kShotai == kage.kMincho){ // mincho
-    switch(a1){
+    switch(a1 % 100){
     case 0:
     case 7:
       delta = -1 * kage.kMinWidthY * 0.5;
@@ -501,10 +501,11 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
     case 2: // ... must be 32
     case 6:
     case 22:
+    case 32: // changed
       delta = 0;
       break;
     case 12:
-    case 32:
+    //case 32:
       delta = kage.kMinWidthY;
       break;
     default:
@@ -526,7 +527,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       y1 = y1 - delta * Math.sin(rad) * v;
     }
     
-    switch(a2){
+    switch(a2 % 100){
     case 0:
     case 1:
     case 7:
@@ -558,11 +559,11 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       x3 = x3 + delta * Math.cos(rad) * v;
       y3 = y3 + delta * Math.sin(rad) * v;
     }
-
-		hosomi = 0.5;
-		if(Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) < 50){
-			hosomi += 0.4 * (1 - Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) / 50);
-		}
+    
+    hosomi = 0.5;
+    if(Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) < 50){
+      hosomi += 0.4 * (1 - Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1)) / 50);
+    }
     
     poly = new Polygon();
     poly2 = new Polygon();
@@ -594,7 +595,7 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       }
       
       if(a1 == 7 && a2 == 0){ // L2RD: fatten
-					deltad = Math.pow(t, hosomi) * kage.kL2RDfatten;
+        deltad = Math.pow(t, hosomi) * kage.kL2RDfatten;
 			}
       else if(a1 == 7){
 				deltad = Math.pow(t, hosomi);
@@ -619,6 +620,29 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
       //copy to polygon structure
       poly.push(x - ia, y - ib);
       poly2.push(x + ia, y + ib);
+    }
+    
+    // suiheisen ni setsuzoku
+    if(a1 == 132){
+      var index = 0;
+      while(true){
+        if(poly2.array[index].y <= y1 && y1 <= poly2.array[index + 1].y){
+          break;
+        }
+        index++;
+      }
+      newx1 = poly2.array[index + 1].x + (poly2.array[index].x - poly2.array[index + 1].x) *
+        (poly2.array[index + 1].y - y1) / (poly2.array[index + 1].y - poly2.array[index].y);
+      newy1 = y1;
+      newx2 = poly.array[0].x + (poly.array[0].x - poly.array[1].x) * (poly.array[0].y - y1) /
+        (poly.array[1].y - poly.array[0].y);
+      newy2 = y1;
+      
+      for(var i = 0; i < index; i++){
+        poly2.shift();
+      }
+      poly2.set(0, newx1, newy1);
+      poly.unshift(newx2, newy2);
     }
     
     poly2.reverse();
