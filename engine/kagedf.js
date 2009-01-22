@@ -143,7 +143,7 @@ function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
       cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a2, 1);
       cdDrawLine(kage, polygons, x3, y3, x4, y4, 6, a3);
       break;
-    case 13:
+    case 4:
       rate = 6;
       if(a3 == 5){
         if(x1 == x2){
