@@ -65,10 +65,10 @@ function Kage(){
   
 	function adjustUroko(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
-      if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0){ // 縦はウロコないので無視。でも計算量が無駄
+      if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0){ // no operation for TATE
         for(var k = 0; k < this.kAdjustUrokoLengthStep; k++){
           var tx, ty, tlen;
-          if(strokesArray[i][4] == strokesArray[i][6]){ // 横
+          if(strokesArray[i][4] == strokesArray[i][6]){ // YOKO
             tx = strokesArray[i][5] - this.kAdjustUrokoLine[k];
             ty = strokesArray[i][6] - 0.5;
             tlen = strokesArray[i][5] - strokesArray[i][3];
@@ -223,17 +223,17 @@ function Kage(){
   this.kL2RDfatten = 1.1;
   this.kMage = 10;
 	
-  this.kAdjustKakatoL = ([14, 9, 5, 2]); // 調整済みカカト用 000,100,200,300
-  this.kAdjustKakatoR = ([8, 6, 4, 2]); // 調整済みカカト用 000,100,200,300
-  this.kAdjustKakatoRangeX = 20; // 影響判定矩形の大きさ
-  this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // 影響判定矩形の大きさ境界（3領域）
-  this.kAdjustKakatoStep = 3; // 影響判定矩形の段階
+  this.kAdjustKakatoL = ([14, 9, 5, 2]); // for KAKATO adjustment 000,100,200,300
+  this.kAdjustKakatoR = ([8, 6, 4, 2]); // for KAKATO adjustment 000,100,200,300
+  this.kAdjustKakatoRangeX = 20; // check area width
+  this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // 3 steps of checking
+  this.kAdjustKakatoStep = 3; // number of steps
 	
-  this.kAdjustUrokoX = ([24, 20, 16, 12]); // 調整済みサイズ 000,100,200,300
-  this.kAdjustUrokoY = ([12, 11, 9, 8]); // 調整済みサイズ 000,100,200,300
-  this.kAdjustUrokoLength = ([22, 36, 50]); // 影響判定長さの段階
-  this.kAdjustUrokoLengthStep = 3; // 影響判定長さの段階
-  this.kAdjustUrokoLine = ([22, 26, 30]); // 交差の影響判定。Lengthと対応
+  this.kAdjustUrokoX = ([24, 20, 16, 12]); // for UROKO adjustment 000,100,200,300
+  this.kAdjustUrokoY = ([12, 11, 9, 8]); // for UROKO adjustment 000,100,200,300
+  this.kAdjustUrokoLength = ([22, 36, 50]); // length for checking
+  this.kAdjustUrokoLengthStep = 3; // number of steps
+  this.kAdjustUrokoLine = ([22, 26, 30]); // check for crossing. corresponds to length
 	
   this.kBuhin = new Buhin();
   
