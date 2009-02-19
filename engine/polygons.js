@@ -1,5 +1,10 @@
 function Polygons(){
   // method
+ 	function clear(){ // void
+    this.array = new Array();
+  }
+  Polygons.prototype.clear = clear;
+	
   function push(polygon){ // void
     // only a simple check
     var minx = 200;
