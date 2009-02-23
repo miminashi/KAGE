@@ -798,19 +798,31 @@ function cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, a1, a2){
     }
     
     if(a2 == 9 || (a1 == 7 && a2 == 0)){ // Math.sinnyu & L2RD Harai ... no need for a2=9
+      var type = (Math.atan2(Math.abs(y3 - y2), Math.abs(x3 - x2)) / Math.PI * 2 - 0.6);
+      if(type > 0){
+        type = type * 8;
+      } else {
+        type = type * 3;
+      }
+      var pm;
+      if(type < 0){
+        pm = -1;
+      } else {
+        pm = 1;
+      }
       if(y2 == y3){
         poly = new Polygon();
         poly.push(x3, y3 + kage.kMinWidthT * kage.kL2RDfatten);
         poly.push(x3, y3 - kage.kMinWidthT * kage.kL2RDfatten);
-        poly.push(x3 + kage.kMinWidthT * kage.kL2RDfatten, y3 - kage.kMinWidthT * kage.kL2RDfatten);
+        poly.push(x3 + kage.kMinWidthT * kage.kL2RDfatten * Math.abs(type), y3 + kage.kMinWidthT * kage.kL2RDfatten * pm);
         polygons.push(poly);
       }
       else{
         poly = new Polygon();
         poly.push(x3 + kage.kMinWidthT * kage.kL2RDfatten * YX, y3 + kage.kMinWidthT * kage.kL2RDfatten * YY);
         poly.push(x3 - kage.kMinWidthT * kage.kL2RDfatten * YX, y3 - kage.kMinWidthT * kage.kL2RDfatten * YY);
-        poly.push(x3 + kage.kMinWidthT * kage.kL2RDfatten * XX - kage.kMinWidthT * kage.kL2RDfatten * YX,
-                  y3 + kage.kMinWidthT * kage.kL2RDfatten * XY - kage.kMinWidthT * kage.kL2RDfatten * YY);
+        poly.push(x3 + kage.kMinWidthT * kage.kL2RDfatten * Math.abs(type) * XX + kage.kMinWidthT * kage.kL2RDfatten * pm * YX,
+                  y3 + kage.kMinWidthT * kage.kL2RDfatten * Math.abs(type) * XY + kage.kMinWidthT * kage.kL2RDfatten * pm * YY);
         polygons.push(poly);
       }
     }
