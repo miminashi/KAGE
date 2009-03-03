@@ -74,20 +74,18 @@ function Polygons(){
     buffer += "%%CreationDate: " + new Date() + "\n";
     buffer += "%%EndComments\n";
     buffer += "%%EndProlog\n";
-    buffer += "newpath\n";
     
     for(var i = 0; i < this.array.length; i++){
       for(var j = 0; j < this.array[i].array.length; j++){
         buffer += (this.array[i].array[j].x * 5) + " " + (1000 - this.array[i].array[j].y * 5 - 200) + " ";
         if(j == 0){
-          buffer += "moveto\n";
+          buffer += "newpath\nmoveto\n";
         } else {
           buffer += "lineto\n";
         }
       }
-      buffer += "closepath\n";
+      buffer += "closepath\nfill\n";
     }
-    buffer += "fill\n";
     buffer += "%%EOF\n";
     return buffer;
   }
