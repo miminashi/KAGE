@@ -222,6 +222,7 @@ function Kage(){
   this.kKakato = 3;
   this.kL2RDfatten = 1.1;
   this.kMage = 10;
+  this.kUseCurve = 0;
 	
   this.kAdjustKakatoL = ([14, 9, 5, 2]); // for KAKATO adjustment 000,100,200,300
   this.kAdjustKakatoR = ([8, 6, 4, 2]); // for KAKATO adjustment 000,100,200,300

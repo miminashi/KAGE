@@ -5,6 +5,7 @@
 
 load("2d.js");
 load("buhin.js");
+load("curve.js");
 load("kage.js");
 load("kagecd.js");
 load("kagedf.js");
@@ -12,6 +13,7 @@ load("polygon.js");
 load("polygons.js");
 
 var kage = new Kage();
+kage.kUseCurve = true;
 var polygons = new Polygons();
 
 kage.kBuhin.push("u6f22", "99:0:0:9:12:73:200:u6c35-07$99:0:0:54:10:190:199:u26c29-07");
@@ -20,5 +22,5 @@ kage.kBuhin.push("u26c29-07", "1:0:0:18:29:187:29$1:0:0:73:10:73:48$1:0:0:132:10
 
 kage.makeGlyph(polygons, "u6f22");
 
-print(polygons.generateSVG());
+print(polygons.generateSVG(true));
 
