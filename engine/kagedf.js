@@ -251,7 +251,7 @@ function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
         cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a2, 15);
       }
       else{
-        cdDrawCurve(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a2, a3);
+        cdDrawBezier(kage, polygons, x1, y1, x2, y2, x3, y3, x4, y4, a2, a3);
       }
       break;
     case 7:
