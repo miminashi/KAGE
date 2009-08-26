@@ -121,6 +121,8 @@ function Kage(){
                                strokesArray[i][6] + this.kAdjustKakatoRangeY[k],
                                strokesArray[i][5] + this.kAdjustKakatoRangeX / 2,
                                strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1])
+             | strokesArray[i][6] + this.kAdjustKakatoRangeY[k + 1] > 200 // adjust for baseline
+             | strokesArray[i][6] - strokesArray[i][4] < this.kAdjustKakatoRangeY[k + 1] // for thin box
              ){
             strokesArray[i][2] += (3 - k) * 100;
             k = Infinity;

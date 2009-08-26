@@ -1,5 +1,6 @@
 #include "2d.js"
 #include "buhin.js"
+#include "curve.js"
 #include "kage.js"
 #include "kagecd.js"
 #include "kagedf.js"
@@ -7,6 +8,7 @@
 #include "polygons.js"
 
 var kage = new Kage();
+kage.kUseCurve = false;
 var polygons = new Polygons();
 
 kage.kBuhin.push("u6f22", "99:0:0:9:12:73:200:u6c35-07$99:0:0:54:10:190:199:u26c29-07");

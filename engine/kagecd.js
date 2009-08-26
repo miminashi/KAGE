@@ -238,6 +238,7 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, a1, a2
         }
         else if(a1 == 7){
           deltad = Math.pow(t, hosomi);
+          deltad = Math.pow(deltad, 0.7); // make fatten
         }
         else if(a2 == 7){
           deltad = Math.pow(1.0 - t, hosomi);
