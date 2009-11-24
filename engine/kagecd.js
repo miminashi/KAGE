@@ -92,6 +92,10 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, a1, a2
       if(kage.kUseCurve){
         // generating fatten curve -- begin
         var kage2 = new Kage();
+        kage2.kMinWidthY = kage.kMinWidthY;
+        kage2.kMinWidthT = kage.kMinWidthT;
+        kage2.kWidth = kage.kWidth;
+        kage2.kKakato = kage.kKakato;
         kage2.kRate = 10;
         
         var curve = new Array(2); // L and R

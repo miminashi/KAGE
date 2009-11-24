@@ -1,4 +1,4 @@
-function Kage(){
+function Kage(size){
   // method
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
@@ -218,26 +218,48 @@ function Kage(){
 	
   this.kRate = 100;
 	
-  this.kMinWidthY = 2;
-  this.kMinWidthT = 6;
-  this.kWidth = 5;
-  this.kKakato = 3;
-  this.kL2RDfatten = 1.1;
-  this.kMage = 10;
-  this.kUseCurve = 0;
-	
-  this.kAdjustKakatoL = ([14, 9, 5, 2]); // for KAKATO adjustment 000,100,200,300
-  this.kAdjustKakatoR = ([8, 6, 4, 2]); // for KAKATO adjustment 000,100,200,300
-  this.kAdjustKakatoRangeX = 20; // check area width
-  this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // 3 steps of checking
-  this.kAdjustKakatoStep = 3; // number of steps
-	
-  this.kAdjustUrokoX = ([24, 20, 16, 12]); // for UROKO adjustment 000,100,200,300
-  this.kAdjustUrokoY = ([12, 11, 9, 8]); // for UROKO adjustment 000,100,200,300
-  this.kAdjustUrokoLength = ([22, 36, 50]); // length for checking
-  this.kAdjustUrokoLengthStep = 3; // number of steps
-  this.kAdjustUrokoLine = ([22, 26, 30]); // check for crossing. corresponds to length
-	
+  if(size == 1){
+    this.kMinWidthY = 1.2;
+    this.kMinWidthT = 3.6;
+    this.kWidth = 3;
+    this.kKakato = 1.8;
+    this.kL2RDfatten = 1.1;
+    this.kMage = 6;
+    this.kUseCurve = 0;
+    
+    this.kAdjustKakatoL = ([8, 5, 3, 1]); // for KAKATO adjustment 000,100,200,300
+    this.kAdjustKakatoR = ([4, 3, 2, 1]); // for KAKATO adjustment 000,100,200,300
+    this.kAdjustKakatoRangeX = 12; // check area width
+    this.kAdjustKakatoRangeY = ([1, 11, 14, 18]); // 3 steps of checking
+    this.kAdjustKakatoStep = 3; // number of steps
+    
+    this.kAdjustUrokoX = ([14, 12, 9, 7]); // for UROKO adjustment 000,100,200,300
+    this.kAdjustUrokoY = ([7, 6, 5, 4]); // for UROKO adjustment 000,100,200,300
+    this.kAdjustUrokoLength = ([13, 21, 30]); // length for checking
+    this.kAdjustUrokoLengthStep = 3; // number of steps
+    this.kAdjustUrokoLine = ([13, 15, 18]); // check for crossing. corresponds to length
+  } else {
+    this.kMinWidthY = 2;
+    this.kMinWidthT = 6;
+    this.kWidth = 5;
+    this.kKakato = 3;
+    this.kL2RDfatten = 1.1;
+    this.kMage = 10;
+    this.kUseCurve = 0;
+    
+    this.kAdjustKakatoL = ([14, 9, 5, 2]); // for KAKATO adjustment 000,100,200,300
+    this.kAdjustKakatoR = ([8, 6, 4, 2]); // for KAKATO adjustment 000,100,200,300
+    this.kAdjustKakatoRangeX = 20; // check area width
+    this.kAdjustKakatoRangeY = ([1, 19, 24, 30]); // 3 steps of checking
+    this.kAdjustKakatoStep = 3; // number of steps
+    
+    this.kAdjustUrokoX = ([24, 20, 16, 12]); // for UROKO adjustment 000,100,200,300
+    this.kAdjustUrokoY = ([12, 11, 9, 8]); // for UROKO adjustment 000,100,200,300
+    this.kAdjustUrokoLength = ([22, 36, 50]); // length for checking
+    this.kAdjustUrokoLengthStep = 3; // number of steps
+    this.kAdjustUrokoLine = ([22, 26, 30]); // check for crossing. corresponds to length
+  }
+
   this.kBuhin = new Buhin();
   
   return this;
