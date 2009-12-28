@@ -3,7 +3,7 @@ function Kage(size){
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
     if(glyphData != ""){
-      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko(this.adjustKakato(this.getEachStrokes(glyphData)))));
+      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko(this.adjustKakato(this.adjustTate(this.getEachStrokes(glyphData))))));
     }
   }
   Kage.prototype.makeGlyph = makeGlyph;
@@ -63,7 +63,7 @@ function Kage(size){
   }
   Kage.prototype.getEachStrokesOfBuhin = getEachStrokesOfBuhin;
   
-	function adjustUroko(strokesArray){ // strokesArray
+  function adjustUroko(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
       if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0){ // no operation for TATE
         for(var k = 0; k < this.kAdjustUrokoLengthStep; k++){
@@ -91,8 +91,27 @@ function Kage(size){
     return strokesArray;
   }
   Kage.prototype.adjustUroko = adjustUroko;
-	
-	function adjustKirikuchi(strokesArray){ // strokesArray
+  
+  function adjustTate(strokesArray){ // strokesArray
+    for(var i = 0; i < strokesArray.length; i++){
+      if((strokesArray[i][0] == 1 || strokesArray[i][3] || strokesArray[i][7]) && strokesArray[i][3] == strokesArray[i][5]){
+        for(var j = 0; j < strokesArray.length; j++){
+          if(i != j && (strokesArray[j][0] == 1 || strokesArray[j][3] || strokesArray[j][7]) && strokesArray[j][3] == strokesArray[j][5] &&
+             !(strokesArray[i][4] + 1 > strokesArray[j][6] || strokesArray[i][6] - 1 < strokesArray[j][4]) &&
+             Math.abs(strokesArray[i][3] - strokesArray[j][3]) < this.kMinWidthT * 4){
+            strokesArray[i][1] += (4 - Math.floor(Math.abs(strokesArray[i][3] - strokesArray[j][3]) / this.kMinWidthT)) * 100;
+            if(strokesArray[i][1] > this.kAdjustTateStep * 100){
+              strokesArray[i][1] = strokesArray[i][1] % 100 + this.kAdjustTateStep * 100;
+            }
+          }
+        }
+      }
+    }
+    return strokesArray;
+  }
+  Kage.prototype.adjustTate = adjustTate;
+  
+  function adjustKirikuchi(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
       if(strokesArray[i][0] == 2 && strokesArray[i][1] == 32 &&
          strokesArray[i][3] > strokesArray[i][5] &&
@@ -110,7 +129,7 @@ function Kage(size){
     return strokesArray;
   }
   Kage.prototype.adjustKirikuchi = adjustKirikuchi;
-	
+  
   function adjustKakato(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
       if(strokesArray[i][0] == 1 &&
@@ -215,9 +234,9 @@ function Kage(size){
   Kage.prototype.kMincho = 0;
   Kage.prototype.kGothic = 1;
   this.kShotai = this.kMincho;
-	
+  
   this.kRate = 100;
-	
+  
   if(size == 1){
     this.kMinWidthY = 1.2;
     this.kMinWidthT = 3.6;
@@ -258,8 +277,10 @@ function Kage(size){
     this.kAdjustUrokoLength = ([22, 36, 50]); // length for checking
     this.kAdjustUrokoLengthStep = 3; // number of steps
     this.kAdjustUrokoLine = ([22, 26, 30]); // check for crossing. corresponds to length
+    
+    this.kAdjustTateStep = 4;
   }
-
+  
   this.kBuhin = new Buhin();
   
   return this;

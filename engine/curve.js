@@ -125,7 +125,7 @@ function find_offcurve(kage, curve, sx, sy, result){
 }
 
 // ------------------------------------------------------------------
-function get_candidate(kage, curve, a1, a2, x1, y1, sx1, sy1, x2, y2){
+function get_candidate(kage, curve, a1, a2, x1, y1, sx1, sy1, x2, y2, opt3){
   var x, y, ix, iy, ir, ia, ib, tt, t, deltad;
   var hosomi = 0.5;
   
@@ -165,6 +165,9 @@ function get_candidate(kage, curve, a1, a2, x1, y1, sx1, sy1, x2, y2){
     }
     else if(a2 == 7){
       deltad = Math.pow(1.0 - t, hosomi);
+    }
+    else if(opt3 > 0){
+      deltad = ((kage.kMinWidthT - opt3 / 2) / kage.kMinWidthT) + opt3 / 2 / kage.kMinWidthT * t;
     }
     else{ deltad = 1; }
     
