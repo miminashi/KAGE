@@ -732,9 +732,9 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
     y1 = ty1;
     x2 = tx2;
     y2 = ty2;
-    a1 = ta1 % 100;
+    a1 = ta1 % 1000;
     a2 = ta2 % 100;
-    opt1 = Math.floor(ta1 / 100);
+    opt1 = Math.floor(ta1 / 1000);
     opt2 = Math.floor(ta2 / 100);
     
     kMinWidthT = kage.kMinWidthT - opt1 / 2;

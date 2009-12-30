@@ -99,7 +99,7 @@ function Kage(size){
           if(i != j && (strokesArray[j][0] == 1 || strokesArray[j][3] || strokesArray[j][7]) && strokesArray[j][3] == strokesArray[j][5] &&
              !(strokesArray[i][4] + 1 > strokesArray[j][6] || strokesArray[i][6] - 1 < strokesArray[j][4]) &&
              Math.abs(strokesArray[i][3] - strokesArray[j][3]) < this.kMinWidthT * 4){
-            strokesArray[i][1] += (4 - Math.floor(Math.abs(strokesArray[i][3] - strokesArray[j][3]) / this.kMinWidthT)) * 100;
+            strokesArray[i][1] += (4 - Math.floor(Math.abs(strokesArray[i][3] - strokesArray[j][3]) / this.kMinWidthT)) * 1000;
             if(strokesArray[i][1] > this.kAdjustTateStep * 1000){
               strokesArray[i][1] = strokesArray[i][1] % 1000 + this.kAdjustTateStep * 1000;
             }
