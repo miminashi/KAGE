@@ -12,11 +12,11 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
   var a1, a2, opt1, opt2, opt3;
   
   if(kage.kShotai == kage.kMincho){ // mincho
-    a1 = ta1 % 100;
+    a1 = ta1 % 1000;
     a2 = ta2 % 100;
-    opt1 = Math.floor((ta1 % 1000) / 100);
+    opt1 = Math.floor((ta1 % 10000) / 1000);
     opt2 = Math.floor(ta2 / 100);
-    opt3 = Math.floor(ta1 / 1000);
+    opt3 = Math.floor(ta1 / 10000);
     
     kMinWidthT = kage.kMinWidthT - opt1 / 2;
     kMinWidthT2 = kage.kMinWidthT - opt3 / 2;
