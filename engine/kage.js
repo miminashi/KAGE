@@ -94,9 +94,9 @@ function Kage(size){
   
   function adjustTate(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
-      if((strokesArray[i][0] == 1 || strokesArray[i][3] || strokesArray[i][7]) && strokesArray[i][3] == strokesArray[i][5]){
+      if((strokesArray[i][0] == 1 || strokesArray[i][0] == 3 || strokesArray[i][0] == 7) && strokesArray[i][3] == strokesArray[i][5]){
         for(var j = 0; j < strokesArray.length; j++){
-          if(i != j && (strokesArray[j][0] == 1 || strokesArray[j][3] || strokesArray[j][7]) && strokesArray[j][3] == strokesArray[j][5] &&
+          if(i != j && (strokesArray[j][0] == 1 || strokesArray[j][0] == 3 || strokesArray[j][0] == 7) && strokesArray[j][3] == strokesArray[j][5] &&
              !(strokesArray[i][4] + 1 > strokesArray[j][6] || strokesArray[i][6] - 1 < strokesArray[j][4]) &&
              Math.abs(strokesArray[i][3] - strokesArray[j][3]) < this.kMinWidthT * 4){
             strokesArray[i][1] += (4 - Math.floor(Math.abs(strokesArray[i][3] - strokesArray[j][3]) / this.kMinWidthT)) * 1000;
