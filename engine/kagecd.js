@@ -465,11 +465,11 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         poly = new Polygon();
         if(kage.kUseCurve){
           // by curve path
-          poly.push(x2 - kMinWidthT, y2);
-          poly.push(x2 - kMinWidthT, y2 + kMinWidthT, 1);
-          poly.push(x2, y2 + kMinWidthT);
-          poly.push(x2 + kMinWidthT, y2 + kMinWidthT, 1);
+          poly.push(x2, y2 - kMinWidthT);
+          poly.push(x2 + kMinWidthT * 0.9, y2 - kMinWidthT * 0.9, 1);
           poly.push(x2 + kMinWidthT, y2);
+          poly.push(x2 + kMinWidthT * 0.9, y2 + kMinWidthT * 0.9, 1);
+          poly.push(x2, y2 + kMinWidthT);
         } else {
           // by polygon
           poly.push(x2, y2 - kMinWidthT);
