@@ -1,12 +1,12 @@
 #-----------------------------------------------------------------------------
 use utf8;
 binmode STDOUT, ":utf8";
-require 'chiseperl.pl';
+use chise;
 use Encode;
 
 $rate = 0.75;
-$x = -10;
-$y = 14;
+$x = -5;
+$y = 10;
 %char = ();
 %link = ();
 %family = ();
@@ -18,10 +18,14 @@ $png = "png";
 $svg = "svg";
 $graphviz = '/usr/bin/dot';
 $html = "html";
+$EXPR_STYLE = 'x="([0-9.-]+)" y="([0-9.-]+)" style="font-family:Times New Roman;font-size:14.00;"';
+$SERVER = 'mousai.kanji.zinbun.kyoto-u.ac.jp';
+$SERVER2 = 'kanji.zinbun.kyoto-u.ac.jp';
 
 #-----------------------------------------------------------------------------
-&init_chise;
+$chise = new chise;
 
+@chise_feature = $chise->get_feature_list();
 foreach(@chise_feature){
   if($_ !~ m/sources/){
     push(@list, $_);
@@ -73,31 +77,28 @@ print FH2 <<EOT;
 <img src="$file.$png" usemap="#object" border="0">
 EOT
 foreach(<FH>){
-  if(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=cns11643\&\#45\;([1-9])\:([0-9A-F]{4})/){
+  if(m/<svg width=\"([0-9]+)pt\" height=\"([0-9]+)pt\"/){
+    $cx = int($1 / $rate);
+    $cy = int($2 / $rate);
+  }
+  
+  if(m/$EXPR_STYLE>=cns11643\&\#45;([1-9]):([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
-    print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/CNS$3/$4.gif\">\r\n";
+    print FH2 "<img src=\"http://$SERVER/glyphs/CNS$3/$4.gif\">\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jef\&\#45\;china3\:([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=jef\&\#45\;china3\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     $target = $3;
     $target =~ tr/A-F/a-f/;
     print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
-    print FH2 "<img src=\"http://kanji.zinbun.kyoto-u.ac.jp/db/CHINA3/Gaiji/$target.gif\" width=\"40\" height=\"40\">\r\n";
+    print FH2 "<img src=\"http://$SERVER2/db/CHINA3/Gaiji/$target.gif\" width=\"40\" height=\"40\">\r\n";
     print FH2 "</div>";
-  #} elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gb2312\:([0-9A-F]{4})/){
-  #  $left = int($1 / $rate) + $x;
-  #  $top = int($2 / $rate) + $y;
-  #  print FH2 "<div style=\"position: absolute; top: $top; left: $left;\">";
-  #  $ku = int(eval('0x'.$3) / 0x100) - 0x20;
-  #  $ten = sprintf "%02d", eval('0x'.$3) % 0x100 - 0x20;
-  #  print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/GB0/$ku-$ten.gif\">\r\n";
-  #  print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gb2312\:([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=gb2312\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"gb\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
@@ -105,37 +106,37 @@ foreach(<FH>){
     utf8::decode($char);
     print FH2 "$char\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0208\@19(78|83|90|97)\:([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=jis\&\#45\;x0208\@19(78|83|90|97)\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     $ku = int(eval('0x'.$4) / 0x100) - 0x20;
     $ten = sprintf "%02d", eval('0x'.$4) % 0x100 - 0x20;
-    print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/JIS-$3/$ku-$ten.gif\">\r\n";
+    print FH2 "<img src=\"http://$SERVER/glyphs/JIS-$3/$ku-$ten.gif\">\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0212\:([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=jis\&\#45\;x0212\:([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"general\" style=\"top: $top; left: $left;\">";
     $ku = int(eval('0x'.$3) / 0x100) - 0x20;
     $ten = sprintf "%02d", eval('0x'.$3) % 0x100 - 0x20;
-    print FH2 "<img src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/JIS-SP/$ku-$ten.gif\">\r\n";
+    print FH2 "<img src=\"http://$SERVER/glyphs/JIS-SP/$ku-$ten.gif\">\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=zinbun\&\#45;oracle\:([0-9A-F]{1,4})/){
+  } elsif(m/$EXPR_STYLE>\=zinbun\&\#45;oracle\:([0-9A-F]{1,4})/){
     $left = int($1 / $rate) + $x - 20;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     my $number = sprintf "%04d", eval('0x'.$3);
-    print FH2 "<img style=\"position: absolute; top: $top; left: $left;\" src=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/glyphs/ZOB-1968/$number.png\" width=\"80\" height=\"80\">";
+    print FH2 "<img style=\"position: absolute; top: $top; left: $left;\" src=\"http://$SERVER/glyphs/ZOB-1968/$number.png\" width=\"80\" height=\"80\">";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=ucs\:([0-9A-F]{4,6})/){
+  } elsif(m/$EXPR_STYLE>\=ucs\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x - 20;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"ucs\" style=\"top: $top; left: $left;\">";
     print FH2 "[".pack('U',eval('0x'.$3))."]\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=big5\:([0-9A-F]{4,6})/){
+  } elsif(m/$EXPR_STYLE>\=big5\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"big5\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
@@ -143,32 +144,15 @@ foreach(<FH>){
     utf8::decode($char);
     print FH2 "$char\r\n";
     print FH2 "</div>";
-  #} elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=hanziku\&\#45\;([0-9]{1,2})\:([0-9A-F]{4})/){
-  #  $left = int($1 / $rate) + $x;
-  #  $top = int($2 / $rate) + $y;
-  #  #$number = sprintf "%02d", $3;
-  #  $number = $3;
-  #  $numberk = $3;
-  #  $numberk =~ tr/12345678/一二三四五六七八/;
-  #  #print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: 'hzk${number}u'; font-size: 40px;\">";
-  #  print FH2 "<div style=\"position: absolute; top: $top; left: $left; font-family: '細明體外字集$numberk'; font-size: 40px;\">";
-  #  #printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise_tools::get_uchar("=hanziku-$number"), eval('0x'.$4)));
-  #  #printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise_tools::get_uchar("=big5"), eval('0x'.$4)));
-  #  $char = $4;
-  #  $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
-  #  Encode::from_to($char, 'big5', 'utf-8');
-  #  utf8::decode($char);
-  #  print FH2 "$char\r\n";
-  #  print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=big5\&\#45\;cdp\:([0-9A-F]{4,6})/){
+  } elsif(m/$EXPR_STYLE>\=big5\&\#45\;cdp\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"cdp\" style=\"top: $top; left: $left;\">";
-    printf FH2 pack('U', chise::chise_ds_decode_char($chise_ds, chise::get_uchar('=big5-pua'), eval('0x'.$3)));
+    printf FH2 pack('U', $chise->ds_decode_char('=big5-pua', eval('0x'.$3)));
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=jis\&\#45\;x0208\:([0-9A-F]{4,6})/){
+  } elsif(m/$EXPR_STYLE>\=jis\&\#45\;x0208\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"jis\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
@@ -176,9 +160,9 @@ foreach(<FH>){
     utf8::decode($char);
     print FH2 "$char\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=ks\&\#45\;x1001\:([0-9A-F]{4,6})/){
+  } elsif(m/$EXPR_STYLE>\=ks\&\#45\;x1001\:([0-9A-F]{4,6})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"ks\" style=\"top: $top; left: $left;\">";
     $char = $3;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
@@ -186,9 +170,9 @@ foreach(<FH>){
     utf8::decode($char);
     print FH2 "$char\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gt\&\#45\;pj\&\#45\;([0-9]{1,2}):([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=gt\&\#45\;pj\&\#45\;([0-9]{1,2}):([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     $number = sprintf("%02d", $3);
     print FH2 "<div class=\"gt$number\" style=\"top: $top; left: $left;\">";
     $char = $4;
@@ -197,9 +181,9 @@ foreach(<FH>){
     utf8::decode($char);
     print FH2 "$char\r\n";
     print FH2 "</div>";
-  } elsif(m/x\=\"([0-9]+)\" y\=\"([0-9]+)\"\>\=gt\&\#45\;pj\&\#45\;(k[12]):([0-9A-F]{4})/){
+  } elsif(m/$EXPR_STYLE>\=gt\&\#45\;pj\&\#45\;(k[12]):([0-9A-F]{4})/){
     $left = int($1 / $rate) + $x;
-    $top = int($2 / $rate) + $y;
+    $top = $cy + int($2 / $rate) + $y;
     print FH2 "<div class=\"gt$3\" style=\"top: $top; left: $left;\">";
     $char = $4;
     $char =~ s/([0-9A-F]{2})/pack('H2', $1)/eg;
@@ -216,7 +200,7 @@ $i = 0;
 foreach(<FH>){
   if($i == 1){
     m/points=\"[0-9]+,[0-9]+ ([0-9]+),([0-9]+) [0-9]+,[0-9]+ ([0-9]+),([0-9]+) /;
-    print FH2 "<area href=\"http://mousai.kanji.zinbun.kyoto-u.ac.jp/char-desc?char=%26u-$target%3B\" shape=\"rect\" coords=\"".int($3 / $rate).", ".int($4 / $rate).", ".int($1 / $rate).", ".int($2 / $rate)."\">\n";
+    print FH2 "<area href=\"http://app.kita.zinbun.kyoto-u.ac.jp/char-desc?char=%26u-$target%3B\" shape=\"rect\" coords=\"".int($3 / $rate).", ".int($4 / $rate).", ".int($1 / $rate).", ".int($2 / $rate)."\">\n";
     $i = 0;
   }
   elsif(m/^<g id=\"node[0-9]+\" class=\"node\"><title>(2{0,1}[0-9A-F]{4})<\/title>\n$/){
@@ -232,8 +216,6 @@ print FH2 <<EOT;
 </html>
 EOT
 close FH2;
-
-&close_chise;
 
 #-----------------------------------------------------------------------------
 sub process{
@@ -251,7 +233,7 @@ sub process{
   #ccs-feature
   foreach(@list){
     if((substr($_,0,1) eq '=' && substr($_,1,1) ne '>') || $_ eq "morohashi-daikanwa"){
-      $buffer = get_feature_value($_, $_[0]);
+      $buffer = $chise->char_gets_feature_value($_[0], $_);
       if($buffer ne ""){
         if($_ eq "=daikanwa" || $_ eq "=gt" || $_ eq "=gt-k"){
           $char{$_[0]} .= sprintf("$_:%05d\\n", $buffer);
@@ -271,7 +253,7 @@ sub process{
   #goto-feature
   foreach(@list){
     if(substr($_,0,2) eq '->'){
-      $buffer = get_feature_value($_, $_[0]);
+      $buffer = $chise->char_gets_feature_value($_[0], $_);
       if($buffer ne ""){
         $feature = $_;
         @buffer = &parse($buffer);
@@ -294,7 +276,7 @@ sub process{
   #comefrom-feature
   foreach(@list){
     if(substr($_,0,2) eq '<-'){
-      $buffer = get_feature_value($_, $_[0]);
+      $buffer = $chise->char_gets_feature_value($_[0], $_);
       if($buffer ne ""){
         $feature = $_;
         @buffer = &parse($buffer);
@@ -311,7 +293,7 @@ sub process{
   #nearlyequal-feature
   foreach(@list){
     if(substr($_,0,2) eq '=>'){
-      $buffer = get_feature_value($_, $_[0]);
+      $buffer = $chise->char_gets_feature_value($_[0], $_);
       if($buffer ne ""){
         $feature = $_;
         @buffer = &parse($buffer);
