@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 
 $PERL = "/usr/bin/perl";
-#$LINKMAP_DIR = "/var/www/fonts.jp/chise_linkmap";
-$LINKMAP_DIR = "/var/www/chise_linkmap";
+$LINKMAP_DIR = "/var/www/fonts.jp/chise_linkmap";
 
 use CGI;
 $cgi = new CGI;

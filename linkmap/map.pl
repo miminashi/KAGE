@@ -199,11 +199,11 @@ seek FH, 0, 0;
 $i = 0;
 foreach(<FH>){
   if($i == 1){
-    m/points=\"[0-9]+,[0-9]+ ([0-9]+),([0-9]+) [0-9]+,[0-9]+ ([0-9]+),([0-9]+) /;
-    print FH2 "<area href=\"http://app.kita.zinbun.kyoto-u.ac.jp/char-desc?char=%26u-$target%3B\" shape=\"rect\" coords=\"".int($3 / $rate).", ".int($4 / $rate).", ".int($1 / $rate).", ".int($2 / $rate)."\">\n";
+    m/points=\"[0-9.-]+,[0-9.-]+ ([0-9.-]+),([0-9.-]+) [0-9.-]+,[0-9.-]+ ([0-9.-]+),([0-9.-]+) /;
+    print FH2 "<area href=\"http://$SERVER/char-desc?char=%26U-$target%3B\" shape=\"rect\" coords=\"".(int($3 / $rate) + $x).", ".($cy + int($4 / $rate) + $y).", ".(int($1 / $rate) + $x).", ".($cy + int($2 / $rate) + $y)."\">\n";
     $i = 0;
   }
-  elsif(m/^<g id=\"node[0-9]+\" class=\"node\"><title>(2{0,1}[0-9A-F]{4})<\/title>\n$/){
+  elsif(m/^<g id=\"node[0-9]+\" class=\"node\"><title>(2?[0-9A-F]{4})<\/title>\n$/){
     $target = $1;
     $i = 1;
   }
