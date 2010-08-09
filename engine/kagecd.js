@@ -534,25 +534,13 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
     }
     
     if(a2 == 15){ //jump up ... it can change 15->5
-      if(sy2 == y2){
-        poly = new Polygon();
-        poly.push(x2, y2 - kMinWidthT + 1);
-        poly.push(x2 + 2, y2 - kMinWidthT - kage.kWidth * 5);
-        poly.push(x2, y2 - kMinWidthT - kage.kWidth * 5);
-        poly.push(x2 - kMinWidthT, y2 - kMinWidthT + 1);
-        polygons.push(poly);
-      }
-      else{
-        poly = new Polygon();
-        poly.push(x2 + (kMinWidthT - 1) * Math.sin(rad) * v, y2 - (kMinWidthT - 1) * Math.cos(rad) * v);
-        poly.push(x2 + 2 * Math.cos(rad) * v + (kMinWidthT + kage.kWidth * 5) * Math.sin(rad) * v,
-                  y2 + 2 * Math.sin(rad) * v - (kMinWidthT + kage.kWidth * 5) * Math.cos(rad) * v);
-        poly.push(x2 + (kMinWidthT + kage.kWidth * 5) * Math.sin(rad) * v,
-                  y2 - (kMinWidthT + kage.kWidth * 5) * Math.cos(rad) * v);
-        poly.push(x2 + (kMinWidthT - 1) * Math.sin(rad) * v - kMinWidthT * Math.cos(rad) * v,
-                  y2 - (kMinWidthT - 1) * Math.cos(rad) * v - kMinWidthT * Math.sin(rad) * v);
-        polygons.push(poly);
-      }
+      // anytime same degree
+      poly = new Polygon();
+      poly.push(x2, y2 - kMinWidthT + 1);
+      poly.push(x2 + 2, y2 - kMinWidthT - kage.kWidth * 5);
+      poly.push(x2, y2 - kMinWidthT - kage.kWidth * 5);
+      poly.push(x2 - kMinWidthT, y2 - kMinWidthT + 1);
+      polygons.push(poly);
     }
     
     if(a2 == 14){ //jump to left, allways go left
