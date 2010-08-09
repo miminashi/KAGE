@@ -932,10 +932,8 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
                    y1 + Math.cos(rad) * kMinWidthT * v - (kMinWidthT + kage.kMinWidthY) * Math.sin(rad) * v);
           break;
         case 32:
-          poly.set(0, x1 + Math.sin(rad) * kMinWidthT * v - kage.kMinWidthY * Math.cos(rad) * v,
-                   y1 - Math.cos(rad) * kMinWidthT * v - kage.kMinWidthY * Math.sin(rad) * v);
-          poly.set(3, x1 - Math.sin(rad) * kMinWidthT * v - kage.kMinWidthY * Math.cos(rad) * v,
-                   y1 + Math.cos(rad) * kMinWidthT * v - kage.kMinWidthY * Math.sin(rad) * v);
+          poly.set(0, x1 + (kMinWidthT * v) / Math.sin(rad), y1);
+          poly.set(3, x1 - (kMinWidthT * v) / Math.sin(rad), y1);
           break;
         }
         
@@ -971,10 +969,8 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
                    y2 + Math.cos(rad) * kMinWidthT * v + (kage.kAdjustKakatoR[opt2] + kMinWidthT) * Math.sin(rad) * v);
           break;
         case 32:
-          poly.set(1, x2 + Math.sin(rad) * kMinWidthT * v + kage.kMinWidthY * Math.cos(rad) * v,
-                   y2 - Math.cos(rad) * kMinWidthT * v + kage.kMinWidthY * Math.sin(rad) * v);
-          poly.set(2, x2 - Math.sin(rad) * kMinWidthT * v + kage.kMinWidthY * Math.cos(rad) * v,
-                   y2 + Math.cos(rad) * kMinWidthT * v + kage.kMinWidthY * Math.sin(rad) * v);
+          poly.set(1, x2 + (kMinWidthT * v) / Math.sin(rad), y2);
+          poly.set(2, x2 - (kMinWidthT * v) / Math.sin(rad), y2);
           break;
         }
         
