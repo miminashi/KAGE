@@ -221,6 +221,29 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
           poly.unshift(newx2, newy2);
         }
         
+        // suiheisen ni setsuzoku 2
+        if(a1 == 22){
+          var index = 0;
+          while(true){
+            if(poly2.array[index].y <= y1 && y1 <= poly2.array[index + 1].y){
+              break;
+            }
+            index++;
+          }
+          newx1 = poly2.array[index + 1].x + (poly2.array[index].x - poly2.array[index + 1].x) *
+            (poly2.array[index + 1].y - y1) / (poly2.array[index + 1].y - poly2.array[index].y);
+          newy1 = y1;
+          newx2 = poly.array[0].x + (poly.array[0].x - poly.array[1].x - 1) * (poly.array[0].y - y1) /
+            (poly.array[1].y - poly.array[0].y);
+          newy2 = y1 + 1;
+          
+          for(var i = 0; i < index; i++){
+            poly2.shift();
+          }
+          poly2.set(0, newx1, newy1);
+          poly.unshift(newx2, newy2);
+        }
+        
         poly2.reverse();
         poly.concat(poly2);
         polygons.push(poly);
@@ -295,6 +318,29 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         newx2 = poly.array[0].x + (poly.array[0].x - poly.array[1].x) * (poly.array[0].y - y1) /
           (poly.array[1].y - poly.array[0].y);
         newy2 = y1;
+        
+        for(var i = 0; i < index; i++){
+          poly2.shift();
+        }
+        poly2.set(0, newx1, newy1);
+        poly.unshift(newx2, newy2);
+      }
+      
+      // suiheisen ni setsuzoku 2
+      if(a1 == 22){
+        var index = 0;
+        while(true){
+          if(poly2.array[index].y <= y1 && y1 <= poly2.array[index + 1].y){
+            break;
+          }
+          index++;
+        }
+        newx1 = poly2.array[index + 1].x + (poly2.array[index].x - poly2.array[index + 1].x) *
+          (poly2.array[index + 1].y - y1) / (poly2.array[index + 1].y - poly2.array[index].y);
+        newy1 = y1;
+        newx2 = poly.array[0].x + (poly.array[0].x - poly.array[1].x - 1) * (poly.array[0].y - y1) /
+          (poly.array[1].y - poly.array[0].y);
+        newy2 = y1 + 1;
         
         for(var i = 0; i < index; i++){
           poly2.shift();
@@ -386,8 +432,8 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
       poly.push(x1 - kMinWidthT, y1 - kage.kMinWidthY);
       poly.push(x1, y1 - kage.kMinWidthY - kage.kWidth);
       poly.push(x1 + kMinWidthT + kage.kWidth, y1 + kage.kMinWidthY);
-      poly.push(x1 + kMinWidthT, y1 + kMinWidthT);
-      poly.push(x1, y1 + kMinWidthT);
+      poly.push(x1 + kMinWidthT, y1 + kMinWidthT - 1);
+      poly.push(x1 - kMinWidthT, y1 + kMinWidthT + 4);
       polygons.push(poly);
     }
     
@@ -932,7 +978,6 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
           break;
         case 1:
         case 6:
-        case 22:
           poly.set(0, x1 + Math.sin(rad) * kMinWidthT * v, y1 - Math.cos(rad) * kMinWidthT * v);
           poly.set(3, x1 - Math.sin(rad) * kMinWidthT * v, y1 + Math.cos(rad) * kMinWidthT * v);
           break;
@@ -941,6 +986,10 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
                    y1 - Math.cos(rad) * kMinWidthT * v - kage.kMinWidthY * Math.sin(rad) * v);
           poly.set(3, x1 - Math.sin(rad) * kMinWidthT * v - (kMinWidthT + kage.kMinWidthY) * Math.cos(rad) * v,
                    y1 + Math.cos(rad) * kMinWidthT * v - (kMinWidthT + kage.kMinWidthY) * Math.sin(rad) * v);
+          break;
+        case 22:
+          poly.set(0, x1 + (kMinWidthT * v + 1) / Math.sin(rad), y1 + 1);
+          poly.set(3, x1 - (kMinWidthT * v) / Math.sin(rad), y1);
           break;
         case 32:
           poly.set(0, x1 + (kMinWidthT * v) / Math.sin(rad), y1);
@@ -1037,8 +1086,8 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
           poly.push(x1 - kMinWidthT, y1 - kage.kMinWidthY);
           poly.push(x1, y1 - kage.kMinWidthY - kage.kWidth);
           poly.push(x1 + kMinWidthT + kage.kWidth, y1 + kage.kMinWidthY);
-          poly.push(x1 + kMinWidthT, y1 + kMinWidthT);
-          poly.push(x1 - kMinWidthT, y1);
+          poly.push(x1 + kMinWidthT, y1 + kMinWidthT - 1);
+          poly.push(x1 - kMinWidthT, y1 + kMinWidthT + 4);
           polygons.push(poly);
         }
         
