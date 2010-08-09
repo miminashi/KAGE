@@ -222,7 +222,7 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         }
         
         // suiheisen ni setsuzoku 2
-        if(a1 == 22){
+        if(a1 == 22 && y1 > y2){
           var index = 0;
           while(true){
             if(poly2.array[index].y <= y1 && y1 <= poly2.array[index + 1].y){
