@@ -97,7 +97,7 @@ function dfDrawFont(kage, polygons, a1, a2, a3, x1, y1, x2, y2, x3, y3, x4, y4){
         
         cdDrawLine(kage, polygons, x1, y1, tx1, ty1, a2, 1);
         cdDrawCurve(kage, polygons, tx1, ty1, x2, y2, tx2, ty2, 1 + (a2 - a2 % 1000) * 10, 1);
-        if(tx3 - tx2 > 0){ // for closer position
+        if((x2 < x3 && tx3 - tx2 > 0) || (x2 > x3 && tx2 - tx3 > 0)){ // for closer position
           cdDrawLine(kage, polygons, tx2, ty2, tx3, ty3, 6, 5); // bolder by force
         }
       }
