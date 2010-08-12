@@ -9,17 +9,18 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
   var poly, poly2;
   var hosomi;
   var kMinWidthT, kMinWidthT2;
-  var a1, a2, opt1, opt2, opt3;
+  var a1, a2, opt1, opt2, opt3, opt4;
   
   if(kage.kShotai == kage.kMincho){ // mincho
     a1 = ta1 % 1000;
     a2 = ta2 % 100;
     opt1 = Math.floor((ta1 % 10000) / 1000);
-    opt2 = Math.floor(ta2 / 100);
+    opt2 = Math.floor((ta2 % 1000) / 100);
     opt3 = Math.floor(ta1 / 10000);
+    opt4 = Math.floor(ta2 / 1000);
     
     kMinWidthT = kage.kMinWidthT - opt1 / 2;
-    kMinWidthT2 = kage.kMinWidthT - opt3 / 2;
+    kMinWidthT2 = kage.kMinWidthT - opt4 / 2;
     
     switch(a1 % 100){
     case 0:
@@ -110,7 +111,7 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         kage2.kRate = 10;
         
         var curve = new Array(2); // L and R
-        get_candidate(kage2, curve, a1, a2, x1, y1, sx1, sy1, x2, y2, opt3);
+        get_candidate(kage2, curve, a1, a2, x1, y1, sx1, sy1, x2, y2, opt3, opt4);
         
         var dcl12_34 = new Array(2);
         var dcr12_34 = new Array(2);
@@ -176,8 +177,8 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
           else if(a2 == 7){
             deltad = Math.pow(1.0 - t, hosomi);
           }
-          else if(opt3 > 0){
-            deltad = ((kage.kMinWidthT - opt3 / 2) / kage.kMinWidthT) + opt3 / 2 / kage.kMinWidthT * t;
+          else if(opt3 > 0 || opt4 > 0){
+              deltad = ((kage.kMinWidthT - opt3 / 2) - (opt4 - opt3) / 2 * t) / kage.kMinWidthT;
           }
           else{ deltad = 1; }
           
@@ -492,18 +493,18 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         poly = new Polygon();
         if(kage.kUseCurve){
           // by curve path
-          poly.push(x2 - kMinWidthT, y2);
-          poly.push(x2 - kMinWidthT * 0.9, y2 + kMinWidthT * 0.9, 1);
-          poly.push(x2, y2 + kMinWidthT);
-          poly.push(x2 + kMinWidthT * 0.9, y2 + kMinWidthT * 0.9, 1);
-          poly.push(x2 + kMinWidthT, y2);
+          poly.push(x2 - kMinWidthT2, y2);
+          poly.push(x2 - kMinWidthT2 * 0.9, y2 + kMinWidthT2 * 0.9, 1);
+          poly.push(x2, y2 + kMinWidthT2);
+          poly.push(x2 + kMinWidthT2 * 0.9, y2 + kMinWidthT2 * 0.9, 1);
+          poly.push(x2 + kMinWidthT2, y2);
         } else {
           // by polygon
-          poly.push(x2 - kMinWidthT, y2);
-          poly.push(x2 - kMinWidthT * 0.7, y2 + kMinWidthT * 0.7);
-          poly.push(x2, y2 + kMinWidthT);
-          poly.push(x2 + kMinWidthT * 0.7, y2 + kMinWidthT * 0.7);
-          poly.push(x2 + kMinWidthT, y2);
+          poly.push(x2 - kMinWidthT2, y2);
+          poly.push(x2 - kMinWidthT2 * 0.7, y2 + kMinWidthT2 * 0.7);
+          poly.push(x2, y2 + kMinWidthT2);
+          poly.push(x2 + kMinWidthT2 * 0.7, y2 + kMinWidthT2 * 0.7);
+          poly.push(x2 + kMinWidthT2, y2);
         }
         polygons.push(poly);
       }
@@ -511,39 +512,39 @@ function cdDrawCurveU(kage, polygons, x1, y1, sx1, sy1, sx2, sy2, x2, y2, ta1, t
         poly = new Polygon();
         if(kage.kUseCurve){
           // by curve path
-          poly.push(x2, y2 - kMinWidthT);
-          poly.push(x2 + kMinWidthT * 0.9, y2 - kMinWidthT * 0.9, 1);
-          poly.push(x2 + kMinWidthT, y2);
-          poly.push(x2 + kMinWidthT * 0.9, y2 + kMinWidthT * 0.9, 1);
-          poly.push(x2, y2 + kMinWidthT);
+          poly.push(x2, y2 - kMinWidthT2);
+          poly.push(x2 + kMinWidthT2 * 0.9, y2 - kMinWidthT2 * 0.9, 1);
+          poly.push(x2 + kMinWidthT2, y2);
+          poly.push(x2 + kMinWidthT2 * 0.9, y2 + kMinWidthT2 * 0.9, 1);
+          poly.push(x2, y2 + kMinWidthT2);
         } else {
           // by polygon
-          poly.push(x2, y2 - kMinWidthT);
-          poly.push(x2 + kMinWidthT * 0.7, y2 - kMinWidthT * 0.7);
-          poly.push(x2 + kMinWidthT, y2);
-          poly.push(x2 + kMinWidthT * 0.7, y2 + kMinWidthT * 0.7);
-          poly.push(x2, y2 + kMinWidthT);
+          poly.push(x2, y2 - kMinWidthT2);
+          poly.push(x2 + kMinWidthT2 * 0.7, y2 - kMinWidthT2 * 0.7);
+          poly.push(x2 + kMinWidthT2, y2);
+          poly.push(x2 + kMinWidthT2 * 0.7, y2 + kMinWidthT2 * 0.7);
+          poly.push(x2, y2 + kMinWidthT2);
         }
         polygons.push(poly);
       }
       else{
         poly = new Polygon();
         if(kage.kUseCurve){
-          poly.push(x2 + Math.sin(rad) * kMinWidthT * v, y2 - Math.cos(rad) * kMinWidthT * v);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * 0.9 * v + Math.sin(rad) * kMinWidthT * 0.9 * v,
-                    y2 + Math.sin(rad) * kMinWidthT * 0.9 * v - Math.cos(rad) * kMinWidthT * 0.9 * v, 1);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * v, y2 + Math.sin(rad) * kMinWidthT * v);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * 0.9 * v - Math.sin(rad) * kMinWidthT * 0.9 * v,
-                    y2 + Math.sin(rad) * kMinWidthT * 0.9 * v + Math.cos(rad) * kMinWidthT * 0.9 * v, 1);
-          poly.push(x2 - Math.sin(rad) * kMinWidthT * v, y2 + Math.cos(rad) * kMinWidthT * v);
+          poly.push(x2 + Math.sin(rad) * kMinWidthT2 * v, y2 - Math.cos(rad) * kMinWidthT2 * v);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * 0.9 * v + Math.sin(rad) * kMinWidthT2 * 0.9 * v,
+                    y2 + Math.sin(rad) * kMinWidthT2 * 0.9 * v - Math.cos(rad) * kMinWidthT2 * 0.9 * v, 1);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * v, y2 + Math.sin(rad) * kMinWidthT2 * v);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * 0.9 * v - Math.sin(rad) * kMinWidthT2 * 0.9 * v,
+                    y2 + Math.sin(rad) * kMinWidthT2 * 0.9 * v + Math.cos(rad) * kMinWidthT2 * 0.9 * v, 1);
+          poly.push(x2 - Math.sin(rad) * kMinWidthT2 * v, y2 + Math.cos(rad) * kMinWidthT2 * v);
         } else {
-          poly.push(x2 + Math.sin(rad) * kMinWidthT * v, y2 - Math.cos(rad) * kMinWidthT * v);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * 0.7 * v + Math.sin(rad) * kMinWidthT * 0.7 * v,
-                    y2 + Math.sin(rad) * kMinWidthT * 0.7 * v - Math.cos(rad) * kMinWidthT * 0.7 * v);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * v, y2 + Math.sin(rad) * kMinWidthT * v);
-          poly.push(x2 + Math.cos(rad) * kMinWidthT * 0.7 * v - Math.sin(rad) * kMinWidthT * 0.7 * v,
-                    y2 + Math.sin(rad) * kMinWidthT * 0.7 * v + Math.cos(rad) * kMinWidthT * 0.7 * v);
-          poly.push(x2 - Math.sin(rad) * kMinWidthT * v, y2 + Math.cos(rad) * kMinWidthT * v);
+          poly.push(x2 + Math.sin(rad) * kMinWidthT2 * v, y2 - Math.cos(rad) * kMinWidthT2 * v);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * 0.7 * v + Math.sin(rad) * kMinWidthT2 * 0.7 * v,
+                    y2 + Math.sin(rad) * kMinWidthT2 * 0.7 * v - Math.cos(rad) * kMinWidthT2 * 0.7 * v);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * v, y2 + Math.sin(rad) * kMinWidthT2 * v);
+          poly.push(x2 + Math.cos(rad) * kMinWidthT2 * 0.7 * v - Math.sin(rad) * kMinWidthT2 * 0.7 * v,
+                    y2 + Math.sin(rad) * kMinWidthT2 * 0.7 * v + Math.cos(rad) * kMinWidthT2 * 0.7 * v);
+          poly.push(x2 - Math.sin(rad) * kMinWidthT2 * v, y2 + Math.cos(rad) * kMinWidthT2 * v);
         }
         polygons.push(poly);
       }
@@ -913,13 +914,13 @@ function cdDrawLine(kage, polygons, tx1, ty1, tx2, ty2, ta1, ta2){
           poly = new Polygon();
           if(x1 < x2){
             poly.push(x2, y2 - kMinWidthT + 1);
-            poly.push(x2 + 2, y2 - kMinWidthT - kage.kWidth * 5);
-            poly.push(x2, y2 - kMinWidthT - kage.kWidth * 5);
+            poly.push(x2 + 2, y2 - kMinWidthT - kage.kWidth * (4 * (1 - opt1 / kage.kAdjustMageStep) + 1));
+            poly.push(x2, y2 - kMinWidthT - kage.kWidth * (4 * (1 - opt1 / kage.kAdjustMageStep) + 1));
             poly.push(x2 - kMinWidthT, y2 - kMinWidthT + 1);
           } else {
             poly.push(x2, y2 - kMinWidthT + 1);
-            poly.push(x2 - 2, y2 - kMinWidthT - kage.kWidth * 5);
-            poly.push(x2, y2 - kMinWidthT - kage.kWidth * 5);
+            poly.push(x2 - 2, y2 - kMinWidthT - kage.kWidth * (4 * (1 - opt1 / kage.kAdjustMageStep) + 1));
+            poly.push(x2, y2 - kMinWidthT - kage.kWidth * (4 * (1 - opt1 / kage.kAdjustMageStep) + 1));
             poly.push(x2 + kMinWidthT, y2 - kMinWidthT + 1);
           }
           poly.reverse(); // for fill-rule
