@@ -3,7 +3,7 @@ function Kage(size){
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
     if(glyphData != ""){
-      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko(this.adjustKakato(this.adjustTate(this.adjustMage(this.getEachStrokes(glyphData)))))));
+      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko2(this.adjustUroko(this.adjustKakato(this.adjustTate(this.adjustMage(this.getEachStrokes(glyphData))))))));
     }
   }
   Kage.prototype.makeGlyph = makeGlyph;
@@ -91,6 +91,32 @@ function Kage(size){
     return strokesArray;
   }
   Kage.prototype.adjustUroko = adjustUroko;
+  
+  function adjustUroko2(strokesArray){ // strokesArray
+    for(var i = 0; i < strokesArray.length; i++){
+      if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0 && strokesArray[i][4] == strokesArray[i][6]){
+        var pressure = 0;
+        for(var j = 0; j < strokesArray.length; j++){
+          if(i != j && (
+             (strokesArray[j][0] == 1 && strokesArray[j][4] == strokesArray[j][6] &&
+              !(strokesArray[i][3] + 1 > strokesArray[j][5] || strokesArray[i][5] - 1 < strokesArray[j][3]) &&
+              Math.abs(strokesArray[i][4] - strokesArray[j][4]) < this.kAdjustUroko2Length) ||
+             (strokesArray[j][0] == 3 && strokesArray[j][6] == strokesArray[j][8] &&
+              !(strokesArray[i][3] + 1 > strokesArray[j][7] || strokesArray[i][5] - 1 < strokesArray[j][5]) &&
+              Math.abs(strokesArray[i][4] - strokesArray[j][6]) < this.kAdjustUroko2Length)
+             )){
+            pressure += Math.pow(this.kAdjustUroko2Length - Math.abs(strokesArray[i][4] - strokesArray[j][6]), 1.1);
+          }
+        }
+        var result = Math.min(Math.floor(pressure / this.kAdjustUroko2Length), this.kAdjustUroko2Step) * 100;
+        if(strokesArray[i][2] < result){
+          strokesArray[i][2] = strokesArray[i][2] % 100 + Math.min(Math.floor(pressure / this.kAdjustUroko2Length), this.kAdjustUroko2Step) * 100;
+        }
+      }
+    }
+    return strokesArray;
+  }
+  Kage.prototype.adjustUroko2 = adjustUroko2;
   
   function adjustTate(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
@@ -301,6 +327,9 @@ function Kage(size){
     this.kAdjustUrokoLength = ([22, 36, 50]); // length for checking
     this.kAdjustUrokoLengthStep = 3; // number of steps
     this.kAdjustUrokoLine = ([22, 26, 30]); // check for crossing. corresponds to length
+    
+    this.kAdjustUroko2Step = 3;
+    this.kAdjustUroko2Length = 40;
     
     this.kAdjustTateStep = 4;
     
