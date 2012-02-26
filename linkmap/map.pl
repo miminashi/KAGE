@@ -19,7 +19,7 @@ $svg = "svg";
 $graphviz = '/usr/bin/dot';
 $html = "html";
 $EXPR_STYLE = 'x="([0-9.-]+)" y="([0-9.-]+)" style="font-family:Times New Roman;font-size:14.00;"';
-$SERVER = 'mousai.kanji.zinbun.kyoto-u.ac.jp';
+$SERVER = 'www.chise.org';
 $SERVER2 = 'kanji.zinbun.kyoto-u.ac.jp';
 
 #-----------------------------------------------------------------------------
