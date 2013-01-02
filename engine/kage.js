@@ -81,13 +81,13 @@ function Kage(size){
 	      }
 	      for(var j = 0; j < sa.length; j++){
 		  if(i != j && sa[j][0] == 1 && sa[j][3] == sa[j][5] && sa[j][4] <= lpy && sa[j][6] >= lpy){
-		      if(lpx - sa[j][3] < 900){
+		      if(lpx - sa[j][3] < 100){
 			  mn = Math.min(mn, lpx - sa[j][3]);
 		      }
 		  }
 	      }
 	      if(mn != Infinity){
-		  sa[i][2] += Math.min(400, 400 - Math.floor(mn / 20) * 100); // 0-8 -> 0-400
+		  sa[i][2] += 700 - Math.floor(mn / 15) * 100; // 0-99 -> 0-700
 	      }
 	  }
       }
