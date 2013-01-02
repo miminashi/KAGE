@@ -3,7 +3,7 @@ function Kage(size){
   function makeGlyph(polygons, buhin){ // void
     var glyphData = this.kBuhin.search(buhin);
     if(glyphData != ""){
-      this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko2(this.adjustUroko(this.adjustKakato(this.adjustTate(this.adjustMage(this.getEachStrokes(glyphData))))))));
+	this.drawStrokesArray(polygons, this.adjustKirikuchi(this.adjustUroko2(this.adjustUroko(this.adjustKakato(this.adjustTate(this.adjustMage(this.adjustHane(this.getEachStrokes(glyphData)))))))));
     }
   }
   Kage.prototype.makeGlyph = makeGlyph;
@@ -63,6 +63,38 @@ function Kage(size){
   }
   Kage.prototype.getEachStrokesOfBuhin = getEachStrokesOfBuhin;
   
+  function adjustHane(sa){ // strokesArray
+      for(var i = 0; i < sa.length; i++){
+	  if((sa[i][0] == 1 || sa[i][0] == 2) && sa[i][2] == 4){
+	      var lpx; // lastPointX
+	      var lpy; // lastPointY
+	      if(sa[i][0] == 1){
+		  lpx = sa[i][5];
+		  lpy = sa[i][6];
+	      } else {
+		  lpx = sa[i][7];
+		  lpy = sa[i][8];
+	      }
+	      var mn = Infinity; // mostNear
+	      if(lpx + 18 < 100){
+		  mn = lpx + 18;
+	      }
+	      for(var j = 0; j < sa.length; j++){
+		  if(i != j && sa[j][0] == 1 && sa[j][3] == sa[j][5] && sa[j][4] <= lpy && sa[j][6] >= lpy){
+		      if(lpx - sa[j][3] < 900){
+			  mn = Math.min(mn, lpx - sa[j][3]);
+		      }
+		  }
+	      }
+	      if(mn != Infinity){
+		  sa[i][2] += Math.min(400, 400 - Math.floor(mn / 20) * 100); // 0-8 -> 0-400
+	      }
+	  }
+      }
+      return sa;
+  }
+  Kage.prototype.adjustHane = adjustHane;
+
   function adjustUroko(strokesArray){ // strokesArray
     for(var i = 0; i < strokesArray.length; i++){
       if(strokesArray[i][0] == 1 && strokesArray[i][2] == 0){ // no operation for TATE
