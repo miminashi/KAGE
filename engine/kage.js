@@ -80,7 +80,7 @@ function Kage(size){
 		  mn = lpx + 18;
 	      }
 	      for(var j = 0; j < sa.length; j++){
-		  if(i != j && sa[j][0] == 1 && sa[j][3] == sa[j][5] && sa[j][4] <= lpy && sa[j][6] >= lpy){
+		  if(i != j && sa[j][0] == 1 && sa[j][3] == sa[j][5] && sa[j][3] < lpx && sa[j][4] <= lpy && sa[j][6] >= lpy){
 		      if(lpx - sa[j][3] < 100){
 			  mn = Math.min(mn, lpx - sa[j][3]);
 		      }
