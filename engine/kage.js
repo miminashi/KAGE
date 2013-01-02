@@ -65,15 +65,18 @@ function Kage(size){
   
   function adjustHane(sa){ // strokesArray
       for(var i = 0; i < sa.length; i++){
-	  if((sa[i][0] == 1 || sa[i][0] == 2) && sa[i][2] == 4){
+	  if((sa[i][0] == 1 || sa[i][0] == 2 || sa[i][0] == 6) && sa[i][2] == 4){
 	      var lpx; // lastPointX
 	      var lpy; // lastPointY
 	      if(sa[i][0] == 1){
 		  lpx = sa[i][5];
 		  lpy = sa[i][6];
-	      } else {
+	      } else if(sa[i][0] == 2){
 		  lpx = sa[i][7];
 		  lpy = sa[i][8];
+	      } else {
+		  lpx = sa[i][9];
+		  lpy = sa[i][10];
 	      }
 	      var mn = Infinity; // mostNear
 	      if(lpx + 18 < 100){
