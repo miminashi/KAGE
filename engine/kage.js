@@ -55,7 +55,7 @@ function Kage(size){
   function getEachStrokesOfBuhin(buhin, x1, y1, x2, y2, a1, a2){
     var temp = this.getEachStrokes(buhin);
     var result = new Array();
-    var box = getBox(buhin);
+    var box = this.getBox(buhin);
     for(var i = 0; i < temp.length; i++){
 
 	var sx = a1;
@@ -319,7 +319,7 @@ function Kage(size){
       a.maxX = 0;
       a.maxY = 0;
       
-      var strokes = getEachStrokes(glyph);
+      var strokes = this.getEachStrokes(glyph);
       for(var i = 0; i < strokes.length; i++){
 	  if(strokes[i][0] == 0){ continue; }
 	  a.minX = Math.min(a.minX, strokes[i][3]);
@@ -366,7 +366,7 @@ function Kage(size){
 
   function drawBuhin(polygons, glyph, x1, y1, x2, y2, sx, sy){ // void
     var strokes = glyph.split("$");
-    var box = getBox(glyph);
+    var box = this.getBox(glyph);
     for(var i = 0; i < strokes.length; i++){
       var columns = strokes[i].split(":");
 
