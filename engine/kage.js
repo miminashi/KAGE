@@ -58,14 +58,16 @@ function Kage(size){
     var temp = this.getEachStrokes(buhin);
     var result = new Array();
     var box = this.getBox(buhin);
+      if(sx != 0 || sy != 0){
+	  if(sx > 200){
+	      sx -= 200; // 任意点モード
+	  } else {
+	      sx2 = 0; // 中心点モード
+	      sy2 = 0;
+	  }
+      }
     for(var i = 0; i < temp.length; i++){
 	if(sx != 0 || sy != 0){
-	    if(sx > 200){
-		sx -= 200; // 任意点モード
-	    } else {
-		sx2 = 0; // 中心点モード
-		sy2 = 0;
-	    }
 	    temp[i][3] = stretch(sx, sx2, temp[i][3], box.minX, box.maxX);
 	    temp[i][4] = stretch(sy, sy2, temp[i][4], box.minY, box.maxY);
 	    temp[i][5] = stretch(sx, sx2, temp[i][5], box.minX, box.maxX);
@@ -374,15 +376,17 @@ function Kage(size){
   function drawBuhin(polygons, glyph, x1, y1, x2, y2, sx, sy, sx2, sy2){ // void
     var strokes = glyph.split("$");
     var box = this.getBox(glyph);
+      if(sx != 0 || sy != 0){
+	  if(sx > 200){
+	      sx -= 200; // 任意点モード
+	  } else {
+	      sx2 = 0; // 中心点モード
+	      sy2 = 0;
+	  }
+      }
     for(var i = 0; i < strokes.length; i++){
       var columns = strokes[i].split(":");
 	if(sx != 0 || sy != 0){
-	    if(sx > 200){
-		sx -= 200; // 任意点モード
-	    } else {
-		sx2 = 0; // 中心点モード
-		sy2 = 0;
-	    }
 	    columns[3] = stretch(sx, sx2, columns[3], box.minX, box.maxX);
 	    columns[4] = stretch(sy, sy2, columns[4], box.minY, box.maxY);
 	    columns[5] = stretch(sx, sx2, columns[5], box.minX, box.maxX);
