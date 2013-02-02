@@ -43,7 +43,9 @@ function Kage(size){
                                                   Math.floor(columns[5]),
                                                   Math.floor(columns[6]),
                                                   Math.floor(columns[1]),
-                                                  Math.floor(columns[2]))
+                                                  Math.floor(columns[2]),
+                                                  Math.floor(columns[9]),
+                                                  Math.floor(columns[10]))
                             );
         }
       }
@@ -52,27 +54,29 @@ function Kage(size){
   }
   Kage.prototype.getEachStrokes = getEachStrokes;
   
-  function getEachStrokesOfBuhin(buhin, x1, y1, x2, y2, a1, a2){
+  function getEachStrokesOfBuhin(buhin, x1, y1, x2, y2, sx, sy, sx2, sy2){
     var temp = this.getEachStrokes(buhin);
     var result = new Array();
     var box = this.getBox(buhin);
     for(var i = 0; i < temp.length; i++){
-
-	var sx = a1;
-	var sy = a2;
 	if(sx != 0 || sy != 0){
-	    temp[i][3] = stretch(sx, temp[i][3], box.minX, box.maxX);
-	    temp[i][4] = stretch(sy, temp[i][4], box.minY, box.maxY);
-	    temp[i][5] = stretch(sx, temp[i][5], box.minX, box.maxX);
-	    temp[i][6] = stretch(sy, temp[i][6], box.minY, box.maxY);
-	    if(temp[i][0] != 99){
-		temp[i][7] = stretch(sx, temp[i][7], box.minX, box.maxX);	
-		temp[i][8] = stretch(sy, temp[i][8], box.minY, box.maxY);
+	    if(sx > 200){
+		sx -= 200; // 任意点モード
+	    } else {
+		sx2 = 0; // 中心点モード
+		sy2 = 0;
 	    }
-	    temp[i][9] = stretch(sx, temp[i][9], box.minX, box.maxX);
-	    temp[i][10] = stretch(sy, temp[i][10], box.minY, box.maxY);
+	    temp[i][3] = stretch(sx, sx2, temp[i][3], box.minX, box.maxX);
+	    temp[i][4] = stretch(sy, sy2, temp[i][4], box.minY, box.maxY);
+	    temp[i][5] = stretch(sx, sx2, temp[i][5], box.minX, box.maxX);
+	    temp[i][6] = stretch(sy, sy2,temp[i][6], box.minY, box.maxY);
+	    if(temp[i][0] != 99){
+		temp[i][7] = stretch(sx, sx2, temp[i][7], box.minX, box.maxX);	
+		temp[i][8] = stretch(sy, sy2, temp[i][8], box.minY, box.maxY);
+		temp[i][9] = stretch(sx, sx2, temp[i][9], box.minX, box.maxX);
+		temp[i][10] = stretch(sy, sy2, temp[i][10], box.minY, box.maxY);
+	    }
 	}
-
       result.push([temp[i][0],
                    temp[i][1],
                    temp[i][2],
@@ -305,7 +309,9 @@ function Kage(size){
                          Math.floor(columns[5]),
                          Math.floor(columns[6]),
                          Math.floor(columns[1]),
-                         Math.floor(columns[2]));
+                         Math.floor(columns[2]),
+                         Math.floor(columns[9]),
+                         Math.floor(columns[10]));
         }
       }
     }
@@ -338,6 +344,7 @@ function Kage(size){
 	  a.maxY = Math.max(a.maxY, strokes[i][8]);
 	  if(strokes[i][0] == 2){ continue; }
 	  if(strokes[i][0] == 3){ continue; }
+	  if(strokes[i][0] == 4){ continue; }
 	  a.minX = Math.min(a.minX, strokes[i][9]);
 	  a.maxX = Math.max(a.maxX, strokes[i][9]);
 	  a.minY = Math.min(a.minY, strokes[i][10]);
@@ -347,42 +354,46 @@ function Kage(size){
   }
   Kage.prototype.getBox = getBox;
 
-  function stretch(dp, sp, min, max){ // interger
+  function stretch(dp, sp, p, min, max){ // interger
       var p1, p2, p3, p4;
-      if(sp < 100){
+      if(p < sp + 100){
 	  p1 = min;
 	  p3 = min;
-	  p2 = 100;
-	  p4 = 100 + dp;
+	  p2 = sp + 100;
+	  p4 = dp + 100;
       } else {
-	  p1 = 100;
-	  p3 = 100 + dp;
+	  p1 = sp + 100;
+	  p3 = dp + 100;
 	  p2 = max;
 	  p4 = max;
       }
-      return Math.floor(((sp - p1) / (p2 - p1)) * (p4 - p3) + p3);
+      return Math.floor(((p - p1) / (p2 - p1)) * (p4 - p3) + p3);
   }
   Kage.prototype.stretch = stretch;
 
-  function drawBuhin(polygons, glyph, x1, y1, x2, y2, sx, sy){ // void
+  function drawBuhin(polygons, glyph, x1, y1, x2, y2, sx, sy, sx2, sy2){ // void
     var strokes = glyph.split("$");
     var box = this.getBox(glyph);
     for(var i = 0; i < strokes.length; i++){
       var columns = strokes[i].split(":");
-
 	if(sx != 0 || sy != 0){
-	    columns[3] = stretch(sx, columns[3], box.minX, box.maxX);
-	    columns[4] = stretch(sy, columns[4], box.minY, box.maxY);
-	    columns[5] = stretch(sx, columns[5], box.minX, box.maxX);
-	    columns[6] = stretch(sy, columns[6], box.minY, box.maxY);
-	    if(columns[0] != 99){
-		columns[7] = stretch(sx, columns[7], box.minX, box.maxX);
-		columns[8] = stretch(sy, columns[8], box.minY, box.maxY);
+	    if(sx > 200){
+		sx -= 200; // 任意点モード
+	    } else {
+		sx2 = 0; // 中心点モード
+		sy2 = 0;
 	    }
-	    columns[9] = stretch(sx, columns[9], box.minX, box.maxX);
-	    columns[10] = stretch(sy, columns[10], box.minY, box.maxY);
+	    columns[3] = stretch(sx, sx2, columns[3], box.minX, box.maxX);
+	    columns[4] = stretch(sy, sy2, columns[4], box.minY, box.maxY);
+	    columns[5] = stretch(sx, sx2, columns[5], box.minX, box.maxX);
+	    columns[6] = stretch(sy, sy2, columns[6], box.minY, box.maxY);
+	    if(columns[0] != 99){
+		columns[7] = stretch(sx, sx2, columns[7], box.minX, box.maxX);
+		columns[8] = stretch(sy, sy2, columns[8], box.minY, box.maxY);
+		columns[9] = stretch(sx, sx2, columns[9], box.minX, box.maxX);
+		columns[10] = stretch(sy, sy2, columns[10], box.minY, box.maxY);
+	    }
 	}
-
       if(Math.floor(columns[0]) != 99){
         dfDrawFont(this, polygons,
                    Math.floor(columns[0]),
@@ -405,7 +416,9 @@ function Kage(size){
                          x1 + Math.floor(columns[5]) * (x2 - x1) / 200,
                          y1 + Math.floor(columns[6]) * (y2 - y1) / 200,
 			 Math.floor(columns[1]),
-			 Math.floor(columns[2]));
+			 Math.floor(columns[2]),
+			 Math.floor(columns[9]),
+			 Math.floor(columns[10]));
         }
       }
     }
