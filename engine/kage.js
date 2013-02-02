@@ -59,7 +59,7 @@ function Kage(size){
     var result = new Array();
     var box = this.getBox(buhin);
       if(sx != 0 || sy != 0){
-	  if(sx > 200){
+	  if(sx > 100){
 	      sx -= 200; // 任意点モード
 	  } else {
 	      sx2 = 0; // 中心点モード
@@ -377,7 +377,7 @@ function Kage(size){
     var strokes = glyph.split("$");
     var box = this.getBox(glyph);
       if(sx != 0 || sy != 0){
-	  if(sx > 200){
+	  if(sx > 100){
 	      sx -= 200; // 任意点モード
 	  } else {
 	      sx2 = 0; // 中心点モード
