@@ -1,4 +1,5 @@
 KAGE
 ====
 
-http://fonts.jp/kage/ の自分でいじる用レポジトリ
+開発・配布元: http://fonts.jp/kage/
+
